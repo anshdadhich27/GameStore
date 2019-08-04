@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "exports": {
+    "IgdbAPI/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.5",
+      "compile": {
+        "bin/Debug/IgdbAPI.dll": {}
+      },
+      "runtime": {
+        "bin/Debug/IgdbAPI.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/IgdbAPI.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    },
+    "HttpHandler/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.5",
+      "compile": {
+        "bin/Debug/HttpHandler.dll": {}
+      },
+      "runtime": {
+        "../packages/Newtonsoft.Json.10.0.3/lib/net45/Newtonsoft.Json.dll": {},
+        "bin/Debug/HttpHandler.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/HttpHandler.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}

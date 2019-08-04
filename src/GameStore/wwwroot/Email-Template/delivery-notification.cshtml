@@ -1,0 +1,482 @@
+﻿@using GameStore.Models.Entity
+@model dynamic
+
+
+@{ 
+    var modal = Model as Shipment_Notification;
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0," />
+    <title>GameStoreMe</title>
+</head>
+<body>
+
+    <modules>
+
+        <module label="Menu" active auto>
+            <table align="center" bgcolor="#FFF" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td align="center">
+                            <table align="center" bgcolor="#42C0D3" border="0" cellpadding="0" cellspacing="0" class="display-width" width="680">
+                                <tr>
+                                    <td align="center" style="padding:0 30px;">
+                                        <table align="center" border="0" cellpadding="0" cellspacing="0" class="display-width" width="600">
+                                            <tr>
+                                                <td align="center">
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0" class="display-width" width="100%">
+                                                        <tr>
+                                                            <td height="15"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center">
+                                                                <table align="center" border="0" cellpadding="0" cellspacing="0" class="display-width" width="25%" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+                                                                    <tr>
+                                                                        <td align="center" valign="middle">
+                                                                            <a href="#" style="color:#444444;text-decoration:none;">
+                                                                                <img src="http://pennyblacktemplates.com/demo/notifications/delivery-confirmation/images/150x50.png" alt="150x50" width="150" editable label="Logo Image" />
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="line-height:20px;" height="20" width="1"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center">
+                                                                <table align="center" border="0" cellpadding="0" cellspacing="0" class="display-width" width="54%" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;width:auto;">
+                                                                    <tr>
+                                                                        <td valign="middle">
+                                                                            <table align="center" border="0" class="padding" cellspacing="0" cellpadding="0" style="width:auto !important;">
+                                                                                <tr>
+                                                                                    <td width="5">&nbsp;</td>
+                                                                                    <td align="left" valign="middle" class="MsoNormal menu" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:11px;font-weight:600;letter-spacing:1px;">
+                                                                                        <a href="#" style="color:#FFFFFF;text-decoration:none;">
+                                                                                            <multi label="Menu">YOUR ORDERS</multi>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    <td width="5">&nbsp;</td>
+                                                                                    <td align="left" valign="middle" class="MsoNormal menu" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;font-weight:600;letter-spacing:1px;">
+                                                                                        <multi label="Menu">|</multi>
+                                                                                    </td>
+                                                                                    <td width="5">&nbsp;</td>
+                                                                                    <td align="left" valign="middle" class="MsoNormal menu" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:11px;font-weight:600;letter-spacing:1px;">
+                                                                                        <a href="#" style="color:#FFFFFF;text-decoration:none;">
+                                                                                            <multi label="Menu">YOUR ACCOUNT</multi>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    <td width="5">&nbsp;</td>
+                                                                                    <td align="left" valign="middle" class="MsoNormal menu" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;font-weight:600;letter-spacing:1px;">
+                                                                                        <multi label="Menu">|</multi>
+                                                                                    </td>
+                                                                                    <td width="5">&nbsp;</td>
+                                                                                    <td align="left" valign="middle" class="MsoNormal menu" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:11px;font-weight:600;letter-spacing:1px;">
+                                                                                        <a href="#" style="color:#FFFFFF;text-decoration:none;">
+                                                                                            <multi label="Menu">COMPANY.IN</multi>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td height="15"></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- MENU ENDS -->
+
+        </module>
+
+        <module label="Delivery Notification" active auto>
+
+            <!-- DELIVERY NOTIFICATION STARTS -->
+
+            <table align="center" bgcolor="#FFF" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td align="center">
+                        <table align="center" bgcolor="#42C0D3" border="0" cellpadding="0" cellspacing="0" class="display-width" width="680">
+                            <tr>
+                                <td align="center" style="padding:0 30px;">
+                                    <table align="center" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" class="display-width" style="border-top-left-radius:5px; border-top-right-radius:5px;" width="600">
+                                        <tr>
+                                            <td height="40"></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" style="padding:0 30px;">
+                                                <table align="center" border="0" cellpadding="0" cellspacing="0" class="display-width padding" width="100%">
+                                                    <tr>
+                                                        <td align="right" class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:20px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:capitalize;">
+                                                            <multi label="Title">Shipment Tracking</multi>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="10"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="right" class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:11px;letter-spacing:1px;line-height:18px;text-transform:capitalize;">
+                                                            <multi label="Content">Order no: <span style="color:#42C0D3;">#12345678923445</span></multi>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="30"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left" class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:18px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:capitalize;">
+                                                            <multi label="Heading">Hello Customer,</multi>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="20"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left">
+                                                            <table align="left" border="0" cellpadding="0" cellspacing="0" class="display-width" width="100%">
+                                                                <tr>
+                                                                    <td align="left" class="MsoNormal" style="color:#666666;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;line-height:24px;">
+                                                                        <multi label="Content">Donec varius sodales orci. Class aptent taciti sociosqu ad litora torquent per conubia nostra orci, inceptos himenaeos. Aenean a arcu ullamcorper nostra conubia. End of content.</multi>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td height="20"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td align="left" class="MsoNormal" style="color:#666666;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;line-height:24px;">
+                                                                        <multi label="Content">Donec varius sodales orci. Class aptent taciti sociosqu ad litora torquent per conubia nostra orci, inceptos himenaeos. Aenean a arcu ullamcorper nostra conubia. End of content.</multi>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td height="30"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border-bottom:3px solid #333333;"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left" bgcolor="#f5f5f5">
+                                                            <table align="left" border="0" cellpadding="0" cellspacing="0" class="display-width" width="100%">
+                                                                <tr>
+                                                                    <td height="30"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding:0 15px;">
+                                                                        <table align="left" border="0" cellpadding="0" cellspacing="0" class="display-width" width="45%" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;width:auto;">
+                                                                            <tr>
+                                                                                <td height="20" class="null"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td align="left" class="button-width">
+                                                                                    <table align="left" bgcolor="#f44202" border="0" cellspacing="0" cellpadding="0" class="display-button textbutton" style="border-radius:5px;">
+                                                                                        <!-- USING TABLE AS BUTTON -->
+                                                                                        <tr>
+                                                                                            <td align="center" valign="middle" class="MsoNormal butn" style="color:#ffffff;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:11px;font-weight:bold;letter-spacing:1px;padding:7px 15px;text-transform:uppercase;">
+                                                                                                <a href="#" style="color:#ffffff;text-decoration:none;" editable label="Track Button">TRACK YOUR ORDER</a>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+
+                                                                        <table align="left" class="display-width" border="0" cellpadding="0" cellspacing="0" width="1" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="line-height:30px;" height="30" width="1"></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                        <table align="right" border="0" cellpadding="0" cellspacing="0" class="display-width" width="48%" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+                                                                            <tr>
+                                                                                <td align="left">
+                                                                                    <table align="left" border="0" cellpadding="0" cellspacing="0" class="display-width" width="100%" style="width:auto !important;">
+                                                                                        <tr>
+                                                                                            <td align="left" class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;font-weight:600;letter-spacing:1px;line-height:24px;text-transform:uppercase;">
+                                                                                                <multi label="Address">Petersmith <br /> No,7, Park Avenue, East Place Ny City, New York 123456.</multi>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td height="30"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="30" style="border-bottom:1px dashed #dddddd;"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="30"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left" class="MsoNormal" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:20px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:capitalize;">
+                                                            <multi label="Heading">Package Contents</multi>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="30"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <!-- TABLE LEFT -->
+
+                                                            <table align="left" border="0" cellpadding="0" cellspacing="0" class="display-width" width="25%" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+                                                                <tr>
+                                                                    <td align="left" valign="middle">
+                                                                        <img src="http://pennyblacktemplates.com/demo/notifications/delivery-confirmation/images/130x80.jpg" alt="130x80" width="130" editable label="Package Image" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+
+                                                            <table align="left" border="0" class="display-width" cellpadding="0" cellspacing="0" width="1" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+                                                                <tr>
+                                                                    <td style="line-height:20px;" height="20" width="1"></td>
+                                                                </tr>
+                                                            </table>
+
+                                                            <!-- TABLE RIGHT -->
+
+                                                            <table align="right" border="0" cellpadding="0" cellspacing="0" class="display-width" width="70%" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+                                                                <tr>
+                                                                    <td height="20" class="null"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td align="left" class="MsoNormal" style="color:#42C0D3;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;line-height:20px;">
+                                                                        <a href="#" style="color:#FFFFFF;text-decoration:none;">
+                                                                            <multi label="Content">Donec varius sodales orci. Class aptent taciti (Black) sociosqu </multi>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="40" style="border-bottom:1px solid #eeeeee;"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- DELIVERY NOTIFICATION ENDS -->
+
+        </module>
+
+        <module label="Company Name" active auto>
+
+            <!-- COMPANY NAME STARTS -->
+
+            <table align="center" bgcolor="#FFF" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td align="center">
+                        <table align="center" bgcolor="#42C0D3" border="0" cellpadding="0" cellspacing="0" class="display-width" width="680">
+                            <tr>
+                                <td align="center" style="padding:0 30px;">
+                                    <table align="center" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" class="display-width" style="border-bottom-left-radius:5px; border-bottom-right-radius:5px;" width="600">
+                                        <tr>
+                                            <td height="30"></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" style="padding:0 30px;">
+                                                <table align="center" border="0" cellpadding="0" cellspacing="0" class="display-width padding" width="100%">
+                                                    <tr>
+                                                        <td align="left" class="MsoNormal" style="color:#666666;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;line-height:24px;">
+                                                            <multi label="Content">Track your order with the <span style="color:#42C0D3;"><a href="#" style="color:#FFFFFF;text-decoration:none;">Company.</a></span></multi>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="5"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left" class="MsoNormal" style="color:#666666;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;line-height:24px;">
+                                                            <multi label="Content">Returns are easy. Visit our  <span style="color:#42C0D3;"><a href="#" style="color:#FFFFFF;text-decoration:none;"> Returns Centre.</a></span></multi>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="20"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left" class="MsoNormal" style="color:#666666;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;line-height:13px;">
+                                                            <multi label="Content">We hope to see you again soon!</multi>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="5"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left" class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:15px;font-weight:600;line-height:24px;">
+                                                            <multi label="Content">Company Name</multi>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="30"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- COMPANY NAME ENDS -->
+
+        </module>
+
+        <module label="Footer" active auto>
+
+            <!-- FOOTER STARTS -->
+
+            <table align="center" bgcolor="#FFF" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td align="center">
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" class="display-width" width="100%">
+                            <tr>
+                                <td align="center">
+                                    <table align="center" bgcolor="#42C0D3" border="0" cellpadding="0" cellspacing="0" class="display-width" width="680">
+                                        <tr>
+                                            <td align="center" style="padding:0 30px;">
+                                                <table align="center" border="0" cellpadding="0" cellspacing="0" class="display-width" width="600">
+                                                    <tr>
+                                                        <td height="50"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="center" style="padding:0 10px;">
+                                                            <table align="center" border="0" cellpadding="0" cellspacing="0" class="display-width" width="100%">
+                                                                <tr>
+                                                                    <td>
+
+                                                                        <!-- TABLE LEFT -->
+
+                                                                        <table align="left" border="0" cellpadding="0" cellspacing="0" class="display-width" width="43%" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center">
+                                                                                        <table align="left" border="0" cellpadding="0" cellspacing="0" class="display-width" style="width:auto;">
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    <table align="center" border="0" cellpadding="0" cellspacing="0" class="display-width" width="100%" style="width:auto !important;">
+                                                                                                        <tr>
+                                                                                                            <td align="center" class="MsoNormal" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:14px;letter-spacing:1px;line-height:24px;">
+                                                                                                                <multi label="Copyright">{copyright}</multi>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    </table>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                        <table align="left" border="0" cellpadding="0" cellspacing="0" width="1" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="line-height:20px;" height="20" width="1"></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                        <!-- TABLE RIGHT -->
+
+                                                                        <table align="right" border="0" cellpadding="0" cellspacing="0" class="display-width" width="39%" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;width:auto;">
+                                                                            <tr>
+                                                                                <td align="center">
+                                                                                    <table align="center" border="0" cellspacing="0" cellpadding="0" class="display-width" style="width:auto !important;">
+                                                                                        <tr>
+                                                                                            <td align="left" class="MsoNormal" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:14px;letter-spacing:1px;line-height:24px;">
+                                                                                                <multi label="Follow">Follow Us</multi>
+                                                                                            </td>
+                                                                                            <td width="20" class="follow">&nbsp;</td>
+                                                                                            <td align="left">
+                                                                                                <a href="#" style="color:#FFFFFF;text-decoration:none;">
+                                                                                                    <img src="http://pennyblacktemplates.com/demo/notifications/app-download/images/25x25x1.png" alt="25x25x1" width="25" editable label="Social Icon" />
+                                                                                                </a>
+                                                                                            </td>
+                                                                                            <td width="10">&nbsp;</td>
+                                                                                            <td align="left">
+                                                                                                <a href="#" style="color:#ffffff;text-decoration:none;">
+                                                                                                    <img src="http://pennyblacktemplates.com/demo/notifications/app-download/images/25x25x2.png" alt="25x25x2" width="25" editable label="Social Icon" />
+                                                                                                </a>
+                                                                                            </td>
+                                                                                            <td width="10">&nbsp;</td>
+                                                                                            <td align="left">
+                                                                                                <a href="#" style="color:#ffffff;text-decoration:none;">
+                                                                                                    <img src="http://pennyblacktemplates.com/demo/notifications/app-download/images/25x25x3.png" alt="25x25x3" width="25" editable label="Social Icon" />
+                                                                                                </a>
+                                                                                            </td>
+                                                                                            <td width="10">&nbsp;</td>
+                                                                                            <td align="left">
+                                                                                                <a href="#" style="color:#ffffff;text-decoration:none;">
+                                                                                                    <img src="http://pennyblacktemplates.com/demo/notifications/app-download/images/25x25x4.png" alt="25x25x4" width="25" editable label="Social Icon" />
+                                                                                                </a>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="50"></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- FOOTER ENDS -->
+
+        </module>
+
+    </modules>
+
+</body>
+</html>

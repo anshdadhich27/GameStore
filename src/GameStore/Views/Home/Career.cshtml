@@ -1,0 +1,88 @@
+﻿@model PageContent
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaKeywords"] = Model.MetaKeywords;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+}
+@section styles{
+    <link href="~/css/policy-terms.min.css" rel="stylesheet" />
+}
+<div class="wrapper">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 col-sm-3">
+                    @await Html.PartialAsync("_StaticPagesLeftNavigation")
+                </div>
+                <div class="col-md-10 col-sm-9">
+                    <div class="textInfoContent">
+                        <div>
+                            @Html.Raw(Model.HeaderContent)
+                        </div>
+                        <div class="infoContent">
+                            @Html.Raw(Model.BodyContent)
+                        </div>
+                        <div id="form-content">
+                            <form class="contactForm" asp-controller="Home" asp-action="Add_New_Career"
+                                  data-ajax="true" data-ajax-begin="onBegin" data-ajax-complete="onComplete"
+                                  data-ajax-method="POST" data-method="post" data-ajax-mode="replace"
+                                  data-ajax-update="#form-content">
+                                <div class="inputfield">
+                                    <input class="field" type="text" placeholder="Name *" name="Name" required>
+                                </div>
+                                <div class="inputfield">
+                                    <input class="field" type="text" placeholder="Contact No. *" name="Phone_No" required />
+                                </div>
+                                <div class="inputfield">
+                                    <input class="field" type="text" placeholder="Email *" name="Email" required />
+                                </div>
+                                <div class="inputfield">
+                                    <select class="select field" name="Applied_For" required>
+                                        <option value="Intern">Intern</option>
+                                        <option value="Associate">Associate</option>
+                                        <option value="Manager">Manager</option>
+                                        <option value="Director">Director</option>
+                                        <option value="Developer">Developer</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>                               
+                                <div class="inputfield">
+                                    <label>Upload Your CV</label> 
+                                    <input type="hidden" name="CV_Path" id="cv-path" />
+                                    <input class="field" type="file" id="bannerUploader" placeholder="Upload CV">
+                                </div>
+                                <div class="inputfield">
+                                    <textarea class="field" placeholder="Your Message *" name="Message" required></textarea>
+                                </div>
+                                <div class="submetField">
+                                    <button type="submit" class="submitBtn pull-left">SUBMIT</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#bannerUploader').on('change', function (e) {
+                var _data = new FormData();
+                _data.append("file", e.target.files[0]);
+                $.ajax({
+                    type: "POST", url: "/uploadfile", data: _data,
+                    cache: false, contentType: false, processData: false,
+                    success: function (url) { $('#cv-path').val(url); }
+                });
+            });
+
+        });
+
+    </script>
+}
+

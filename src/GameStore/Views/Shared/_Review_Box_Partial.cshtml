@@ -1,0 +1,129 @@
+﻿@model Review
+
+
+<div class="pre-own prdct-detail-pr-own" id="review-block">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="pre-box rate-us">
+                <h3 class="txt-upr clr-black">Write a review</h3>
+                <div class="review-sec" id="review-submition-update">
+                    <form class="rate-box" method="post" asp-controller="ShopingCart" asp-action="Submit_Review"
+                          data-ajax="true" data-ajax-begin="onBegin" data-ajax-complete="onComplete"
+                          data-ajax-method="POST" data-method="post" data-ajax-mode="replace" 
+                          data-ajax-update="#review-submition-update">
+                        <div class="pull-left">Rate Now :</div>
+                        <input type="hidden" value="@Model.Reference_Id" name="Reference_Id" />
+                        <input type="hidden" value="@Model.Platform_Id" name="Platform_Id" />
+                        <input type="hidden" value="@Model.ReviewFor" name="ReviewFor" />  
+                        <input type="hidden" value="@Model.SKU" name="SKU" />                        
+                        <div class="cstmr-reviews pull-left">
+                            <fieldset class="rating">
+                                <input type="radio" id="star-a" name="Rating" value="5" checked="" />
+                                <label class="full" for="star-a" title="Awesome - 5 star-s"></label>
+
+                                <input type="radio" id="star-c" name="Rating" value="4" checked="" />
+                                <label class="full" for="star-c" title="Pretty good - 4 star-s"></label>
+
+                                <input type="radio" id="star-e" name="Rating" value="3" checked="" />
+                                <label class="full" for="star-e" title="Meh - 3 star-s"></label>
+
+                                <input type="radio" id="star-g" name="Rating" value="2" />
+                                <label class="full" for="star-g" title="Kinda bad - 2 star-s"></label>
+
+                                <input type="radio" id="star-i" name="Rating" value="1" />
+                                <label class="full" for="star-i" title="Sucks big time - 1 star-"></label>
+
+                            </fieldset>
+                        </div>
+                        <div class="cmnt-sec">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Enter Title" name="Title" required />
+                            </div>                            
+                        </div>
+                        <div class="cmnt-sec">
+                            <div class="form-group">
+                                <textarea rows="8" class="form-control" name="Content" placeholder="Write your review here.."></textarea>
+                            </div>
+                            
+                            @{
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                    <button type="submit" class="black-btn clr-white submitBtn" >
+                                        <span>Submit</span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="black-btn clr-white"
+                                            data-toggle="popover" title="Information" 
+                                            data-content="Please login to submit a review."
+                                            data-container="body" data-placement="right">
+                                        <span>Submit</span>
+                                    </button>
+                                    
+                                }
+                            }
+                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="pre-box animation-element slide-bottom">
+                <h3 class="txt-upr clr-black">
+                    PRE - Owned Gaming Guarantee
+                </h3>
+                <p>
+                    All our pre-owned products have been carefully tested, and are guaranteed to work. Some products might even come with Warranties (check documentation and invoice). If you are not completely satisfied, simply return the product within seven (7) days for your money back or identical exchange.
+                </p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="round-box txt-center">
+                            <li>
+                                <div class="img">
+                                    <span>
+                                        <img src="/images/dvd.png" alt="Product is guaranteed to work">
+                                    </span>
+                                </div>
+                                <p>
+                                    Product is guaranteed to work
+                                </p>
+                            </li>
+                            <li>
+                                <div class="img">
+                                    <span>
+                                        <img src="/images/box.png" alt="May not include origianl box or manual">
+                                    </span>
+                                </div>
+                                <p>
+                                    May not include origianl box or manual
+                                </p>
+                            </li>
+                            <li>
+                                <div class="img">
+                                    <span>
+                                        <img src="/images/home.png" alt="Picture item may not represent condition received">
+                                    </span>
+                                </div>
+                                <p>
+                                    Picture item may not represent condition received
+                                </p>
+                            </li>
+                            <li>
+                                <div class="img">
+                                    <span>
+                                        <img src="/images/money.png" alt="3 days money back guaranteed">
+                                    </span>
+                                </div>
+                                <p>
+                                    3 days money back guaranteed
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

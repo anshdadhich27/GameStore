@@ -1,0 +1,172 @@
+﻿@{
+    ViewData["Title"] = "Check Out";
+    var payment = ViewBag.Payments as PaymentSetting;
+    string addrs = (ViewBag.CartType == "Shopping") ? "Delivery" : "Pickup";
+}
+
+@section styles{
+    <link href="~/css/checkout.min.css" rel="stylesheet" />
+    <link href="~/css/sign-login.min.css" rel="stylesheet" />
+}
+
+<div class="wrapper checout-page">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="chk-out-process">
+                        <ul>
+                            <li class="active">
+                                <div class="prcs-icn prcs-login">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    Login/Register
+                                </div>
+                            </li>
+                            <li class="active">
+                                <div class="prcs-icn location">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    @addrs Address
+                                </div>
+                            </li>
+                            <li class="active">
+                                <div class="prcs-icn payment">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    Payment Info
+                                </div>
+                            </li>
+                            <li class="" id="place-order">
+                                <div class="prcs-icn plce-order">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    Place Order
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="payment-options">
+                        @{
+                            if (ViewBag.CartType == "Shopping")
+                            {
+                                <h4 class="billing-title">Choose Your Payment Method</h4>
+                                <div class="cstmr-adrs-blck pay-mode-block">
+                                    <div class="pay-mode">
+                                        <a href="@ViewBag.NextStep" class="cc txt-center">
+                                            <img src="/images/cc.png" alt="Payment Method">
+                                        </a>
+                                        <a href="javascript:;" class="cod txt-center" data-bind="click:CreateShipmentOrder">
+                                            <img src="/images/cod.png" alt="Payment Method">
+                                            <span class="glyphicon glyphicon-refresh processingIcon"
+                                                  style="color:white;" title="Processing..."
+                                                  data-bind="visible:IsPlacingOrder"></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="cstmr-adrs-blck pay-mode-block">
+                                    <a href="javascript:;" class="btn btn-danger" data-bind="click:CreateShipmentOrder">
+                                        <span>Place your order</span>
+                                        <span class="glyphicon glyphicon-refresh processingIcon"
+                                              style="color:white;" title="Processing..."
+                                              data-bind="visible:IsPlacingOrder"></span>
+                                    </a>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div id="order-processing-sec">
+                        <h4 class="billing-title" data-bind="visible:IsPlacingOrder">Creating your order....</h4>
+                    </div>
+                    <div class="prcd-buy" id="msg-section" style="padding:10px;">
+
+                    </div>                    
+                </div>
+                <div class="col-md-6">
+                    @await Component.InvokeAsync("CartSummary", new { id = ViewBag.TrackingId })
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hidden">
+    <div id="waring-msg">
+        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <strong>Warning!</strong> Something went wrong. Please try again.
+        </div>
+    </div>
+    <div id="success-msg">
+        <div class="alert alert-success alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <strong>Success!</strong> Your order is successfully placed.
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        this.IsPlacingOrder = ko.observable(false);
+        function CreateShipmentOrder() {
+            if (IsPlacingOrder()) { return; }
+            IsPlacingOrder(true);
+            $.ajax({
+                type: 'POST', dataType: "json", url: '/create-order',
+                contentType: "application/json; charset=utf-8",
+                data: ko.toJSON({ Cart_Id: '@ViewBag.TrackingId', PaymentType: 'cod', PaymentStatus : false}),
+                success: function (obj) {
+                    //console.log(obj);
+                    IsPlacingOrder(false);
+                    if (obj === false) {
+                        $('#msg-section').html($('#waring-msg').html());
+                    } else {
+                        $('#msg-section').html($('#success-msg').html());
+                        $('#place-order').addClass('active');
+                    }
+                }
+            }).done(function () {
+                localStorage.clear();
+                _app.Cart.ShopingCart.removeAll();
+
+                setTimeout(function () {
+                    if ('@ViewBag.CartType' === 'Shopping')
+                    { window.location.href = '/my-orders'; }
+                    else { window.location.href = '/my-sold-items'; }
+                }, 3000);
+             });
+        };
+
+
+        $(document).ready(function () {
+            var tax = parseInt('@payment.Tax');
+            var shippimg = parseInt('@payment.ShippingCharge');
+            _app.Tax_Rate(tax);
+            _app.ShippingCharge(shippimg);
+            //_app.Manage_Shopping_Cart();
+            var amount = parseFloat('@ViewBag.TotalAmount');
+            if (amount === 0) {
+                $('#payment-options').hide();
+                CreateShipmentOrder();
+            }
+        });
+    </script>
+}

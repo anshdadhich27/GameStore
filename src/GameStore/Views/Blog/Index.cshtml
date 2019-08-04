@@ -1,0 +1,304 @@
+﻿@model PageContent
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaKeywords"] = Model.MetaKeywords;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+    var blog_list = ViewBag.BlogList as PaginatedEntity<Blog>;
+    Blog first_blog = null;
+    Blog second_blog = null;
+    Blog third_blog = null;
+    Blog forth_blog = null;
+    if (blog_list != null)
+    {
+        if (blog_list.PagedSet.Count() > 0)
+        {
+            first_blog = blog_list.PagedSet.ElementAt(0);
+        }
+        if (blog_list.PagedSet.Count() > 1)
+        {
+            second_blog = blog_list.PagedSet.ElementAt(1);
+        }
+        if (blog_list.PagedSet.Count() > 2)
+        {
+            third_blog = blog_list.PagedSet.ElementAt(2);
+        }
+        if (blog_list.PagedSet.Count() > 3)
+        {
+            forth_blog = blog_list.PagedSet.ElementAt(3);
+        }
+    }
+}
+
+@section styles{
+    <link href="~/css/blog.min.css" rel="stylesheet" />
+}
+
+<div class="wrapper">
+    <div class="middle blog-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="blg-pg-title txt-upr txt-center clr-black">@Model.HeaderContent</h2>
+                    @{
+                        if (first_blog != null)
+                        {
+                            <div class="pull-left blg-wd50 brdr-right">
+                                <div class="top-blg-sec">
+                                    <img src="@first_blog.Banner" alt="@first_blog.Title">
+                                    <div class="blg-smry">
+                                        <a href="javascript:void(0);" class="red-btn txt-upr clr-white">@first_blog.Category_Name</a>
+                                        <h3 class="blg-title">
+                                            <a href="/blog/@first_blog.Link" class="clr-white">
+                                                @first_blog.Title
+                                            </a>
+                                        </h3>
+                                        <span class="pull-left clr-white">@first_blog.Author</span>
+                                        <span class="pull-left"> &nbsp;|&nbsp;</span> 
+                                        <span class="pull-left clr-white time">@first_blog.AddedOn.ToString("dd MMMM yyyy hh:mm tt")</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        if (second_blog != null)
+                        {
+                            <div class="pull-left blg-wd50">
+                                @{
+                                    <div class="top-blg-sec top-blg-sec-left">
+                                        <img src="@second_blog.Banner" alt="@second_blog.Title">
+                                        <div class="blg-smry">
+                                            <a href="javascript:void(0);" class="red-btn txt-upr clr-white">@second_blog.Category_Name</a>
+                                            <h3 class="blg-title">
+                                                <a href="/blog/@second_blog.Link" class="clr-white">
+                                                    @second_blog.Title
+                                                </a>
+                                            </h3>
+                                            <span class="pull-left clr-white">@second_blog.Author</span>
+                                            <span class="pull-left"> &nbsp;|&nbsp;</span> 
+                                            <span class="pull-left clr-white time">@second_blog.AddedOn.ToString("dd MMMM yyyy hh:mm tt")</span>
+                                        </div>
+                                    </div>
+
+                                    if (third_blog != null)
+                                    {
+                                        <div class="blg-row brdr-top">
+                                            <div class="top-blg-sec blg-wd50 pull-left  brdr-right">
+                                                <img src="@third_blog.Banner" alt="@third_blog.Title">
+                                                <div class="blg-smry">
+                                                    <a href="javascript:void(0);" class="red-btn txt-upr clr-white">@third_blog.Category_Name</a>
+                                                    <h3 class="blg-title-small">
+                                                        <a href="/blog/@third_blog.Link" class="clr-white">
+                                                            @third_blog.Title
+                                                        </a>
+                                                    </h3>
+                                                    <span class="pull-left clr-white">@third_blog.Author</span>
+                                                    <span class="pull-left"> &nbsp;|&nbsp;</span> 
+                                                    <span class="pull-left clr-white time">@third_blog.AddedOn.ToString("dd MMMM yyyy hh:mm tt")</span>
+                                                </div>
+                                            </div>
+                                            @{
+                                                if (forth_blog != null)
+                                                {
+                                                    <div class="top-blg-sec blg-wd50 pull-left">
+                                                        <img src="@forth_blog.Banner" alt="@forth_blog.Title">
+                                                        <div class="blg-smry">
+                                                            <a href="javascript:void(0);" class="red-btn txt-upr clr-white">@forth_blog.Category_Name</a>
+                                                            <h3 class="blg-title-small">
+                                                                <a href="/blog/@forth_blog.Link" class="clr-white">
+                                                                    @forth_blog.Title
+                                                                </a>
+                                                            </h3>
+                                                            <span class="pull-left clr-white">@forth_blog.Author</span>
+                                                            <span class="pull-left"> &nbsp;|&nbsp;</span> 
+                                                            <span class="pull-left clr-white time">@forth_blog.AddedOn.ToString("dd MMMM yyyy hh:mm tt")</span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                            
+                                        </div>
+
+                                    }
+                                }
+                                
+                                
+                            </div>
+
+                        }
+                    }
+                    
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
+                    <div id="blog-list-block" class="blg-ctgry" style="border-top: 1px solid #ddd;">
+                        @{
+                            if (blog_list != null)
+                            {
+                                foreach (var x in blog_list.PagedSet)
+                                {
+                                    <div class="blg-sec">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="blg-img-sec">
+                                                    <a href="/blog/@x.Link">
+                                                        <img src="@x.Banner" alt="@x.Title">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="blg-div">
+                                                    <ul class="no-border">
+                                                        <li>
+                                                            <a href="javascript:;" class="cat">@x.Category_Name</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;">@x.Author</a>
+                                                        </li>
+                                                        <li class="no-border">
+                                                            <a href="javascript:;" class="time">@x.AddedOn.ToString("dd MMMM yyyy hh:mm tt")</a>
+                                                        </li>
+                                                    </ul>
+                                                    <h3 class="blg-pg-title clr-black">@x.Title</h3>
+                                                    <p class="blg-des">
+                                                        @x.SortDescription
+                                                    </p>
+                                                    <a href="/blog/@x.Link" class="txt-upr white-btn">Read</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+
+                            }
+                        }
+
+                    </div>
+                    <div class="showTitle" style="display:none;">
+                        <span>Showing </span>
+                        <span id="page-index">1</span>
+                        <span>–</span>
+                        <span id="items-on-page">@blog_list.NumResult</span>
+                        <span>of</span>
+                        <span id="total-items">@blog_list.TotalCount</span>
+                        <span>items</span>
+                    </div>
+                    <div class="tab-pane">
+                        <button id="blod-load-more-btn" type="button" 
+                                class="load-more txt-center txt-upr" 
+                                onclick="Get_More_Data();">
+                            <span>Load More</span>
+                            <span class="glyphicon glyphicon-refresh processingIcon" id="loaderIcon" style="display:none;"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="new-ltr-block">
+                        <h5 class="txt-upr txt-center clr-red">News Letter </h5>
+                        <hr>
+                        <div class="ltr-sec txt-center">
+                            <h6>Subscribe GameStoreMe</h6>
+                            <p>
+                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has...
+                            </p>
+                            <form data-ajax="true" data-ajax-begin="onBegin" data-ajax-complete="onComplete"
+                                  action="/newsletter" data-ajax-method="POST" data-method="post"
+                                  id="form-content-home" data-ajax-mode="replace" data-ajax-update="#form-content-home">
+                                <input type="email" name="Email" required placeholder="Enter email address" class="pull-left">
+                                <input type="submit" value="Subscribe" class="txt-upr red-btn pull-left">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="fblike">
+                        <img src="/images/fb-like.jpg" alt="fblike">
+                    </div>
+                    <div class="new-ltr-block">
+
+                        @{
+                            var news_list = ViewBag.TopNews as IEnumerable<Blog>;
+                            if (news_list != null)
+                            {
+                                if (news_list.Count() > 0)
+                                {
+                                    <h5 class="txt-upr txt-center clr-red">Latest news</h5>
+                                    <hr>
+                                    foreach (var x in news_list)
+                                    {
+                                        <div class="nws-blck">
+                                            <div class="img pull-left">
+                                                <img src="@x.Banner" alt="@x.Title">
+                                            </div>
+                                            <div class="news pull-left">
+                                                <p>
+                                                    <a href="/blog/@x.Link">@x.Title</a>
+                                                </p>
+                                                <span class="time"> @x.AddedOn.ToString("dd MMM yyyy hh:mm tt")</span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            }
+                        }
+
+
+                    </div>
+
+                    <div class="new-ltr-block">
+                        @{
+                            var editors_list = ViewBag.TopNews as IEnumerable<Blog>;
+                            if (editors_list != null)
+                            {
+                                if (editors_list.Count() > 0)
+                                {
+                                    <h5 class="txt-upr txt-center clr-red">Editor’s pick</h5>
+                                    <hr>
+                                    foreach (var x in editors_list)
+                                    {
+                                        <div class="nws-blck">
+                                            <div class="img pull-left">
+                                                <img src="@x.Banner" alt="@x.Title">
+                                            </div>
+                                            <div class="news pull-left">
+                                                <p>
+                                                    <a href="/blog/@x.Link">@x.Title</a>
+                                                </p>
+                                                <span class="time"> @x.AddedOn.ToString("dd MMM yyyy hh:mm tt")</span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            }
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        var offset = 10;
+        function Get_More_Data() {
+            $('#loaderIcon').show();
+            document.getElementById('blod-load-more-btn').disabled = true;
+            var api_url = '/blog/get-more-blogs/' + offset;
+            $.ajax({
+                type: 'GET', dataType: "html", url: api_url,
+                contentType: "html/text; charset=utf-8",
+                success: function (data) {
+                    document.getElementById('blod-load-more-btn').disabled = false;
+                    $('#blog-list-block').append(data);
+                    $('#loaderIcon').hide();
+                    offset += 10;                                   
+                }
+            });
+        }
+        
+    </script>
+}

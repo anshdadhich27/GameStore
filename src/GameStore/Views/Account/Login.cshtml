@@ -1,0 +1,137 @@
+﻿@using System.Collections.Generic
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@using GameStore.Models.ViewModel
+@using GameStore.Models.Entity
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Log in";
+    Layout= "_LoginSignupLayout";
+}
+
+
+<div id="signinUp">
+    <div class="modal-header">
+        <h4 class="modal-title txt-center">Login</h4>
+    </div>
+    <div class="modal-body">        
+        <form asp-controller="Account" asp-action="Login" 
+              asp-route-returnurl="@ViewData["ReturnUrl"]" 
+              method="post" class="signup-form">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p>@ViewBag.Message</p>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="frm-field">
+                        <input asp-for="Email" placeholder="Email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <input asp-for="Password" placeholder="Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <input class="txt-upr red-btn" type="submit" value="Login">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <p class="forgot">
+                        <a asp-action="ForgotPassword">Forgot your password?</a>
+                        <label class="pull-right">
+                            <input type="checkbox" value="true" name="RememberMe" class="pull-left" />
+                            <span class="pull-left">Keep me signed in</span>
+                        </label>
+                    </p>
+                </div>
+            </div>            
+        </form>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="or">
+                    <span class="txt-upr">
+                        or
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <form asp-controller="Account" asp-action="ExternalLogin"
+                      asp-route-returnurl="@ViewData["ReturnUrl"]"
+                      method="post" class="form-horizontal">
+                    <div class="signup-with">
+                        <ul>
+                            <li>
+                                <button type="submit" class="btn btn-default"
+                                        name="provider" value="Facebook"
+                                        title="Log in using your Facebook account">
+                                    <img src="/images/fb-signin.png" alt="Facebook">
+                                </button>
+                            </li>   
+                            <li>
+                                <button type="submit" class="btn btn-default"
+                                        name="provider" value="Twitter"
+                                        title="Log in using your Twitter account">
+                                    <img src="/images/tw-sign.png" alt="Twitter">
+                                </button>
+                            </li>   
+                            <li>
+                                <button type="submit" class="btn btn-default"
+                                        name="provider" value="Google"
+                                        title="Log in using your Google account">
+                                    <img src="/images/ggl-sign.png" alt="Google">
+                                </button>
+                            </li>                            
+                        </ul>
+                    </div>
+                </form>
+                <div class="signup-with" style="display:none;">
+                    <ul>
+                        <li>
+                            <a href="">
+                                <img src="/images/fb-signin.png" alt="fb">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <img src="/images/tw-sign.png" alt="tw">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <img src="/images/ggl-sign.png" alt="ggl">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="or more-width">
+                    <span class="txt-center">
+                        New to GameStoreMe?
+                    </span>
+                    <p class="txt-center">
+                        <a asp-action="SignUp" asp-route-returnurl="@ViewData["ReturnUrl"]" 
+                           class="signUpLink gray-btn">Create your GSM account</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+   
+<script type="text/javascript">
+	var windowHeight = $(window).height();
+    $(".signup-sec").css("min-height",windowHeight);
+</script>
+}

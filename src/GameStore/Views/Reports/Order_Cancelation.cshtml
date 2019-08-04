@@ -1,0 +1,518 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Order Cancelation";
+}
+
+@section styles{
+    <link href="~/assets/plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
+
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .bs-example-modal-lg .modal-dialog .modal-dialog {
+            border: 1px solid #9c9797;
+            box-shadow: #bfb3b3 3px 3px 20px 8px;
+        }
+
+        .modal-header {
+            background-color: #dadada;
+        }
+
+        .tab-content {
+            border-bottom: 1px solid lightgray;
+            border-left: 1px solid lightgray;
+            border-right: 1px solid lightgray;
+        }
+
+        .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {
+            background-color: #d1dbe4;
+        }
+
+        .filter-style-top {
+            background-color: #d0d0d0;
+            padding-top: 20px;
+        }
+
+        .filter-style-middle {
+            background-color: #d0d0d0;
+        }
+
+        .filter-style-bottom {
+            background-color: #d0d0d0;
+            margin-bottom: 10px;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">            
+            <div class="panel-body">
+                <form action="/reports/export-order-cancelation" method="post" id="shoppingorder-filter-form" target="_blank">
+                    <div class="row filter-style-top">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">Category:</label>
+                                <select name="Product_Category" id="category-select" class="form-control" data-bind="options:CategoryList, value:Search_Filter.Product_Category"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2" data-bind="visible: Search_Filter.Product_Category()=='Game'">
+                            <div class="form-group">
+                                <label class="control-label">Sub Category:</label>
+                                <input type="hidden" name="Platform_Id" data-bind="value:Search_Filter.Platform_Id" />
+
+                                <select id="sub-category-select-1" class="form-control" data-bind="options:Platform_List, optionsText:'Name', optionsValue:'Id', value:Search_Filter.Platform_Id, optionsCaption:'Choose option'"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2" data-bind="visible: Search_Filter.Product_Category() !='Game'">
+                            <div class="form-group">
+                                <label class="control-label">Sub Category:</label>
+                                <input type="hidden" name="Product_SubCategoryId" data-bind="value:Search_Filter.Product_SubCategoryId" />
+                                <select id="sub-category-select-2" class="form-control" data-bind="options:Filtered_SubCategory, optionsText:'Name', optionsValue:'Id', value:Search_Filter.Product_SubCategoryId, optionsCaption:'Choose option'"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">Payment Type:</label>
+                                <select name="PaymentType" id="payment-type-select" class="form-control" data-bind="options:PaymentMethods, optionsText:'Text', optionsValue:'Value', value:Search_Filter.PaymentType"></select>
+                            </div>
+                        </div>
+                       
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">Start Date:</label>
+                                <input name="StartDate" type="text" class="form-control" placeholder="Start Date"
+                                       data-bind="datePicker:Search_Filter.StartDate" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">End Date:</label>
+                                <input name="EndDate" type="text" class="form-control" placeholder="End Date"
+                                       data-bind="datePicker:Search_Filter.EndDate" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row filter-style-bottom">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">Begin Value (AED):</label>
+                                <input name="BeginValue" type="text" class="form-control" placeholder="Begin Value"
+                                       data-bind="value:Search_Filter.BeginValue, valueUpdate:'afterkeydown'" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">End Value (AED):</label>
+                                <input name="EndValue" type="text" class="form-control" placeholder="End Value"
+                                       data-bind="value:Search_Filter.EndValue, valueUpdate:'afterkeydown'" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">Product Code(SKU):</label>
+                                <input name="Product_SKU" type="text" class="form-control" placeholder="Product Code(SKU)"
+                                       data-bind="value:Search_Filter.Product_SKU, valueUpdate:'afterkeydown'" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">Order Number:</label>
+                                <input name="OrderNumber" type="text" class="form-control" placeholder="Order Number"
+                                       data-bind="value:Search_Filter.OrderNumber, valueUpdate:'afterkeydown'" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group" style="margin-top:20px;">
+                                <label class="control-label">&nbsp;</label>
+                                <button class="btn btn-primary" type="button" data-bind="click: OnCLickFilterBtn, disable: IsLoading">
+                                    <span>Filter</span>
+                                    <span class="glyphicon glyphicon-filter"></span>
+                                    <span class="glyphicon glyphicon-refresh processingIcon" data-bind="visible:IsLoading"></span>
+                                </button>
+
+                                <button class="btn btn-default" type="button" data-bind="click: Reset_Filter, disable: IsLoading">
+                                    <span>Reset</span>
+                                </button>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group" style="margin-top:20px;">
+                                <button type="submit" form="shoppingorder-filter-form" class="btn btn-default">
+                                    <span>Export</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:120px;">#</th>
+                                    <th>Name &amp; Email &amp; Order_id</th>
+                                    <th>Order Status</th>                                    
+                                    <th>Product Name</th>
+                                    <th>SKU</th>
+                                    <th>Quantity</th>
+                                    <th>Total Sum</th>
+                                    <th>Payment Type</th>
+                                    <th>Order Date</th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach:OrderList">
+                                <tr>
+                                    <td style="width:120px;">
+                                        <div class="dropdown">
+                                            <a href="javascript:void(0);" class="dropdown-toggle"
+                                               data-toggle="dropdown" aria-expanded="false">
+                                                <span data-bind="text: ($index()+1)+'). '"></span>
+                                                <span>Options</span>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-list" role="menu">
+                                               
+                                                <li role="presentation" data-bind="visible:$data.Shipping_Id != null">
+                                                    <a href="javascript:void(0);" title="Get Awb Bill"
+                                                       data-bind="click:$parent.Get_Awb_Bill">
+                                                        <i class="fa fa-newspaper-o"></i>
+                                                        <span>Awb Bill</span>
+                                                    </a>
+                                                </li>
+                                                <li role="presentation">
+                                                    <a href="javascript:void(0);" title="Get Invoice"
+                                                       data-bind="click:$parent.Get_Invoice">
+                                                        <i class="fa fa-newspaper-o"></i>
+                                                        <span>Get Invoice</span>
+                                                    </a>
+                                                </li>
+                                                
+                                                <li role="presentation">
+                                                    <a href="javascript:void(0);" title="Cancel Order"
+                                                       data-bind="click:$parent.Cancel_Order">
+                                                        <i class="glyphicon glyphicon-remove-circle"></i>
+                                                        <span>Cancel Order</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span data-bind="text:$data.Name"></span><br />
+                                        <small data-bind="text:$data.Email"></small><br />
+                                        <small class="text-info" data-bind="text:'#'+$data.Id"></small>
+                                    </td>
+                                    <td>
+                                        <span data-bind="text:$data.Status"></span>
+                                    </td>
+                                    <td>
+                                        <a href="#" target="_blank" data-bind="attr:{href: $data.PageUrl}">
+                                            <span data-bind="text:$data.Product_Name"></span>
+                                        </a>                                        
+                                    </td>
+                                    <td>
+                                        <span data-bind="text:$data.SKU"></span>
+                                    </td>
+                                    <td>
+                                        <span data-bind="text:$data.Quantity"></span>
+                                    </td>
+                                    <td>
+                                        <span data-bind="text:$data.TotalPrice"></span>
+                                    </td>
+                                    <td>
+                                        <span data-bind="text:($data.PaymentType=='cc')?'Credit Card':'Cash on Delivery'"></span>
+                                    </td>
+                                    <td>
+                                        <small data-bind="text:moment($data.OrderDate).format('LLL')"></small>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody data-bind="visible:IsLoading">
+                                <tr>
+                                    <td colspan="9">
+                                        <span class="glyphicon glyphicon-refresh processingIcon"></span>
+                                        <span>Loading.....</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="1">
+                                        <select id="row-select" data-bind="options:[10,20,50,100], value:Rows, optionsCaption:'Rows'"
+                                                class="form-control"></select>
+                                    </td>
+                                    <td colspan="1">
+                                        <span>
+                                            <span>Total:</span>
+                                            <span data-bind="text:Total"></span>
+                                            <span>Records</span>
+                                        </span>
+                                    </td>
+                                    <td colspan="7">
+                                        <div id="page-selection"></div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">Order Cancelation</li>
+    </ol>
+}
+
+
+
+
+@section scripts{
+<script>
+        (function (h, q) {
+            h.fn.bootpag = function (p) {
+                function m(c, b) {
+                    b = parseInt(b, 10); var d, e = 0 == a.maxVisible ? 1 : a.maxVisible, k = 1 == a.maxVisible ? 0 : 1, n = Math.floor((b - 1) / e) * e, f = c.find("li"); a.page = b = 0 > b ? 0 : b > a.total ? a.total : b; f.removeClass(a.activeClass); d = 1 > b - 1 ? 1 : a.leaps && b - 1 >= a.maxVisible ? Math.floor((b - 1) / e) * e : b - 1; a.firstLastUse && f.first().toggleClass(a.disabledClass, 1 === b); e = f.first(); a.firstLastUse && (e = e.next()); e.toggleClass(a.disabledClass, 1 === b).attr("data-lp", d).find("a").attr("href", g(d)); k = 1 == a.maxVisible ?
+            0 : 1; d = b + 1 > a.total ? a.total : a.leaps && b + 1 < a.total - a.maxVisible ? n + a.maxVisible + k : b + 1; e = f.last(); a.firstLastUse && (e = e.prev()); e.toggleClass(a.disabledClass, b === a.total).attr("data-lp", d).find("a").attr("href", g(d)); f.last().toggleClass(a.disabledClass, b === a.total); e = f.filter("[data-lp=" + b + "]"); k = "." + [a.nextClass, a.prevClass, a.firstClass, a.lastClass].join(",."); if (!e.not(k).length) {
+                var m = b <= n ? -a.maxVisible : 0; f.not(k).each(function (b) {
+                    d = b + 1 + n + m; h(this).attr("data-lp", d).toggle(d <= a.total).find("a").html(d).attr("href",
+                    g(d))
+                }); e = f.filter("[data-lp=" + b + "]")
+            } e.not(k).addClass(a.activeClass); l.data("settings", a)
+                } function g(c) { return a.href.replace(a.hrefVariable, c) } var l = this, a = h.extend({
+                    total: 0, page: 1, maxVisible: null, leaps: !0, href: "javascript:void(0);", hrefVariable: "{{number}}", next: "&raquo;", prev: "&laquo;", firstLastUse: !1, first: '<span aria-hidden="true">&larr;</span>', last: '<span aria-hidden="true">&rarr;</span>', wrapClass: "pagination", activeClass: "active", disabledClass: "disabled", nextClass: "next", prevClass: "prev",
+                    lastClass: "last", firstClass: "first"
+                }, l.data("settings") || {}, p || {}); if (0 >= a.total) return this; h.isNumeric(a.maxVisible) || a.maxVisible || (a.maxVisible = parseInt(a.total, 10)); l.data("settings", a); return this.each(function () {
+                    var c, b, d = h(this); c = ['<ul class="', a.wrapClass, ' bootpag">']; a.firstLastUse && (c = c.concat(['<li data-lp="1" class="', a.firstClass, '"><a href="', g(1), '">', a.first, "</a></li>"])); a.prev && (c = c.concat(['<li data-lp="1" class="', a.prevClass, '"><a href="', g(1), '">', a.prev, "</a></li>"])); for (b =
+                    1; b <= Math.min(a.total, a.maxVisible) ; b++) c = c.concat(['<li data-lp="', b, '"><a href="', g(b), '">', b, "</a></li>"]); a.next && (b = a.leaps && a.total > a.maxVisible ? Math.min(a.maxVisible + 1, a.total) : 2, c = c.concat(['<li data-lp="', b, '" class="', a.nextClass, '"><a href="', g(b), '">', a.next, "</a></li>"])); a.firstLastUse && (c = c.concat(['<li data-lp="', a.total, '" class="last"><a href="', g(a.total), '">', a.last, "</a></li>"])); c.push("</ul>"); d.find("ul.bootpag").remove(); d.append(c.join("")); c = d.find("ul.bootpag"); d.find("li").click(function () {
+                        var b =
+                        h(this); if (!b.hasClass(a.disabledClass) && !b.hasClass(a.activeClass)) { var c = parseInt(b.attr("data-lp"), 10); l.find("ul.bootpag").each(function () { m(h(this), c) }); l.trigger("page", c) }
+                    }); m(c, a.page)
+                })
+            }
+        })(jQuery, window);
+</script>
+
+<script src="~/assets/plugins/select2/js/select2.min.js"></script>
+<script src="~/lib/moment/moment.js"></script>
+<script src="~/lib/knockout/dist/knockout.js"></script>
+<script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+
+    <script type="text/javascript">
+        function AppViewModel() {
+            var self = this;
+            self.IsLoading = ko.observable(false);
+            self.OrderList = ko.observableArray([]);
+
+            self.Offset = ko.observable(0);
+            self.Rows = ko.observable(10).extend({ rateLimit: 500 });
+            self.Total = ko.observable(0);
+            self.SearchText = ko.observable('').extend({ rateLimit: 500 });
+
+            self.PaymentMethods = [{ Text: 'ALL', Value: 'all' }, { Text: 'Credit Card', Value: 'cc' }, { Text: 'Cash on Delivery', Value: 'cod' }];
+            self.OrderTypes = [{ Text: 'ALL', Value: 'all' }, { Text: 'Selling', Value: 'Selling' }, { Text: 'Shopping', Value: 'Shopping' }];
+            self.CategoryList = ["ALL", "Game", "Console", "Accessories", "Merchandise"];
+            self.All_SubCategory = ko.observableArray([]);
+            self.Platform_List = ko.observableArray([]);
+
+            self.Rows.subscribe(function (newValue) {
+                self.OrderList.removeAll();
+                self.Get_OrderList();
+            });
+
+            self.Search_Filter = {
+                offset: ko.observable(0),
+                rows: self.Rows(),
+                CartType: ko.observable('all'),
+                PaymentType: ko.observable('all'),
+                Product_Category: ko.observable('ALL'),
+                Product_SubCategoryId: ko.observable(),
+                Platform_Id: ko.observable(),
+                StartDate: ko.observable(),
+                EndDate: ko.observable(),
+                BeginValue: ko.observable(),
+                EndValue: ko.observable(),
+                Product_SKU: ko.observable(),
+                OrderNumber: ko.observable()
+            };
+
+            self.Reset_Filter = function () {
+                self.Search_Filter.CartType('all');
+                self.Search_Filter.PaymentType('all');
+                self.Search_Filter.Product_Category('ALL');
+                self.Search_Filter.Product_SubCategoryId(undefined);
+                self.Search_Filter.OrderNumber('');
+                self.Search_Filter.Product_SKU('');
+                self.Search_Filter.EndValue(undefined);
+                self.Search_Filter.BeginValue(undefined);
+                self.Search_Filter.EndDate(undefined);
+                self.Search_Filter.StartDate(undefined);
+                self.Search_Filter.Platform_Id(undefined);
+                $('#category-select').trigger('change');
+                $('#payment-type-select').trigger('change');
+                $('#order-type-select').trigger('change');
+            };
+
+            self.Filtered_SubCategory = ko.computed(function () {
+                return ko.utils.arrayFilter(self.All_SubCategory(), function (o) {
+                    return o.Type === self.Search_Filter.Product_Category();
+                });
+            }, self);
+
+            self.OnCLickFilterBtn = function () {
+                self.OrderList.removeAll();
+                self.Get_OrderList(0, 1);
+            };
+
+            self.Get_Sub_Category_List = function () {
+                $.getJSON("/master/get-all-common-name-url", function (data) {
+                    console.log('Get_Sub_Category_List', data);
+                    self.All_SubCategory(data);
+                });
+            };
+
+            self.Get_Platform_List = function () {
+                $.getJSON("/master/get_platform_list", function (data) {
+                    console.log('Get_Platform_List', data);
+                    self.Platform_List(data);
+                });
+            };
+
+            self.Get_Awb_Bill = function (obj) {
+                $.getJSON("/reports/awb-bill/" + obj.Id, function (data) {
+                    console.log('Get_Awb_Bills', data);
+                    if (data.Success && data.Data.status == 'success') { window.open(data.Data.data); }
+                    else { toastr.warning(data.Data.data); }
+                });
+            };
+
+            self.Get_Invoice = function (obj) {
+                window.open("/reports/invoice/" + obj.Tracking_Id, "_blank");
+            };
+
+            self.Cancel_Order = function (obj) {
+                $.getJSON("/reports/cancel-order/" + obj.Tracking_Id, function (data) {
+                    console.log('Cancel_Order', data);
+                    toastr.success("Success");
+                    obj.Status('Canceled');
+                });
+            };
+
+            self.Get_OrderList = function (Offset, index) {
+                self.IsLoading(true);
+                Offset = Offset || 0;
+                index = index || 1;
+                var rows = self.Rows();
+                var _data = self.Search_Filter;
+                _data.offset = Offset;
+                _data.rows = rows;
+                console.log('Get_OrderList', ko.toJSON(_data));
+                $.ajax({
+                    type: 'POST', dataType: "json",
+                    url: '/reports/get-order-cancelation',
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(_data),
+                    success: function (obj) {
+                        var totalPage = (obj.TotalCount > self.Rows()) ? obj.TotalCount / self.Rows() : 1;
+                        var reminder = (obj.TotalCount > self.Rows()) ? obj.TotalCount % self.Rows() : 0;
+                        if (reminder > 0) { totalPage += 1; }
+                        $.each(obj.PagedSet, function (i, o) { self.OrderList.push(o); });
+                        $('#page-selection').bootpag({ total: parseInt(totalPage), page: index, maxVisible: 10 });
+                        self.Total(obj.TotalCount);
+                        self.IsLoading(false);
+                        console.log(obj);
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.Init = function () {
+                self.Get_OrderList();
+                self.Get_Platform_List();
+                self.Get_Sub_Category_List();
+            };
+
+        };
+
+
+        ko.bindingHandlers.datePicker = {
+            init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+                var unwrap = ko.utils.unwrapObservable;
+                var dataSource = valueAccessor();
+                var binding = allBindingsAccessor();
+                var options = {
+                    keyboardNavigation: true,
+                    todayHighlight: true,
+                    autoclose: true,
+                    daysOfWeekDisabled: [0, 6],
+                    format: 'mm/dd/yyyy'
+                };
+                if (binding.datePickerOptions) {
+                    options = $.extend(options, binding.datePickerOptions);
+                }
+                $(element).datepicker(options);
+                $(element).datepicker('update', dataSource());
+                $(element).on("changeDate", function (ev) {
+                    var observable = valueAccessor();
+                    if ($(element).is(':focus')) {
+                        // Don't update while the user is in the field...
+                        // Instead, handle focus loss
+                        $(element).one('blur', function (ev) {
+                            var dateVal = $(element).datepicker("getDate");
+                            observable(dateVal);
+                        });
+                    }
+                    else {
+                        observable(ev.date);
+                    }
+                });
+                //handle removing an element from the dom
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                    $(element).datepicker('remove');
+                });
+            },
+            update: function (element, valueAccessor) {
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                $(element).datepicker('update', value);
+            }
+        };
+
+        $(document).ready(function () {
+            var app = new AppViewModel();
+            ko.applyBindings(app);
+
+            app.Rows(10);
+            app.Init();
+
+            $('select').select2();
+            $('#page-selection').bootpag({ total: 10, page: 1, maxVisible: 10 });
+
+            $('#page-selection').on('page', function (event, num) {
+                console.log('bootpag', event, num);
+                var offset = (app.Rows() * (num - 1));
+                app.OrderList.removeAll();
+                app.Get_OrderList(offset, num);
+            });
+
+            $('#category-select').on('change', function (e) {
+                app.Search_Filter.Platform_Id(undefined);
+                app.Search_Filter.Product_SubCategoryId(undefined);
+                if (app.Search_Filter.Product_Category() == "Game") {
+                    $('#sub-category-select-1').select2();
+                    $('#sub-category-select-1').trigger('change');
+                } else {
+                    $('#sub-category-select-2').trigger('change');
+                }
+            });
+        });
+    </script>
+}

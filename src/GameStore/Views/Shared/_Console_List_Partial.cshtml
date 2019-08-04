@@ -1,0 +1,60 @@
+﻿@model PaginatedEntity<Product>
+
+
+    <input type="hidden" id="page_index" value="1" />
+    <input type="hidden" id="items_on_page" value="@Model.NumResult" />
+    <input type="hidden" id="total_items" value="@Model.TotalCount" />
+    @{
+        foreach (var x in Model.PagedSet)
+        {
+            double avgRating = x.Rating;// (x.RatingCount > 0) ? x.RatingValue / x.RatingCount : 0;
+            if (avgRating > 5) { avgRating = 5; }
+            string ratingStyle = "good";
+            if (Math.Round(avgRating, 1) > 3.5) { ratingStyle = "good"; }
+            if (Math.Round(avgRating, 1) <= 3.5 && Math.Round(avgRating, 1) >= 2.5) { ratingStyle = "avrage"; }
+            if (Math.Round(avgRating, 1) < 2.5) { ratingStyle = "bad"; }
+            string img_url = string.IsNullOrEmpty(x.ImageUrl) ? "/images/imagenotavailable.jpg" : x.ImageUrl;
+
+
+            <div class="col-md-3 col-sm-4 col-xs-6">
+                <div class="prodcut-box-one prodcut-box">
+                    <div class="prdct-img">
+                        <a href="@x.PageUrl">
+                            <img src="@img_url" alt="@x.Name">
+                        </a>                        
+                    </div>
+                    <div class="prdct-title">
+                        <a href="@x.PageUrl" title="@x.Name">
+                            @(string.IsNullOrEmpty(x.Name) ? "N/A" : (x.Name.Length > 15) ? x.Name.Substring(0, 15) + "..." : x.Name)
+                        </a>
+                    </div>
+                    <div class="prdct-type">                        
+                        <a class="pull-left" href="javascript:void(0);" title="@x.Name">@x.ProductTypeName</a>
+                        <div class="rating pull-right">
+                            <span class="@ratingStyle clr-white txt-center pull-left">@Math.Round(avgRating, 1)</span>
+                        </div>
+                    </div>
+
+                    <div class="price">
+                        <div class="clr-black">
+                            <span>@string.Format("AED {0}", Math.Round(x.Selling_Price, 2))</span>
+                        </div>
+                        <div class="clearfix">
+                            <a href="javascript:void(0);" class="red-btn cart"
+                               data-bind="click: Add_To_Shoping_Cart.bind($data, @x.Id, @x.ProductTypeId, 'Console', @Math.Round(x.Selling_Price, 2), '@x.SKU')">Add to Cart</a>
+                        </div>
+
+                    </div>
+
+                    @{
+                        if (x.PreOrder)
+                        {
+                            <div class="sale-tag"><span>Pre-Order</span></div>
+                        }
+                    }
+                </div>
+            </div>
+                        }
+    }
+
+

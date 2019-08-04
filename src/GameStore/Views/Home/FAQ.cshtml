@@ -1,0 +1,31 @@
+﻿@model PageContent
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaKeywords"] = Model.MetaKeywords;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+}
+@section styles{
+    <link href="~/css/policy-terms.min.css" rel="stylesheet" />
+}
+<div class="wrapper">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 col-sm-3">
+                    @await Html.PartialAsync("_StaticPagesLeftNavigation")
+                </div>
+                <div class="col-md-10 col-sm-9">
+                    <div class="textInfoContent">
+                        <div>
+                            @Html.Raw(Model.HeaderContent)
+                        </div>
+                        <div class="infoContent faqSection">
+                            @Html.Raw(Model.BodyContent)
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

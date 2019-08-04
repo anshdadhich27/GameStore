@@ -1,0 +1,603 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Blog Page";
+}
+
+@section styles{
+
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/summernote-master/summernote.css" rel="stylesheet" />
+    <style>
+        .bs-example-modal-lg .modal-dialog .modal-dialog {
+            border: 1px solid #9c9797;
+            box-shadow: #bfb3b3 3px 3px 20px 8px;
+        }
+
+        .modal-header {
+            background-color: #dadada;
+        }
+
+        .tab-content{border-bottom:1px solid lightgray; border-left:1px solid lightgray; border-right:1px solid lightgray; }
+        .nav-tabs.nav-justified>.active>a, .nav-tabs.nav-justified>.active>a:focus, .nav-tabs.nav-justified>.active>a:hover{
+            background-color:#d1dbe4;
+        }
+    </style>
+}
+
+
+
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">Blogs</li>
+    </ol>
+}
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel panel-heading">
+                <h2 class="panel-title">
+                    <span>Blogs</span>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div role="tabpanel">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs nav-justified" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#tab_basic" role="tab" data-toggle="tab" aria-expanded="true">
+                                        <span class="badge badge-info">1</span>&nbsp;<span id="tab-1-txt">Add New</span>
+                                    </a>
+                                </li>
+                                <li role="presentation" class="">
+                                    <a href="#tab_price" role="tab" data-toggle="tab" aria-expanded="false">
+                                        <span class="badge badge-info">2</span>&nbsp;<span>Blog List</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active in" id="tab_basic">
+                                    <form id="new-form" data-bind="submit:Save_Blog">
+                                        <div class="row">
+                                            <div class="col-sm-12">                                                
+                                                <div class="form-group">
+                                                    <label class="control-label">Title:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Blog Title" required
+                                                           data-bind="value:Blog.Title, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Url: </label>
+                                                    <span class="form-control" style="padding: 7px 10px!important;" data-bind="text:Blog.Link"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Meta Keywords:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Meta Keywords"
+                                                           data-bind="value:Blog.MetaKeyword, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Meta Description:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Meta Description"
+                                                           data-bind="value:Blog.MetaDescription, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Category:</label>
+                                                    <select id="CategoryList_select" class="form-control" data-bind="options:CategoryList, optionsText:'Name', optionsValue:'Id', value:Blog.Category_Id, optionsCaption:'Choose option'">
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Author:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter author name"
+                                                           data-bind="value:Blog.Author, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Active:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <input type="checkbox" value="true" data-bind="checked: Blog.Active" />
+                                                        </div>
+                                                        <div class="form-control" style="padding:8px 13px!important;" data-bind="text:Blog.Active()?'Yes':'No'">Yes</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Is it News:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <input type="checkbox" value="true" data-bind="checked: Blog.IsNews" />
+                                                        </div>
+                                                        <div class="form-control" style="padding:8px 13px!important;" data-bind="text:Blog.IsNews()?'Yes':'No'">Yes</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Is it Editor's pic:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <input type="checkbox" value="true" data-bind="checked: Blog.EditorsPic" />
+                                                        </div>
+                                                        <div class="form-control" style="padding:8px 13px!important;" data-bind="text:Blog.EditorsPic()?'Yes':'No'">Yes</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Banner</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-picture"></span>
+                                                        </div>
+                                                        <label for="bannerUploader" class="form-control" style="padding:5px!important;">
+                                                            <span class="btn btn-default btn-xs">Choose banner</span>
+                                                        </label>
+                                                        <div class="input-group-btn" data-bind="visible:Blog.Banner()!=''">
+                                                            <button class="btn btn-danger" type="button" title="Delete Banner" data-bind="click:function(){Blog.Banner('');}">
+                                                                <span class="glyphicon glyphicon-trash"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <input type="file" id="bannerUploader" style="display:none;" accept="image/*" />
+                                                </div>
+                                                <div class="form-group" data-bind="visible:Blog.Banner()!=''">
+                                                    <img style="max-height:400px;" alt="Banner" data-bind="attr:{src: Blog.Banner}" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Sort Description:</label>
+                                                    <textarea placeholder="Enter sort description of blog" class="form-control" data-bind="value:Blog.SortDescription, valueUpdate:'afterkeydown'"></textarea>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Blog Content:</label>
+                                                    <div id="summernote-body"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-success" form="new-form" data-bind="disable:IsSaving">
+                                                        <span>Save</span>
+                                                        <span class="fa fa-spinner fa-spin" data-bind="visible:IsSaving"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_price">
+                                    <div class="row">                                        
+                                        <div class="col-sm-12 table-responsive">
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:100px;">#</th>
+                                                        <th>Title</th>
+                                                        <th>Author</th>
+                                                        <th>Active</th>
+                                                        <th>Added On</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="form-control" placeholder="Search..."
+                                                                   data-bind="value:SearchText, valueUpdate:'afterkeydown'" />
+                                                        </td>
+                                                        <td colspan="4"></td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody data-bind="foreach:BlogList">
+                                                    <tr>
+                                                        <td style="width:100px;" data-bind="text: $index()+1"></td>
+                                                        <td>
+                                                            <a href="#" target="_blank" data-bind="attr:{href:'/blog/'+$data.Link()}">
+                                                                <span data-bind="text: $data.Title"></span>
+                                                            </a>
+                                                        </td>
+                                                        <td data-bind="text: $data.Author"></td>
+                                                        <td>
+                                                            <label>
+                                                                <input type="checkbox" value="true" data-bind="checked: $data.Active" />
+                                                                <span data-bind="text: $data.Active()?'Yes':'No'"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <span data-bind="visible:$data.AddedOn!=null">
+                                                                <span data-bind="text: moment($data.AddedOn).format('Do MMM YYYY')"></span>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <button type="button" class="btn btn-primary btn-rounded btn-xs"
+                                                                        data-bind="click:$parent.OnClickEditBtn">
+                                                                    <i class="fa fa-edit"></i>
+                                                                    <span>Edit</span>
+                                                                </button>
+                                                                <button type="button" class="btn btn-danger btn-rounded btn-xs"
+                                                                        data-bind="click:$parent.Delete_Blog, disable:$data.IsDeleting">
+                                                                    <i class="fa fa-trash"></i>
+                                                                    <span>Delete</span>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody data-bind="visible:IsLoading">
+                                                    <tr>
+                                                        <td colspan="6">
+                                                            <span class="glyphicon glyphicon-refresh processingIcon"></span>
+                                                            <span>Loading.....</span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td style="width:100px;">
+                                                            <select id="row-select" data-bind="options:[10,20,50,100], value:Rows, optionsCaption:'Rows'"
+                                                                    class="form-control"></select>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                <span>Total:</span>
+                                                                <span data-bind="text:Total"></span>
+                                                                <span>Records</span>
+                                                            </span>
+                                                        </td>
+                                                        <td colspan="4">
+                                                            <div id="page-selection"></div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+<script>
+        (function (h, q) {
+            h.fn.bootpag = function (p) {
+                function m(c, b) {
+                    b = parseInt(b, 10); var d, e = 0 == a.maxVisible ? 1 : a.maxVisible, k = 1 == a.maxVisible ? 0 : 1, n = Math.floor((b - 1) / e) * e, f = c.find("li"); a.page = b = 0 > b ? 0 : b > a.total ? a.total : b; f.removeClass(a.activeClass); d = 1 > b - 1 ? 1 : a.leaps && b - 1 >= a.maxVisible ? Math.floor((b - 1) / e) * e : b - 1; a.firstLastUse && f.first().toggleClass(a.disabledClass, 1 === b); e = f.first(); a.firstLastUse && (e = e.next()); e.toggleClass(a.disabledClass, 1 === b).attr("data-lp", d).find("a").attr("href", g(d)); k = 1 == a.maxVisible ?
+            0 : 1; d = b + 1 > a.total ? a.total : a.leaps && b + 1 < a.total - a.maxVisible ? n + a.maxVisible + k : b + 1; e = f.last(); a.firstLastUse && (e = e.prev()); e.toggleClass(a.disabledClass, b === a.total).attr("data-lp", d).find("a").attr("href", g(d)); f.last().toggleClass(a.disabledClass, b === a.total); e = f.filter("[data-lp=" + b + "]"); k = "." + [a.nextClass, a.prevClass, a.firstClass, a.lastClass].join(",."); if (!e.not(k).length) {
+                var m = b <= n ? -a.maxVisible : 0; f.not(k).each(function (b) {
+                    d = b + 1 + n + m; h(this).attr("data-lp", d).toggle(d <= a.total).find("a").html(d).attr("href",
+                    g(d))
+                }); e = f.filter("[data-lp=" + b + "]")
+            } e.not(k).addClass(a.activeClass); l.data("settings", a)
+                } function g(c) { return a.href.replace(a.hrefVariable, c) } var l = this, a = h.extend({
+                    total: 0, page: 1, maxVisible: null, leaps: !0, href: "javascript:void(0);", hrefVariable: "{{number}}", next: "&raquo;", prev: "&laquo;", firstLastUse: !1, first: '<span aria-hidden="true">&larr;</span>', last: '<span aria-hidden="true">&rarr;</span>', wrapClass: "pagination", activeClass: "active", disabledClass: "disabled", nextClass: "next", prevClass: "prev",
+                    lastClass: "last", firstClass: "first"
+                }, l.data("settings") || {}, p || {}); if (0 >= a.total) return this; h.isNumeric(a.maxVisible) || a.maxVisible || (a.maxVisible = parseInt(a.total, 10)); l.data("settings", a); return this.each(function () {
+                    var c, b, d = h(this); c = ['<ul class="', a.wrapClass, ' bootpag">']; a.firstLastUse && (c = c.concat(['<li data-lp="1" class="', a.firstClass, '"><a href="', g(1), '">', a.first, "</a></li>"])); a.prev && (c = c.concat(['<li data-lp="1" class="', a.prevClass, '"><a href="', g(1), '">', a.prev, "</a></li>"])); for (b =
+                    1; b <= Math.min(a.total, a.maxVisible) ; b++) c = c.concat(['<li data-lp="', b, '"><a href="', g(b), '">', b, "</a></li>"]); a.next && (b = a.leaps && a.total > a.maxVisible ? Math.min(a.maxVisible + 1, a.total) : 2, c = c.concat(['<li data-lp="', b, '" class="', a.nextClass, '"><a href="', g(b), '">', a.next, "</a></li>"])); a.firstLastUse && (c = c.concat(['<li data-lp="', a.total, '" class="last"><a href="', g(a.total), '">', a.last, "</a></li>"])); c.push("</ul>"); d.find("ul.bootpag").remove(); d.append(c.join("")); c = d.find("ul.bootpag"); d.find("li").click(function () {
+                        var b =
+                        h(this); if (!b.hasClass(a.disabledClass) && !b.hasClass(a.activeClass)) { var c = parseInt(b.attr("data-lp"), 10); l.find("ul.bootpag").each(function () { m(h(this), c) }); l.trigger("page", c) }
+                    }); m(c, a.page)
+                })
+            }
+        })(jQuery, window);
+</script>
+<script src="~/assets/plugins/summernote-master/summernote.min.js"></script>
+<script src="~/assets/plugins/summernote-master/summernote-ext-video.js"></script>
+<script src="~/assets/plugins/summernote-master/summernote-ext-fontstyle.js"></script>
+
+<script src="~/assets/plugins/select2/js/select2.min.js"></script>
+<script src="~/lib/moment/moment.js"></script>
+<script src="~/lib/knockout/dist/knockout.js"></script>
+
+    <script type="text/javascript">
+
+        function AppViewModel() {
+            var self = this;
+            self.IsEditing = ko.observable(false);
+            self.IsLoading = ko.observable(false);
+            self.IsSaving = ko.observable(false);
+            self.IsDeleting = ko.observable(false);
+
+            self.Offset = ko.observable(0);
+            self.Rows = ko.observable(10).extend({ rateLimit: 500 });
+            self.Total = ko.observable(0);
+            self.SearchText = ko.observable('').extend({ rateLimit: 500 });
+            self.BlogList = ko.observableArray([]);
+            self.CategoryList = ko.observableArray([]);
+
+            self.Blog = {
+                Id: ko.observable(0),
+                Author: ko.observable(''),
+                Link: ko.observable(''),
+                Title: ko.observable(''),
+                Banner: ko.observable(''),
+                Category_Id: ko.observable(0),
+                Active: ko.observable(true),
+                IsNews: ko.observable(false),
+                EditorsPic: ko.observable(false),
+                MetaKeyword: ko.observable(''),
+                MetaDescription: ko.observable(''),
+                BlogContent: ko.observable(''),
+                SortDescription: ko.observable('')
+            };
+
+            self.Blog.Title.subscribe(function (newValue) {
+                newValue = newValue || '';
+                newValue = '/blog/'+ GetWithoutSpecialChar(newValue);
+                self.Blog.Link(newValue.toLowerCase());
+            });
+
+            self.Rows.subscribe(function (newValue) {
+                self.BlogList.removeAll();
+                self.Get_BlogList();
+            });
+
+            self.SearchText.subscribe(function (newValue) {
+                newValue = newValue || '';
+                if (newValue.length == 0) {
+                    self.BlogList.removeAll();
+                    self.Get_BlogList();
+                }
+                self.GetSearchResult();
+            });
+
+            self.Get_CategoryList = function () {
+                $.get('/master/get-all-common-name-url', function (obj) {
+                    $.each(obj, function (i, o) {
+                        if (o.Type === 'BlogCategory') {
+                            self.CategoryList.push(o);
+                        }
+                    });
+                    console.log(obj);
+                });                
+            };
+
+            self.Get_BlogList = function (offset, index) {
+                self.IsLoading(true);
+                offset = offset || 0;
+                index = index || 1;
+                $.get('/manage-blogs/getpaginated-blog/' + offset + '/' + self.Rows(), function (obj) {
+                    var totalPage = (obj.TotalCount > self.Rows()) ? obj.TotalCount / self.Rows() : 1;
+                    var reminder = (obj.TotalCount > self.Rows()) ? obj.TotalCount % self.Rows() : 0;
+                    if (reminder > 0) { totalPage += 1; }
+                    $.each(obj.PagedSet, function (i, o) { self.BlogList.push(new BlogViewModel(o)); });
+                    $('#page-selection').bootpag({ total: parseInt(totalPage), page: index, maxVisible: 10 });
+                    self.Total(obj.TotalCount);
+                    self.IsLoading(false);
+                    console.log(obj);
+                });
+            };
+
+            self.GetSearchResult = function (Offset, index) {
+                Offset = Offset || 0;
+                index = index || 1;
+                self.IsLoading(true);
+                $.ajax({
+                    type: 'POST', dataType: "json",
+                    url: '/manage-blogs/search-blog',
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON({ offset: Offset, rows: self.Rows(), searchTxt: self.SearchText() }),
+                    success: function (obj) {
+                        self.BlogList.removeAll();
+                        var totalPage = (obj.TotalCount > self.Rows()) ? obj.TotalCount / self.Rows() : 1;
+                        var reminder = (obj.TotalCount > self.Rows()) ? obj.TotalCount % self.Rows() : 0;
+                        if (reminder > 0) { totalPage += 1; }
+                        $.each(obj.PagedSet, function (i, o) { self.BlogList.push(new BlogViewModel(o)); });
+                        $('#page-selection').bootpag({ total: parseInt(totalPage), page: index, maxVisible: 10 });
+                        self.Total(obj.TotalCount);
+                        self.IsLoading(false);
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+            };
+
+            self.Save_Blog = function () {
+                var title = self.Blog.Title() || '';
+                if (title.length == 0) { return; }
+
+                var bodyContent = $('#summernote-body').code();
+                self.Blog.BlogContent(bodyContent);
+
+                self.IsSaving(true);
+                var api = self.IsEditing() ? '/manage-blogs/update-blog' : '/manage-blogs/add-new-blog';
+                $.ajax({
+                    type: 'POST', dataType: "json", url: api,
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(self.Blog),
+                    success: function (data) {
+                        self.IsSaving(false); console.log(data);
+                        toastr.success('Success'); self.IsEditing(false);
+                        self.BlogList.removeAll(); //self.ClearAllFields();
+                        self.Get_BlogList(self.Offset(0), self.Rows());
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.Delete_Blog = function (obj) {
+                console.log(ko.toJSON(obj));
+                obj.IsDeleting(true);
+                $.ajax({
+                    type: 'GET', dataType: "json",
+                    url: '/manage-blogs/delete-blog/' + obj.Id,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        obj.IsDeleting(false);
+                        self.BlogList.removeAll();
+                        self.Get_BlogList(self.Offset(), self.Rows());
+                        console.log(data);
+                        toastr.success('Success');
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.OnClickEditBtn = function (obj) {
+                self.IsEditing(true);
+                self.Blog.Id(obj.Id);
+                
+                self.Blog.Link(obj.Link());
+                self.Blog.Author(obj.Author());
+                self.Blog.Title(obj.Title());
+                self.Blog.Active(obj.Active());
+                self.Blog.Banner(obj.Banner());
+                self.Blog.IsNews(obj.IsNews());
+                self.Blog.EditorsPic(obj.EditorsPic());
+                self.Blog.SortDescription(obj.SortDescription());
+
+                self.Blog.Category_Id(obj.Category_Id());
+                self.Blog.BlogContent(obj.BlogContent());
+                self.Blog.MetaKeyword(obj.MetaKeyword());
+                self.Blog.MetaDescription(obj.MetaDescription());
+                                
+                var bodyContent = obj.BlogContent() || '';
+                $('#summernote-body').code(bodyContent);
+                $('#tab-1-txt').text("Update");
+                $('a[href="#tab_basic"]').click();
+                $('#CategoryList_select').trigger('change');
+                
+                console.log(ko.toJSON(self.Blog));
+            };
+
+            self.ClearAllFields = function () {                
+                self.Blog.Id(0);
+                self.Blog.Category_Id(0);
+                self.Blog.MetaDescription('');
+                self.Blog.MetaKeyword('');
+                self.Blog.Author('');
+                self.Blog.Link('');
+                self.Blog.Banner('');
+                self.Blog.Title('');
+                self.Blog.BlogContent('');
+                self.Blog.Active(true);
+                self.Blog.IsNews(false);
+                self.Blog.EditorsPic(false);
+                self.Blog.SortDescription('');
+                $('#summernote-body').code('');
+                $('#tab-1-txt').text("Add New");
+                $('a[href="#tab_price"]').click();
+            };
+
+            self.Init = function () {
+                self.Get_BlogList();
+                self.Get_CategoryList();
+            };
+
+        };
+
+        function BlogViewModel(obj) {
+            var x = this;
+            x.Id = obj.Id;
+            x.AddedOn = obj.AddedOn;
+            x.IsDeleting = ko.observable(false);
+            x.Author = ko.observable(obj.Author);
+            x.Link = ko.observable(obj.Link);
+            x.Title = ko.observable(obj.Title);
+            x.Active = ko.observable(obj.Active);
+            x.Banner = ko.observable(obj.Banner);
+            x.IsNews = ko.observable(obj.IsNews);
+            x.EditorsPic = ko.observable(obj.EditorsPic);
+            x.Category_Id = ko.observable(obj.Category_Id);
+            x.BlogContent = ko.observable(obj.BlogContent);
+            x.MetaKeyword = ko.observable(obj.MetaKeyword);
+            x.MetaDescription = ko.observable(obj.MetaDescription);
+            x.SortDescription = ko.observable(obj.SortDescription);
+        };
+
+        $(document).ready(function () {
+            var app = new AppViewModel();
+            ko.applyBindings(app);
+            app.Rows(10);
+            app.Init();
+           
+            $('#row-select').select2();
+            $('#CategoryList_select').select2();
+            $('#page-selection').bootpag({ total: 10, page: 1, maxVisible: 10 });
+
+            $('#page-selection').on('page', function (event, num) {
+                console.log('bootpag', event, num);
+                var offset = (app.Rows() * (num - 1));
+                app.BlogList.removeAll();
+                if (app.SearchText().length > 0) {
+                    app.GetSearchResult(offset, num);
+                } else { app.Get_BlogList(offset, num); }
+            });
+
+            $('#summernote-body').summernote({
+                placeholder: 'Enter page content', height: 100,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ],
+                popover: {
+                    image: [
+                      ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                      ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                      ['remove', ['removeMedia']]
+                    ]
+                }, dialogsFade: true,
+                onImageUpload: function (files, editor, welEditable) {
+                    var _data = new FormData();
+                    _data.append("file", files[0]);
+                    $.ajax({
+                        type: "POST", url: "/uploadfile", data: _data,
+                        cache: false, contentType: false, processData: false,
+                        success: function (url) { editor.insertImage(welEditable, url); }
+                    });
+                }
+            });
+
+            $('#bannerUploader').on('change', function (e) {
+                var _data = new FormData();
+                _data.append("file", e.target.files[0]);
+                $.ajax({
+                    type: "POST", url: "/uploadfile", data: _data,
+                    cache: false, contentType: false, processData: false,
+                    success: function (url) { app.Blog.Banner(url); }
+                });
+            });
+
+        });
+    </script>
+
+
+}

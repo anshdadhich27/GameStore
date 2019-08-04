@@ -1,0 +1,115 @@
+﻿@model PageContent
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaKeywords"] = Model.MetaKeywords;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+    var payment = ViewBag.Payments as PaymentSetting;
+}
+
+@section styles{
+    <link href="~/css/checkout.min.css" rel="stylesheet" />
+}
+
+<div class="wrapper checout-page">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="order-rvw-box cart-sec">
+                        <h4 class="txt-upr">Selling cart (<span data-bind="text:Total_Item_In_SellingCart">0</span>)</h4>
+                        <div class="cart-box table-responsive">
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ITEM</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: Cart2.SellingCart">
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <div class="prd-img">
+                                                    <a href="#" target="_blank" data-bind="attr:{href: $data.PageUrl}">
+                                                        <img style="max-height:100px;" src="/images/cart-item.jpg" alt="img" data-bind="attr:{src: $data.ImageUrl, alt: $data.Product_Name}">
+                                                    </a>
+                                                </div>
+                                                <div class="prd-name">
+                                                    <a href="#" target="_blank" data-bind="attr:{href: $data.PageUrl}">
+                                                        <span data-bind="text:$data.Product_Name"></span>
+                                                    </a>
+                                                    <br>
+                                                    <b class="type" data-bind="text: Product_TypeName">Playstation</b>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-default btn-xs"
+                                                    data-bind="click: $parent.Remove_Item_From_SellingCart.bind($data)">
+                                                <span>Remove</span>
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </button>
+                                        </td>
+                                        <td align="center">
+                                            <span class="newPric">
+                                                AED <span data-bind="text: $data.Sub_Total"></span>
+                                            </span>                                            
+                                        </td>                                        
+                                    </tr>                                    
+                                </tbody>
+                                <tbody data-bind="visible: Total_Item_In_SellingCart()==0">
+                                    <tr>
+                                        <td colspan="2">
+                                            <p>Your cart is empty. <a href="/sell-yours">Continue selling..</a></p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bill-box" data-bind="visible:Total_Item_In_SellingCart() > 0">
+                        <h3 class="ordr-summry">ORDER SUMMARY</h3>
+                        <div class="order-detail">
+                            <div class="trw item-detail">
+                                <span class="pull-left">Total	</span>
+                                <span class="pull-right">AED <span data-bind="text: Sub_Total_Sell_After_Deduction"></span></span>
+                            </div>                            
+                            <div class="trw item-detail">
+                                <span class="pull-left">Shipping Charge	</span>
+                                <span class="pull-right">- AED <span data-bind="text: ShippingCharge_Show">Free</span></span>
+                            </div>                            
+                            <div class="trw item-detail sbttl">
+                                <span class="pull-left txt-upr clr-black">Subtotal</span>
+                                <span class="pull-right clr-black">AED <span data-bind="text: Sub_Total_Sell"></span></span>
+                            </div>
+
+                            <div class="trw prcd-buy">
+                                <a href="javascript:void(0);" class="red-btn txt-upr" data-bind="click:Check_out_SellingCart">
+                                    Proceed to Checkout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+            var tax = parseInt('@payment.Tax');
+            var shippimg = parseInt('@payment.ShippingCharge');
+            _app.Tax_Rate(0);
+            _app.ShippingCharge(shippimg);
+            _app.Update_Total_Price_Sell();
+            console.log('cart', _app.Sub_Total_Sell());
+        });
+
+        
+    </script>
+}

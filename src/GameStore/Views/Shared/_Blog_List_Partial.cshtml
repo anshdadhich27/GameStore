@@ -1,0 +1,42 @@
+﻿@model PaginatedEntity<Blog>
+@{
+    if (Model != null)
+    {
+        foreach (var x in Model.PagedSet)
+        {
+            <div class="blg-sec">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="blg-img-sec">
+                            <a href="/blog/@x.Link">
+                                <img src="@x.Banner" alt="@x.Title">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="blg-div">
+                            <ul class="no-border">
+                                <li>
+                                    <a href="javascript:;" class="cat">@x.Category_Name</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">@x.Author</a>
+                                </li>
+                                <li class="no-border">
+                                    <a href="javascript:;" class="time">@x.AddedOn.ToString("dd MMMM yyyy hh:mm tt")</a>
+                                </li>
+                            </ul>
+                            <h3 class="blg-pg-title clr-black">@x.Title</h3>
+                            <p class="blg-des">
+                                @x.SortDescription
+                            </p>
+                            <a href="/blog/@x.Link" class="txt-upr white-btn">Read</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+
+    }
+}

@@ -1,0 +1,189 @@
+﻿@model PageContent
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaKeywords"] = Model.MetaKeywords;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+    var gamesByPlatform = ViewBag.GamesByPlatform as IEnumerable<GamePlatform>;
+}
+@section styles{
+<link href="~/css/home.min.css" rel="stylesheet" />
+    <style>
+        .loader {
+            display: none;
+        }
+    </style>
+
+}
+
+
+
+@await Component.InvokeAsync("BannerView")
+
+<div class="wrapper">
+    <div class="container">
+        <div class="box-zone animation-element slide-bottom">
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="ofr-box txt-upr rcntLaunch ">
+                        <a href="/search?rd=new-releases">
+                            Recently<br>
+                            <span>Launched</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="ofr-box txt-upr bstSelling">
+                        <a href="/search?bs=true">
+                            Best selling<br>
+                            <span>titles</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="ofr-box txt-upr ofrZone">
+                        <a href="/hotdeals">
+                            offers<br>
+                            <span>zone</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="news-ltr-box txt-upr clr-white">
+                        <h4>
+                            Subscribe<br>
+                            <span>Newsletter</span>
+                        </h4>
+                        <form class="subscribe-sec" data-ajax="true" data-ajax-begin="onBegin" 
+                              data-ajax-complete="onComplete"
+                              action="/newsletter" data-ajax-method="POST" data-method="post"
+                              data-ajax-mode="replace" data-ajax-update="#form-content-home">
+                            <input type="email" name="Email" placeholder="Enter email">
+                            <button type="submit" class="submitBtn"></button>
+                        </form>
+                        <div id="form-content-home" class="nwsLtrMsg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        @await Html.PartialAsync("_PreOwnedGaming")
+        
+        @await Html.PartialAsync("_GameListWithPlatformTabs", gamesByPlatform)
+
+        <div class="sell-game clr-white">
+            <h2 class="page-title txt-upr txt-center">sell your games</h2>
+            <p class="txt-center">Convert your old games to cash</p>
+            <div class="row">
+                <div class="col-md-4 col-sm-4">
+                    <div class="prdct-box-two clr-white  txt-center animation-element slide-left">
+                        <img src="/images/list-prdct.png" alt="List Your Game">
+                        <div class="list-title txt-upr"> List Your Game </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <div class="prdct-box-two clr-white  txt-center">
+                        <img src="/images/pack-send.png" alt="Pack It & Send us">
+                        <div class="list-title txt-upr"> Pack It & Send us </div>
+                        
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4 animation-element slide-right">
+                    <div class="prdct-box-two clr-white  txt-center">
+                        <img src="/images/get-paid.png" alt="Get paid">
+                        <div class="list-title txt-upr"> Get paid </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @await Component.InvokeAsync("ConsoleView")
+        
+        @await Component.InvokeAsync("AdsView", new { page = "HomePage" })
+
+        @await Component.InvokeAsync("AccessoriesView")
+        
+    </div>
+</div>
+<div class="wrapper read-news">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="/pages/recent-news">
+                    <div class="news-box">
+                        <div class="news-line txt-upr txt-center clr-white bar">
+                            <span>Read the recent news about</span><br>
+                            gaming world
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+<script src="~/js/home.min.js"></script>
+<script type="text/javascript">
+     
+
+     $(document).ready(function () {
+         $('#devps').easyResponsiveTabs({
+             type: 'default',
+             width: 'auto',
+             fit: true,
+             closed: 'accordion',
+         });
+
+         $('#console').easyResponsiveTabs({
+             type: 'default',
+             width: 'auto',
+             fit: true,
+             closed: 'accordion',
+         });
+
+         $(window).on("load", function () {
+             console.log('loaded');
+             setTimeout(function () {
+                 $(".loader").fadeOut('3000');
+                 console.log('fadeout');
+             }, 5000);
+         });
+
+
+         $('#main-banner').carouFredSel({
+             width: '100%',
+             items: {
+                 visible: 3,
+                 start: -1
+             },
+             scroll: {
+                 items: 1,
+                 duration: 700,
+                 timeoutDuration: 2000
+             },
+             prev: '#prev',
+             next: '#next',
+             pagination: {
+                 container: '#pager',
+                 deviation: 1
+             }
+         });
+     });
+
+    
+
+     $('.prodcut-box').hover(function () {
+         $('body').toggleClass('body-hover');
+         $(this).toggleClass('product-hover');
+     });
+
+
+
+
+</script>
+
+}

@@ -1,0 +1,180 @@
+﻿@model IEnumerable<Category>
+
+
+<div class="main-menu mobile-mega-menu mob">
+    <nav>
+        <ul>
+            <li>
+                <a href="/">Home</a>
+            </li>
+
+            @{
+                foreach (var x in Model)
+                {
+                    <li>
+                        <a href="javacript:void(0);">@x.Name</a>
+                        <ul>
+                            @{
+                                foreach (var xx in x.PlatformList)
+                                {
+                                    <li>
+                                        <a href="javacript:void(0);">@xx.Name</a>
+                                        <ul>
+                                            <li><a href="@string.Format("/platform/{0}", xx.NameUrl)">All Games</a></li>
+                                            <li>
+                                                <a href="javacript:void(0);">Genre</a>
+                                                <ul>
+                                                    @{
+                                                        foreach (var g in x.GenereList)
+                                                        {
+                                                            <li>
+                                                                <a href="@string.Format("/platform/{0}?g={1}", xx.NameUrl, g.NameUrl)">@g.Name</a>
+                                                            </li>
+                                                        }
+                                                    }
+
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);">Pre-Owned</a>
+                                                <ul>
+                                                    <li>
+                                                        <a href="@string.Format("/platform/{0}?c=pre-owned", xx.NameUrl)">
+                                                            <span>Pre-Owned Games</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/accessories?c=pre-owned">
+                                                            <span>Pre-Owned Accessories</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);">Accessories</a>
+                                                <ul>
+                                                    <li>
+                                                        <a href="/accessories">
+                                                            <span>All Accessories</span>
+                                                        </a>
+                                                    </li>
+                                                    @{
+                                                        if (x.AccessoriesTypes != null)
+                                                        {
+                                                            foreach (var acc in x.AccessoriesTypes)
+                                                            {
+                                                                <li>
+                                                                    <a href="@string.Format("/accessories?type={0}", acc.NameUrl)">
+                                                                        <span>@acc.Name</span>
+                                                                    </a>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);">Digital Content</a>
+                                                <ul>
+                                                    <li>
+                                                        <a href="@string.Format("/platform/{0}?dc=gift-cart", xx.NameUrl)">
+                                                            <span>Gift Cards</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="@string.Format("/platform/{0}?dc=plus-subscription", xx.NameUrl)">
+                                                            <span>Plus Subscriptions</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="@string.Format("/platform/{0}?dc=in-game-currency", xx.NameUrl)">
+                                                            <span>In-Game Currency</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="@string.Format("/platform/{0}?dc=season-passes", xx.NameUrl)">
+                                                            <span>Season Passes</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="@string.Format("/platform/{0}?dc=add-ons", xx.NameUrl)">
+                                                            <span>Add-Ons</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);">Hardware</a>
+                                                <ul>
+                                                    <li>
+                                                        <a href="/console?type=game-systems">
+                                                            <span>Game Systems</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/console?type=kinect">
+                                                            <span>Kinect</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);">Toys Of Life</a>
+                                                <ul>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span>Clothing</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span>Collectibles</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);">Shop By Age</a>
+                                                <ul>
+                                                    <li>
+                                                        <a href="@string.Format("/platform/{0}?pegi=1", xx.NameUrl)">
+                                                            <span>Everyone</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="@string.Format("/platform/{0}?pegi=2", xx.NameUrl)">
+                                                            <span>Everyone 10+</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="@string.Format("/platform/{0}?pegi=4", xx.NameUrl)">
+                                                            <span>Teen</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="@string.Format("/platform/{0}?pegi=5", xx.NameUrl)">
+                                                            <span>Mature</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                                        }
+                            }
+
+
+                        </ul>
+                    </li>
+                                                        }
+            }
+
+
+
+            <li>
+                <a href="/blog">Blog</a>
+            </li>
+        </ul>
+    </nav>
+</div>

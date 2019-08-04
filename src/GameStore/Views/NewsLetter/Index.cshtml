@@ -1,0 +1,122 @@
+﻿@{ 
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Game Store Me | Under Construction | Coming Soon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- START: Styles -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7cOpen+Sans:400,700" rel="stylesheet" type="text/css">
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/coming-soon.css" rel="stylesheet" />
+    <style type="text/css">
+         .container {
+         width: 100% !important;
+         }
+         .ftr-social>ul {
+         display: table;
+         margin: 0 auto;
+         }
+         .container .cmingsoonwrapper{
+         position: relative;
+         }
+         .cming-logo{
+         margin:1% auto 0;
+         width: 100%;
+         max-width:750px;
+         }
+         .cmingsoonwrapper .nk-mchimp.validate{
+         position: fixed;
+         top: 60%;
+         margin: -89px 0;
+         }
+
+         .copyRight {
+                position: fixed;
+                bottom: 25px;
+                color: #fff;
+                left: 38%;
+                right: 38%;
+            }
+
+         @@media (max-width: 600px) {
+         form.nk-mchimp.validate .input-group .form-control{
+         margin-bottom: 11px;
+         margin-right: 0;
+         width: 90%;
+         }
+         .nk-page-background-fixed {
+         background-size: cover;
+         background-position: top left;
+         }
+         .copyRight {
+                position: fixed;
+                bottom: 25px;
+                color: #fff;
+                left: 22%;
+                right: 20%;
+            }
+         }
+    </style>
+    </head>
+    <body>
+        <div class="nk-main">
+            <div class="nk-fullscreen-block">
+                <div class="nk-fullscreen-block-middle">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="cmingsoonwrapper">
+                                    <div class="cming-logo">
+                                        <a href="/"><img class="logo" src="/images/coming-logo.png" alt="Game Store Me | Under Construction"></a>
+                                    </div>
+                                    <div>
+                                        <form class="nk-mchimp validate" data-ajax="true" data-ajax-begin="onBegin"
+                                              data-ajax-complete="onComplete" action="/newsletter"
+                                              data-ajax-method="POST" data-method="post"
+                                              data-ajax-mode="replace" data-ajax-update="#form-content">
+                                            <div class="input-group" id="form-content">
+                                                <input type="text" name="FirstName" required class="required email form-control" placeholder="First Name">
+                                                <input type="text" name="LastName" class="required email form-control" placeholder="Last Name">
+                                                <input type="email" name="Email" required class="required email form-control" placeholder="Enter your Email">
+                                                <input type="submit" value="Subscribe" id="submitBtn" class="nk-btn nk-btn-rounded nk-btn-color-white ml-20">
+                                            </div>
+                                            <div class="nk-form-response-success"></div>
+                                            <div class="nk-form-response-error"></div>
+                                        </form>
+                                    </div>                                    
+                                    <div class="copyRight">
+                                        © 2017 by Gamestoreme, All Rights Reserved.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nk-fullscreen-block-bottom">
+                    <div class="text-center">
+                        <div class="nk-gap-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- START: Page Background -->
+        <div class="nk-page-background-fixed" style=""></div>
+        <!-- END: Page Background -->
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/js/jquery.unobtrusive-ajax.min.js"></script>
+        <script type="text/javascript">
+         function onBegin() {
+         $('#submitBtn').val('Processing...');
+             document.getElementById('submitBtn').disabled = true;
+         };
+         function onComplete() {
+             //document.getElementById('submitBtn').disabled = false;
+         };
+        </script>
+    </body>
+</html>

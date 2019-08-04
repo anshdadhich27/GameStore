@@ -1,0 +1,9 @@
+﻿@using GameStore.Models.Entity
+@model IEnumerable<Genere>
+
+@foreach (var x in Model)
+{
+    <li>
+        <a href="@string.Format("/genere/{0}", x.NameUrl)">@x.Name</a>
+    </li>
+}

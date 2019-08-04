@@ -1,0 +1,89 @@
+﻿@model List<Console_DTO>
+
+
+
+<div class="consols">
+    <div class="page-title-block animation-element">
+        <h2 class="page-title txt-upr txt-center clr-black">consoles</h2>
+    </div>
+    <a href="/console" class="view-all">View all</a>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="console" class="web-flow">
+                <ul class="pro-list txt-upr">
+                    @{
+                        int index = 0;
+                        foreach (var x in Model)
+                        {
+                            if (x.ProductList.Count() == 0) { continue; }
+                            <li class="@(index==0?"resp-tab-active":"")"> @x.Name </li>
+                            index++;
+                        }
+                    }
+                    
+                </ul>
+                @{ 
+                    index = 0;
+                    foreach(var x in Model)
+                    {
+                        if (x.ProductList.Count() == 0) { continue; }
+                        <div class="pro-container">
+                            <div class="row">
+                                @{
+                                    foreach (var p in x.ProductList)
+                                    {
+                                        double avgRating = p.Rating;// (p.RatingCount > 0) ? p.RatingValue / p.RatingCount : 0;
+                                        if (avgRating > 5) { avgRating = 5; }
+                                        string ratingStyle = "good";
+                                        if (Math.Round(avgRating, 1) > 3.5) { ratingStyle = "good"; }
+                                        if (Math.Round(avgRating, 1) <= 3.5 && Math.Round(avgRating, 1) >= 2.5) { ratingStyle = "avrage"; }
+                                        if (Math.Round(avgRating, 1) < 2.5) { ratingStyle = "bad"; }
+
+                                        <div class="col-md-2 col-sm-4 col-xs-6">
+                                            <div class="prodcut-box-one prodcut-box">
+                                                <div class="prdct-img">
+                                                    <a href="@p.PageUrl">
+                                                        <img title="@p.Name" src="@(string.IsNullOrEmpty(p.ImageUrl)?"/images/imagenotavailable.jpg":p.ImageUrl)" alt="@p.Name" />
+                                                    </a>
+                                                </div>
+                                                <div class="prdct-title">
+                                                    <a href="@p.PageUrl">
+                                                        @(string.IsNullOrEmpty(p.Name) ? "N/A" : (p.Name.Length > 15) ? p.Name.Substring(0, 15) + "..." : p.Name)
+                                                    </a>
+                                                </div>
+                                                <div class="prdct-type">
+                                                    <a href="javascript:void(0);">@p.ProductTypeName</a>
+                                                </div>
+                                                <div class="rating">
+                                                    <span class="@ratingStyle clr-white txt-center">@Math.Round(avgRating, 1)</span>
+                                                </div>
+                                                <div class="price">
+                                                    <div class="pull-left clr-black">
+                                                        <span>@string.Format("AED {0}", Math.Round(p.Selling_Price, 2))</span>
+                                                    </div>
+                                                    <div class="pull-left">
+                                                        <a href="javascript:void(0);" class="red-btn cart"
+                                                           data-bind="click: Add_To_Shoping_Cart.bind($data, @p.Id, @p.ProductTypeId, 'Console', @Math.Round(p.Selling_Price, 2), '@p.SKU')">Add to Cart</a>
+                                                    </div>
+                                                </div>
+                                                @{
+                                                    if (p.PreOrder)
+                                                    {
+                                                        <div class="sale-tag"><span>Pre-Order</span></div>
+                                                    }
+                                                }
+                                                
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        index++;
+                    }
+                }
+                
+            </div>
+        </div>
+    </div>
+</div>

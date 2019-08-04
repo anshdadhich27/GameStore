@@ -1,0 +1,1023 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Update Game";
+}
+
+@section styles{
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/summernote-master/summernote.css" rel="stylesheet" />
+    <link href="~/assets/plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .bs-example-modal-lg .modal-dialog .modal-dialog {
+            border: 1px solid #9c9797;
+            box-shadow: #bfb3b3 3px 3px 20px 8px;
+        }
+
+        .modal-header {
+            background-color: #dadada;
+        }
+        .tab-content{border-bottom:1px solid lightgray; border-left:1px solid lightgray; border-right:1px solid lightgray; }
+        .nav-tabs.nav-justified>.active>a, .nav-tabs.nav-justified>.active>a:focus, .nav-tabs.nav-justified>.active>a:hover{
+            background-color:#d1dbe4;
+        }
+    </style>
+}
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">Update Game</li>
+    </ol>
+}
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel panel-heading">
+                <h2 class="panel-title">
+                    <span>Update Game</span>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <form id="new-game-form" data-bind="submit:Save_Game_Details">
+                    <div role="tabpanel">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs nav-justified" role="tablist">
+                            <li role="presentation" class="active"><a href="#tab_basic" role="tab" data-toggle="tab" aria-expanded="true">
+                                 <span class="badge badge-info">1</span>&nbsp;<span>Basic Info</span></a></li>
+                            <li role="presentation" class=""><a href="#tab_price" role="tab" data-toggle="tab" aria-expanded="false">
+                                 <span class="badge badge-info">2</span>&nbsp;<span>Price Details</span> </a></li>
+                            <li role="presentation" class=""><a href="#tab_images" role="tab" data-toggle="tab" aria-expanded="false">
+                                 <span class="badge badge-info">3</span>&nbsp;<span>Images</span></a></li>
+                            <li role="presentation" class=""><a href="#tab_videos" role="tab" data-toggle="tab" aria-expanded="false">
+                                 <span class="badge badge-info">4</span>&nbsp;<span>Videos</span></a></li>
+                            <li role="presentation" class="hidden"><a href="#tab_reviews" role="tab" data-toggle="tab" aria-expanded="false">
+                                 <span class="badge badge-info">5</span>&nbsp;<span>Reviews</span></a></li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade active in" id="tab_basic">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="control-label">Name:</label>
+                                            <input type="text" class="form-control" placeholder="Enter Game Name" required
+                                                   data-bind="value:Game.Name, valueUpdate:'afterkeydown'" />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">Popularity:</label>
+                                            <input type="text" class="form-control" placeholder="Enter Popularity"
+                                                   data-bind="value:Game.Popularity, valueUpdate:'afterkeydown'" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="control-label">Pre Order:</label>
+                                            <div class="form-control" style="padding:5px 5px !important;">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" value="true" data-bind="checked:Game.PreOrder" />
+                                                    <span data-bind="text:Game.PreOrder()?'YES':'NO'">YES</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Active:</label>
+                                            <div class="form-control" style="padding:5px 5px !important;">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" value="true" data-bind="checked:Game.Active" />
+                                                    <span data-bind="text:Game.Active()?'YES':'NO'">YES</span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="control-label">PEGI Rating:</label>
+                                            <select id="pegi-selection" class="form-control" data-bind="value:Game.PEGI_Rating">
+                                                <option data-bind="text:'Choose option', value:0"></option>
+                                                <option data-bind="text:'Everyone (3+)', value:1"></option>
+                                                <option data-bind="text:'Everyone (7+)', value:2"></option>
+                                                <option data-bind="text:'Everyone (12+)', value:3"></option>
+                                                <option data-bind="text:'Teen (16+)', value:4"></option>
+                                                <option data-bind="text:'Mature (18+)', value:5"></option>
+                                            </select>                                            
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Vendor:</label>
+                                            <select id="vendor_select" class="form-control"
+                                                    data-bind="value:Game.Vendor_Id, options:VendorList, optionsText:'Name', optionsValue:'Id', optionsCaption:'Choose option'"></select>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="control-label">First Release Date:</label>
+                                            <input id="datetimepicker1" type="text" class="form-control" placeholder="Enter Release Date"
+                                                   data-bind="datePicker:Game.First_release_date, valueUpdate:'afterkeydown'" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="control-label">Barcode:</label>
+                                            <input type="text" class="form-control" placeholder="Enter Barcode"
+                                                   data-bind="value:Game.Barcode, valueUpdate:'afterkeydown'" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="control-label">Condition: *</label>
+                                            <select id="condition_select" class="form-control" multiple
+                                                    data-bind="selectedOptions:Game.Selected_Conditions, options:Conditions, optionsText:'Text', optionsValue:'Id', optionsCaption:'Choose option'"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Game Modes</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoading_Game_modes, 'fa-th-list': !IsLoading_Game_modes()}"></span>
+                                                </div>
+                                                <select class="form-control" id="Game_modeList_select" multiple
+                                                        data-bind="options:Game_modeList, optionsText:'Name', optionsValue:'Id', selectedOptions:Game.Selected_Game_modes"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Keywords</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoading_Keywords, 'fa-th-list': !IsLoading_Keywords()}"></span>
+                                                </div>
+                                                <select class="form-control" id="KeywordList_select" multiple
+                                                        data-bind="options:KeywordList, optionsText:'Name', optionsValue:'Id', selectedOptions:Game.Selected_Keywords"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Genres</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoadingGenres, 'fa-th-list': !IsLoadingGenres()}"></span>
+                                                </div>
+                                                <select class="form-control" id="GenreList_select" multiple
+                                                        data-bind="options:GenreList, optionsText:'Name', optionsValue:'Id', selectedOptions:Game.Selected_Genres"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Platforms</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoadingPlatforms, 'fa-th-list': !IsLoadingPlatforms()}"></span>
+                                                </div>
+                                                <select class="form-control" id="PlatformList_select" multiple
+                                                        data-bind="options:PlatformList, optionsText:'Name', optionsValue:'Id', selectedOptions:Game.Selected_Platforms"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Summary:</label>
+                                            <div id="Summary-box"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Storyline:</label>
+                                            <div id="Storyline-box"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="tab_price">
+                                <table class="table table-bordered table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:7%;">Condition</th>
+                                            <th style="width:10%;">Platform</th>                                            
+                                            <th style="width:13%;">Price</th>
+                                            <th style="width:15%;">Available For</th>
+                                            <th style="width:10%;">Quantity</th>
+                                            <th style="width:10%;">Best Selling</th>
+                                            <th style="width:15%;">SKU</th>
+                                            <th style="width:10%;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach:GamePlatformMapings">
+                                        <tr>
+                                            <td><span data-bind="text:$data.Condition"></span></td>
+                                            <td><span data-bind="text:$data.Platform_Name"></span></td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label class="control-label">Buying Price</label>
+                                                    <input type="text" placeholder="Buying Price" class="form-control"
+                                                           data-bind="value:$data.Buying_Price, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Selling Price</label>
+                                                    <input type="text" placeholder="Selling Price" class="form-control"
+                                                           data-bind="value:$data.Selling_Price, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Original Price</label>
+                                                    <input type="text" placeholder="Original Price" class="form-control"
+                                                           data-bind="value:$data.Original_Price, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label class="control-label">Available to Sell:</label>
+                                                    <div class="form-control" style="padding:5px 5px !important;">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" value="true" data-bind="checked:$data.Available_To_Sell" />
+                                                            <span data-bind="text:$data.Available_To_Sell()?'YES':'NO'">YES</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Available to Buy:</label>
+                                                    <div class="form-control" style="padding:5px 5px !important;">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" value="true" data-bind="checked:$data.Available_To_Buy" />
+                                                            <span data-bind="text:$data.Available_To_Buy()?'YES':'NO'">YES</span>
+                                                        </label>
+                                                    </div>
+                                                </div>                                          
+                                            </td>                                            
+                                            <td>
+                                                <input type="text" placeholder="Available Quantity" class="form-control"
+                                                       data-bind="value:$data.Quantity, valueUpdate:'afterkeydown'" />                                                        
+                                            </td>
+                                            <td>
+                                                <div class="form-control" style="padding:5px 5px !important;">
+                                                    <label class="checkbox-inline">
+                                                        <input type="checkbox" value="true" data-bind="checked:$data.IsBestSelling" />
+                                                        <span data-bind="text:$data.IsBestSelling()?'YES':'NO'">YES</span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="text" placeholder="SKU" class="form-control" readonly
+                                                       data-bind="value:$data.SKU, valueUpdate:'afterkeydown'" /> 
+                                            </td>                                            
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-xs" data-bind="click:$parent.OnClick_Remove_Selected_Platform">
+                                                    <span>Delete</span>
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="tab_images">
+                                <table class="table table-bordered table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:50px;">SNo</th>
+                                            <th>Image</th>
+                                            <th>Type (Size)</th>
+                                            <th>Category</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach:ImageList">
+                                        <tr>
+                                            <td style="width:50px;" data-bind="text:$index()+1"></td>
+                                            <td>
+                                                <img alt="" src="#" style="max-height:100px;" data-bind="attr:{src: $data.Url}" />
+                                            </td>
+                                            <td>
+                                                <select style="padding:0!important;" data-bind="options:$data.ImageTypes, optionsText:'Text', optionsValue:'Value', value:$data.ImageType, optionsCaption:'Choose Image Type', attr:{id: 'Game_ImageType_select-'+($index()+1)}"
+                                                        class="form-control" id="Game_ImageType_select-1"></select>
+                                            </td>
+                                            <td>
+                                                <select style="padding:0!important;" data-bind="options:$data.ImageCategories, value:$data.ImageCategory, optionsCaption:'Choose Image Category', attr:{id: 'Game_ImageCategory_select-'+($index()+1)}"
+                                                        class="form-control" id="Game_ImageCategory_select-1"></select>
+                                            </td>
+                                            <td>                                                
+                                                <label class="btn btn-info btn-xs">
+                                                    <span>Upload Image</span>
+                                                    <span class="glyphicon glyphicon-upload"></span>
+                                                    <input type="file" style="display:none;" data-bind="event:{change:$data.OnChange}"/>
+                                                </label>
+                                                <button type="button" class="btn btn-danger btn-xs" data-bind="click:$parent.OnClick_Remove_Images">
+                                                    <span>Delete</span>
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" align="center">
+                                                <button type="button" class="btn btn-info btn-xs" data-bind="click:OnCLick_Add_New_Image">
+                                                    <span>Add New</span>
+                                                    <span class="glyphicon glyphicon-plus-sign"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="tab_videos">
+                                <table class="table table-bordered table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:50px;">SNo</th>
+                                            <th>Video Id</th>
+                                            <th>Name</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach:VideoList">
+                                        <tr>
+                                            <td style="width:50px;" data-bind="text:$index()+1"></td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <a href="#" target="_blank" data-bind="attr:{href: 'https://www.youtube.com/watch?v='+$data.Video_Id()}">
+                                                                <span class="glyphicon glyphicon-hd-video"></span>
+                                                            </a>                                                            
+                                                        </div>
+                                                        <input type="text" placeholder="YouTube Video Id" class="form-control"
+                                                               data-bind="value:$data.Video_Id, valueUpdate:'afterkeydown'" />
+                                                    </div>
+                                                </div>
+                                                
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-sd-video"></span>
+                                                        </div>
+                                                        <input type="text" placeholder="YouTube Video Name" class="form-control"
+                                                               data-bind="value:$data.Name, valueUpdate:'afterkeydown'" />
+                                                    </div>
+                                                </div>
+                                                
+                                            </td>
+                                            <td>                                                
+                                                <button type="button" class="btn btn-danger btn-xs" data-bind="click:$parent.OnClick_Remove_Video">
+                                                    <span>Delete</span>
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4" align="center">
+                                                <button type="button" class="btn btn-info btn-xs" data-bind="click:OnClick_Add_New_Video">
+                                                    <span>Add New</span>
+                                                    <span class="glyphicon glyphicon-plus-sign"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="tab_reviews">
+                                <p>TODO..</p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="panel-footer">
+                <button type="submit" class="btn btn-success" form="new-game-form" data-bind="disable:IsSaving">
+                    <span>Save all changes</span>
+                    <span class="fa fa-spinner fa-spin" data-bind="visible:IsSaving"></span>
+                </button>
+                <button type="button" class="btn btn-default" data-bind="click:Back_to_Game_Page">
+                    <span>Exit</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+<script src="/assets/plugins/select2/js/select2.min.js"></script>
+<script src="~/assets/plugins/summernote-master/summernote.min.js"></script>
+<script src="~/assets/plugins/summernote-master/summernote-ext-video.js"></script>
+<script src="~/assets/plugins/summernote-master/summernote-ext-fontstyle.js"></script>
+
+<script src="~/lib/moment/moment.js"></script>
+<script src="~/lib/knockout/dist/knockout.debug.js"></script>
+<script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="~/lib/underscore/underscore-min.js"></script>
+    
+<script type="text/javascript">
+
+    
+
+        function AppViewModel() {
+            var self = this;
+            self.Total = ko.observable(0);
+            self.IsSaving = ko.observable(false);
+            self.IsEditing = ko.observable(false);
+            self.IsLoading = ko.observable(false);
+            self.IsLoadingPlatforms = ko.observable(false);
+            self.IsLoadingGenres = ko.observable(false);
+            self.IsLoading_Game_modes = ko.observable(false);
+            self.IsLoading_Keywords = ko.observable(false);
+            self.GameList = ko.observableArray([]);
+            self.PlatformList = ko.observableArray([]);
+            self.GenreList = ko.observableArray([]);
+            self.Game_modeList = ko.observableArray([]);
+            self.KeywordList = ko.observableArray([]);
+            self.GamePlatformMapings = ko.observableArray([]);
+            self.ImageList=ko.observableArray([]);
+            self.VideoList=ko.observableArray([]);
+            self.Reviews=ko.observableArray([]);
+
+            self.IsLoadingVendors = ko.observable(false);
+            self.VendorList = ko.observableArray([]);
+            self.Conditions = [{ Id: 1, Text: 'NEW' }, { Id: 2, Text: 'PRE-OWNED' }];
+
+            self.Game = {
+                Id: ko.observable(0),
+                Name: ko.observable(''),
+                Summary: ko.observable(''),
+                Storyline: ko.observable(''),
+                Currency: ko.observable('AED'),
+                Price: ko.observable(0),
+                Pre_owned_Price: ko.observable(0),
+                Popularity: ko.observable(0),
+                Availability: ko.observable('Available'),
+                First_release_date: ko.observable(),
+                PreOrder: ko.observable(false),
+                Active: ko.observable(true),
+                Game_modes: ko.observable(''),
+                Keywords: ko.observable(''),
+                Genres: ko.observable(''),
+                Platforms: ko.observable(''),
+                Conditions: ko.observable(''),
+                Barcode: ko.observable(0),
+
+                Selected_Game_modes: ko.observableArray([]),
+                Selected_Keywords: ko.observableArray([]),
+                Selected_Genres: ko.observableArray([]),
+                Selected_Platforms: ko.observableArray([]),
+                Selected_Conditions: ko.observableArray([]),
+
+                PEGI_Rating: ko.observable(0),
+                ESRB_Rating: ko.observable(0),
+
+                ESRB_Synopsis: ko.observable(''),
+                PEGI_Synopsis: ko.observable(''),
+
+                Vendor_Name: ko.observable(''),
+                Vendor_Id: ko.observable(0)
+            };
+
+            self.Game.Selected_Platforms.subscribe(function(newValue){
+                console.log(newValue);
+                if(newValue.length > 0){
+                    $.each(newValue, function(i,o) {
+                        var old = ko.utils.arrayFirst(self.GamePlatformMapings(), function(x) { return x.Platform_Id() === o; });
+                        console.log('old', old);
+                        if(old == null) {
+                            $.each(self.Game.Selected_Conditions(), function(ii, oo){
+                                var gpm = new PlatformMapingViewModel();                            
+                                gpm.Game_Id(self.Game.Id());
+                                gpm.Platform_Id(o);
+                                gpm.Condition_Id(oo);
+                                var p = ko.utils.arrayFirst(self.PlatformList(), function(x) { return x.Id === o; });
+                                if(p !== null){
+                                    gpm.Platform_Name(p.Name);
+                                } 
+                                var cn = ko.utils.arrayFirst(self.Conditions, function(x) { return x.Id === oo; });
+                                if(cn !== null){
+                                    gpm.Condition(cn.Text);
+                                }
+                                self.GamePlatformMapings.push(gpm); 
+                            });                    
+                        }                        
+                    });
+                }else{self.GamePlatformMapings.removeAll();}
+            });
+
+            self.OnClick_Remove_Selected_Platform=function(obj){
+                console.log('Remove_Game_platform_Maping', ko.toJSON(obj)); return;
+                //self.Game.Selected_Platforms.remove(obj.Platform_Id());
+                self.GamePlatformMapings.remove(obj);  
+                self.Remove_Game_platform_Maping(obj.SKU());
+            };
+
+            self.OnCLick_AddNewGame = function () {
+                self.IsEditing(false);
+                self.IsSaving(false);
+            };
+
+            self.Remove_Game_platform_Maping=function(sku){
+                $.getJSON('/master/remove-maping/'+sku, function (data) { 
+                    console.log('Remove_Game_platform_Maping',data); 
+                });        
+            };
+
+            self.OnCLick_EditGame_Btn = function (obj) {
+                //console.log(obj);
+                self.Game.Id(obj.Id);
+                self.Game.Name(obj.Name);
+                self.Game.Currency(obj.Currency);
+                self.Game.Active(obj.Active);
+                self.Game.Availability(obj.Availability);
+                self.Game.ESRB_Rating(obj.ESRB_Rating);
+                self.Game.ESRB_Synopsis(obj.ESRB_Synopsis);
+                var frd=obj.First_release_date||'';
+                frd=moment(frd).format('MM/DD/YYYY');
+                self.Game.First_release_date(frd);
+                self.Game.Game_modes(obj.Game_modes);
+                self.Game.Genres(obj.Genres);
+                self.Game.Keywords(obj.Keywords);
+                self.Game.PEGI_Rating(obj.PEGI_Rating);
+                self.Game.PEGI_Synopsis(obj.PEGI_Synopsis);
+                self.Game.Platforms(obj.Platforms);
+                self.Game.Popularity(obj.Popularity);
+                self.Game.Pre_owned_Price(obj.Pre_owned_Price);
+                self.Game.PreOrder(obj.PreOrder);
+                self.Game.Price(obj.Price);
+                self.Game.Storyline(obj.Storyline);
+                self.Game.Summary(obj.Summary);
+                self.Game.Vendor_Id(obj.Vendor_Id);
+                self.Game.Vendor_Name(obj.Vendor_Name);
+                self.Game.Conditions(obj.Conditions);
+                self.Game.Barcode(obj.Barcode);
+                self.IsEditing(true);
+                self.IsSaving(false);
+
+                //console.log(ko.toJSON(self.Game));
+
+                $('#pegi-selection').trigger('change');
+                $('#vendor_select').trigger('change');
+
+                $('#Summary-box').code(obj.Summary);
+                $('#Storyline-box').code(obj.Storyline);
+
+                if (obj.Conditions != null || obj.Conditions != undefined) {
+                    if (obj.Conditions.Contains(',')) {
+                        var plt = obj.Conditions.split(',');
+                        $.each(plt, function (i, o) {
+                            if (o != "") { self.Game.Selected_Conditions.push(parseInt(o)); }
+                        });
+                    }
+                }
+
+                
+                if (obj.Platforms != null || obj.Platforms != undefined) {
+                    if (obj.Platforms.Contains(',')) {
+                        var plt = obj.Platforms.split(',');
+                        $.each(plt, function (i, o) {
+                            if (o != "") { self.Game.Selected_Platforms.push(parseInt(o)); }
+                        });
+                    }
+                }
+
+                if (obj.Keywords != null || obj.Keywords != undefined) {
+                    if (obj.Keywords.Contains(',')) {
+                        var plt = obj.Keywords.split(',');
+                        $.each(plt, function (i, o) {
+                            if (o != "") { self.Game.Selected_Keywords.push(parseInt(o)); }
+                        });
+                    }
+                }
+
+                if (obj.Game_modes != null || obj.Game_modes != undefined) {
+                    if (obj.Game_modes.Contains(',')) {
+                        var plt = obj.Game_modes.split(',');
+                        $.each(plt, function (i, o) {
+                            if (o != "") { self.Game.Selected_Game_modes.push(parseInt(o)); }
+                        });
+                    }
+                }
+
+                if (obj.Genres != null || obj.Genres != undefined) {
+                    if (obj.Genres.Contains(',')) {
+                        var plt = obj.Genres.split(',');
+                        $.each(plt, function (i, o) {
+                            if (o != "") { self.Game.Selected_Genres.push(parseInt(o)); }
+                        });
+                    }
+                }
+
+                $('#condition_select').trigger('change');
+                                
+            };
+
+            self.OnCLick_Add_New_Image=function(){
+                var img=new Image_ViewModel();
+                img.Reference_Id(self.Game.Id());
+                img.ImageOf('Game');
+                self.ImageList.push(img);
+                var id='#Game_ImageType_select-'+self.ImageList.length;
+                $(id).select2();
+                var id='#Game_ImageCategory_select-'+self.ImageList.length;
+                $(id).select2();
+            };
+
+            self.OnClick_Remove_Images=function(obj){
+                self.ImageList.remove(obj);  
+                var url=obj.Url();
+                if(url != null && url != '' && url != undefined){
+                    $.ajax({
+                        type: 'POST', dataType: "json", 
+                        url: '/master/delete-images',
+                        contentType: "application/json; charset=utf-8",
+                        data: ko.toJSON(obj),
+                        success: function (data) { console.log(data); },
+                        error: function (result) { console.log(result); }
+                    });              
+                }                
+            };
+
+            self.OnClick_Add_New_Video=function(){
+                var obj=new Video_ViewModel();
+                obj.Reference_Id(self.Game.Id());
+                obj.Video_of('Game');
+                obj.Name('Trailer');
+                self.VideoList.push(obj);  
+            };
+
+            self.OnClick_Remove_Video=function(obj){
+                self.VideoList.remove(obj);
+                if(obj.Id()>0){ $.getJSON('/master/remove-video/'+obj.Id(), function (data) { console.log('Remove_Video',data); }); }
+            };
+
+            self.Save_Game_Details = function () {
+                var summary = $('#Summary-box').code();
+                var story = $('#Storyline-box').code();
+                self.Game.Summary(summary);
+                self.Game.Storyline(story);
+
+                var platforms = ',';
+                $.each(_.uniq(self.Game.Selected_Platforms()), function (i, o) { platforms += o + ',' });
+                self.Game.Platforms(platforms);
+
+                var genre = ',';
+                $.each(_.uniq(self.Game.Selected_Genres()), function (i, o) { genre += o + ',' });
+                self.Game.Genres(genre);
+
+                var game_mode = ',';
+                $.each(_.uniq(self.Game.Selected_Game_modes()), function (i, o) { game_mode += o + ',' });
+                self.Game.Game_modes(game_mode);
+
+                var keyword = ',';
+                $.each(_.uniq(self.Game.Selected_Keywords()), function (i, o) { keyword += o + ',' });
+                self.Game.Keywords(keyword);
+
+                var condition = ',';
+                $.each(self.Game.Selected_Conditions(), function (i, o) { condition += o + ',' });
+                self.Game.Conditions(condition);
+
+                var _data={Game: self.Game, VideoList: self.VideoList(), ImageList: self.ImageList(), GamePlatformMapings: self.GamePlatformMapings() };
+                //console.log(ko.toJSON(_data)); return;
+
+                self.IsSaving(true);
+
+                $.ajax({
+                    type: 'POST', dataType: "json", url: '/master/save-game-details',
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(_data),
+                    success: function (obj) {
+                        console.log(obj);
+                        if (obj.Success) {
+                            toastr.success(obj.Message);
+                        }
+                        else { toastr.warning(obj.Message);}
+                    },
+                    error: function (result) { toastr.warning('Error'); }
+                }).done(function () { self.IsSaving(false); });
+            };
+
+            self.Back_to_Game_Page=function(){
+                window.location.href = '/master/games';        
+            };
+
+            self.GetAllVendors = function () {
+                self.IsLoadingVendors(true);
+                $.getJSON('/vendor/get-all', function (data) {
+                    self.IsLoadingVendors(false);
+                    self.VendorList(data);
+                });
+            };
+
+            self.Init = function () {
+                //self.GetAllVendors();
+            };
+
+            
+
+        };
+
+        function Image_ViewModel(){
+            var x=this;
+            x.Id=ko.observable(0);
+            x.Url=ko.observable('');
+            x.Width=ko.observable(0);
+            x.Height=ko.observable(0);
+            x.ImageOf=ko.observable('');
+            x.ImageType=ko.observable('');
+            x.ImageTypes=[{Text : 'Small (50x50)', Value : 'Small'}, { Text : 'Large (940x529)', Value : 'Large'}, { Text : 'Medium (555x312)', Value : 'Medium'}, { Text : 'Thumbnail (210x250)', Value : 'Thumbnail'}];
+            x.ImageCategories=['Logo', 'Cover', 'ScreenShot'];
+            x.Reference_Id=ko.observable(0);
+            x.ImageCategory=ko.observable('');
+            x.OnChange=function(o, e){
+                //console.log('event',e);
+                var _data = new FormData();
+                _data.append("file", e.target.files[0]);
+                $.ajax({
+                    type: "POST", url: "/uploadfile", data: _data,
+                    cache: false, contentType: false, processData: false,
+                    success: function (url) { x.Url(url); }
+                });      
+            };
+        }
+
+        function Video_ViewModel(){
+            var x=this;
+            x.Id=ko.observable(0);
+            x.Name=ko.observable('');
+            x.Video_of=ko.observable('');
+            x.Video_Id=ko.observable('');
+            x.Snapshot=ko.observable('');
+            x.Reference_Id=ko.observable(0);
+        }
+
+        function PlatformMapingViewModel(){
+            var x=this;
+            x.SNo=ko.observable(0);
+            x.Game_Id=ko.observable(0);            
+            x.Condition_Id=ko.observable(1);
+            x.Platform_Id=ko.observable(0);
+            x.Platform_Name=ko.observable('');
+
+            x.Buying_Price=ko.observable(0);
+            x.Selling_Price=ko.observable(0);
+            x.Original_Price=ko.observable(0);
+            x.Quantity=ko.observable(0);
+
+            x.SKU=ko.observable('');
+            x.Condition=ko.observable('');            
+            x.IsBestSelling=ko.observable(0);
+            x.Available_To_Buy=ko.observable(0);
+            x.Available_To_Sell=ko.observable(1);
+        }
+
+        function GameViewModel(obj) {
+            var x = this;
+            x.Id = obj.Id;
+            x.ImageUrl = obj.ImageUrl;
+            x.Name = obj.Name;
+            x.NameUrl = obj.NameUrl;
+            x.Genre_Names = obj.Genre_Names;
+            x.Platform_Names = obj.Platform_Names;
+            x.Summary = obj.Summary;
+            x.Storyline = obj.Storyline;
+            x.Currency = obj.Currency;
+            x.Price = obj.Price;
+            x.Pre_owned_Price = obj.Pre_owned_Price;
+            x.Popularity = obj.Popularity;
+            x.Availability = obj.Availability;
+            x.First_release_date = obj.First_release_date;
+            x.PreOrder = obj.PreOrder;
+            x.Active = obj.Active;
+            x.Idgb_GameId = obj.Idgb_GameId;
+            x.Collection = obj.Collection;
+            x.Category = obj.Category;
+            x.Rating = obj.Rating;
+            x.RatingCount = obj.RatingCount;
+            x.SimilarGames = obj.SimilarGames;
+            x.Tags = obj.Tags;
+            x.Developers = obj.Developers;
+            x.Publishers = obj.Publishers;
+            x.Game_modes = obj.Game_modes;
+            x.Keywords = obj.Keywords;
+            x.Themes = obj.Themes;
+            x.Genres = obj.Genres;
+            x.Platforms = obj.Platforms;
+            x.PEGI_Rating = obj.PEGI_Rating;
+            x.ESRB_Rating = obj.ESRB_Rating;
+            x.ESRB_Synopsis = obj.ESRB_Synopsis;
+            x.PEGI_Synopsis = obj.PEGI_Synopsis;
+            x.ImageUrl = obj.ImageUrl;
+            x.Vendor_Id = obj.Vendor_Id;
+            x.Vendor_Name = obj.Vendor_Name;
+            x.Conditions = obj.Conditions;
+            x.Barcode = obj.Barcode;
+        };
+
+        ko.bindingHandlers.datePicker = {
+            init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+                var unwrap = ko.utils.unwrapObservable;
+                var dataSource = valueAccessor();
+                var binding = allBindingsAccessor();
+                var options = {
+                    keyboardNavigation: true,
+                    todayHighlight: true,
+                    autoclose: true,
+                    daysOfWeekDisabled: [0, 6],
+                    format: 'mm/dd/yyyy'
+                };
+                if (binding.datePickerOptions) {
+                    options = $.extend(options, binding.datePickerOptions);
+                }
+                $(element).datepicker(options);
+                $(element).datepicker('update', dataSource());
+                $(element).on("changeDate", function (ev) {
+                    var observable = valueAccessor();
+                    if ($(element).is(':focus')) {
+                        // Don't update while the user is in the field...
+                        // Instead, handle focus loss
+                        $(element).one('blur', function(ev){
+                            var dateVal = $(element).datepicker("getDate");
+                            observable(dateVal);
+                        });
+                    }
+                    else {
+                        observable(ev.date);
+                    }
+                });
+                //handle removing an element from the dom
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                    $(element).datepicker('remove');
+                });
+            },
+            update: function (element, valueAccessor) {
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                $(element).datepicker('update', value);
+            }
+        };
+
+        $(document).ready(function () {
+
+            var app = new AppViewModel();
+            ko.applyBindings(app);
+            app.Init();
+
+            //$('#datetimepicker1').datetimepicker({
+            //    format: 'MM/DD/YYYY'
+            //}).on('dp.change', function (e) {
+            //    var date = moment(e.date).format('MM/DD/YYYY');
+            //    app.Game.First_release_date(date);
+            //    console.log(date);
+            //});
+
+            $('#pegi-selection').select2();
+            $('#vendor_select').select2();
+
+            $('#Game_modeList_select').select2({
+                tags: true,
+                placeholder: 'Select options',
+                tokenSeparators: [',', ' ']
+            });
+            $('#GenreList_select').select2({
+                tags: true,
+                placeholder: 'Select options',
+                tokenSeparators: [',', ' ']
+            });
+            $('#KeywordList_select').select2({
+                tags: true,
+                placeholder: 'Select options',
+                tokenSeparators: [',', ' ']
+            });
+            $('#PlatformList_select').select2({
+                tags: true,
+                placeholder: 'Select options',
+                tokenSeparators: [',', ' ']
+            });
+
+            $('#condition_select').select2({
+                tags: true,
+                placeholder: 'Select options',
+                tokenSeparators: [',', ' ']
+            });
+
+            $('#PlatformList_select').on('select2:unselecting', function (e) {
+                var id=parseInt(e.params.args.data.id);
+                var obj=ko.utils.arrayFirst(app.GamePlatformMapings(), function(x) { return x.Platform_Id() == id; });
+                if(obj !== null && obj !== undefined){
+                    app.GamePlatformMapings.remove(obj);
+                    app.Remove_Game_platform_Maping(obj.Platform_Id(), obj.Condition_Id());              
+                }               
+            });
+
+            $('#Storyline-box, #Summary-box').summernote({
+                placeholder: 'Enter content', height: 100,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ],                
+                popover: {
+                    image: [
+                      ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                      ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                      ['remove', ['removeMedia']]
+                    ]
+                }, dialogsFade: true,
+                onImageUpload: function (files, editor, welEditable) {
+                    var _data = new FormData();
+                    _data.append("file", files[0]);
+                    $.ajax({
+                        type: "POST", url: "/uploadfile", data: _data,
+                        cache: false, contentType: false, processData: false,
+                        success: function (url) { editor.insertImage(welEditable, url); }
+                    });
+                }
+            });
+
+            
+            var data = @Json.Serialize(ViewData["GameData"]);
+            //console.log(data);
+            app.KeywordList(data.KeywordList);
+            app.Game_modeList(data.Game_modeList);
+            app.GenreList(data.GenreList);
+            app.VendorList(data.VendorList);
+            app.PlatformList(data.PlatformList);
+            app.Reviews(data.Game_DTO.Reviews);
+
+            if(data.Game_DTO.ImageList.length>0){
+                $.each(data.Game_DTO.ImageList, function(i, o){
+                    var obj=new Image_ViewModel();
+                    obj.Height(o.Height);
+                    obj.Id(o.Id);
+                    obj.ImageCategory(o.ImageCategory);
+                    obj.ImageOf(o.ImageOf);
+                    obj.ImageType(o.ImageType);
+                    obj.Reference_Id(o.Reference_Id);
+                    obj.Url(o.Url);
+                    obj.Width(o.Width);
+                    app.ImageList.push(obj);
+                    var id='#Game_ImageType_select-'+app.ImageList.length;
+                    $(id).select2();
+                });
+            }
+
+            if(data.Game_DTO.VideoList.length>0){
+                $.each(data.Game_DTO.VideoList, function(i, o){
+                    var obj=new Video_ViewModel();
+                    obj.Id(o.Id);
+                    obj.Name(o.Name || '');
+                    obj.Video_of(o.Video_of);
+                    obj.Video_Id(o.Video_Id);
+                    obj.Reference_Id(o.Reference_Id);
+                    obj.Snapshot(o.Snapshot);
+                    app.VideoList.push(obj);
+                });
+            }
+
+            if(data.Game_DTO.GamePlatformMapings.length>0){
+                $.each(data.Game_DTO.GamePlatformMapings, function(i, o){
+                    var obj=new PlatformMapingViewModel();
+                    obj.SNo(o.SNo);
+                    obj.Game_Id(o.Game_Id);
+                    obj.Condition(o.Condition);
+                    obj.Condition_Id(o.Condition_Id);
+                    obj.Platform_Id(o.Platform_Id);
+                    obj.Platform_Name(o.Platform_Name);
+                    obj.Buying_Price(o.Buying_Price);
+                    obj.Selling_Price(o.Selling_Price); 
+                    obj.Original_Price(o.Original_Price);
+                    obj.SKU(o.SKU); obj.Quantity(o.Quantity);
+                    obj.IsBestSelling(o.IsBestSelling);
+                    obj.Available_To_Buy(o.Available_To_Buy);
+                    obj.Available_To_Sell(o.Available_To_Sell);
+                    app.GamePlatformMapings.push(obj);
+                });            
+            }
+
+            app.OnCLick_EditGame_Btn(data.Game_DTO.Game);
+
+
+            
+
+        });
+</script>
+}

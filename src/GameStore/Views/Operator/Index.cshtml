@@ -1,0 +1,286 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Operator";
+}
+
+@section styles{
+
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .bs-example-modal-lg .modal-dialog .modal-dialog {
+            border: 1px solid #9c9797;
+            box-shadow: #bfb3b3 3px 3px 20px 8px;
+        }
+
+        .modal-header {
+            background-color: #dadada;
+        }
+
+        .tab-content {
+            border-bottom: 1px solid lightgray;
+            border-left: 1px solid lightgray;
+            border-right: 1px solid lightgray;
+        }
+
+        .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {
+            background-color: #d1dbe4;
+        }
+    </style>
+}
+
+
+
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">Operator</li>
+    </ol>
+}
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel panel-heading">
+                <h2 class="panel-title">
+                    <span>Operator</span>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div role="tabpanel">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs nav-justified" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#tab_basic" role="tab" data-toggle="tab" aria-expanded="true">
+                                        <span class="badge badge-info">1</span>&nbsp;<span id="tab-1-txt">Add New</span>
+                                    </a>
+                                </li>
+                                <li role="presentation" class="">
+                                    <a href="#tab_price" role="tab" data-toggle="tab" aria-expanded="false">
+                                        <span class="badge badge-info">2</span>&nbsp;<span>Operator List</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active in" id="tab_basic">
+                                    <form id="new-form" data-bind="submit:Save_Operator">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">First Name:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter First Name" required
+                                                           data-bind="value:Operator.FirstName, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Last Name:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Last Name"
+                                                           data-bind="value:Operator.LastName, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Email:</label>
+                                                    <input type="email" class="form-control" placeholder="Enter Email" required
+                                                           data-bind="value:Operator.Email, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Password:</label>
+                                                    <input type="password" class="form-control" placeholder="Enter Password" required
+                                                           data-bind="value:Operator.Password, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Active:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <input type="checkbox" value="true" data-bind="checked:Operator.Active" />
+                                                        </div>
+                                                        <div class="form-control" style="padding:7px!important;" data-bind="text: Operator.Active()?'YES':'NO'"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-success" form="new-form" data-bind="disable:IsSaving">
+                                                        <span>Save</span>
+                                                        <span class="fa fa-spinner fa-spin" data-bind="visible:IsSaving"></span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-default" data-bind="click:ClearAllFields">
+                                                        <span>Cancel</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_price">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:100px;">#</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Active</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-bind="foreach:OperatorList">
+                                                <tr>
+                                                    <td style="width:100px;" data-bind="text: $index()+1"></td>
+                                                    <td data-bind="text: $data.FirstName + ' ' +$data.LastName"></td>
+                                                    <td data-bind="text: $data.Email"></td>
+                                                    <td data-bind="text: $data.Active?'YES':'NO'"></td>
+                                                    <td>
+                                                        <div>
+                                                            <button type="button" class="btn btn-primary btn-rounded btn-xs"
+                                                                    data-bind="click:$parent.OnClickEditBtn">
+                                                                <i class="fa fa-edit"></i>
+                                                                <span>Edit</span>
+                                                            </button>                                                            
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tbody data-bind="visible:IsLoading">
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <span class="glyphicon glyphicon-refresh processingIcon"></span>
+                                                        <span>Loading.....</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <span>
+                                                            <span>Total:</span>
+                                                            <span data-bind="text:Total"></span>
+                                                            <span>Records</span>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+
+    <script src="~/assets/plugins/select2/js/select2.min.js"></script>
+    <script src="~/lib/knockout/dist/knockout.js"></script>
+
+    <script type="text/javascript">
+
+        function AppViewModel() {
+            var self = this;
+            self.IsEditing = ko.observable(false);
+            self.IsLoading = ko.observable(false);
+            self.IsSaving = ko.observable(false);
+            self.IsDeleting = ko.observable(false);
+
+            self.Offset = ko.observable(0);
+            
+            self.OperatorList = ko.observableArray([]);
+            self.Total = ko.computed(function () {
+                return self.OperatorList().length;
+            }, self);
+
+            self.Operator = {
+                Id: ko.observable(0),
+                FirstName: ko.observable(''),
+                LastName: ko.observable(''),
+                Email: ko.observable(''),
+                Password: ko.observable(''),
+                Active: ko.observable(true)
+            };
+
+            self.Save_Operator = function () {
+                self.IsSaving(true);
+                var api = self.IsEditing() ? '/operator/update' : '/operator/add-new';
+                $.ajax({
+                    type: 'POST', dataType: "json", url: api,
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(self.Operator),
+                    success: function (data) {
+                        self.IsSaving(false); console.log(data);
+                        toastr.success('Success'); self.IsEditing(false);
+                        self.OperatorList.removeAll(); self.ClearAllFields();
+                        self.Get_OperatorList();
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.Get_OperatorList = function () {
+                $.getJSON('/operator/get-all', function (data) {
+                    self.OperatorList(data);
+                });
+            };
+
+            self.OnClickEditBtn = function (obj) {
+                self.IsEditing(true);
+                self.Operator.Id(obj.Id);
+                self.Operator.FirstName(obj.FirstName);
+                self.Operator.LastName(obj.LastName);
+                self.Operator.Email(obj.Email);
+                self.Operator.Password(obj.Password);
+                self.Operator.Active(obj.Active);
+                $('a[href="#tab_basic"]').click();
+                $('#tab-1-txt').text("Update");
+                console.log(ko.toJSON(self.Operator));
+            };
+
+            self.ClearAllFields = function () {
+                self.IsEditing(false);
+                self.Operator.Id(0);
+                self.Operator.FirstName('');
+                self.Operator.LastName('');
+                self.Operator.Email('');
+                self.Operator.Password('');
+                self.Operator.Active(true);
+                $('#tab-1-txt').text("Add New");
+                $('a[href="#tab_New"]').click();
+            };
+
+            self.Init = function () {
+                self.Get_OperatorList();
+            };
+
+        };
+
+
+        $(document).ready(function () {
+            var app = new AppViewModel();
+            ko.applyBindings(app);           
+            app.Init();
+
+            
+
+        });
+    </script>
+
+
+}

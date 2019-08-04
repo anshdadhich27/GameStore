@@ -1,0 +1,296 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Banners";
+}
+
+@section styles{
+
+    <style>
+        .bs-example-modal-lg .modal-dialog .modal-dialog {
+            border: 1px solid #9c9797;
+            box-shadow: #bfb3b3 3px 3px 20px 8px;
+        }
+
+        .modal-header {
+            background-color: #dadada;
+        }
+
+        .tab-content {
+            border-bottom: 1px solid lightgray;
+            border-left: 1px solid lightgray;
+            border-right: 1px solid lightgray;
+        }
+
+        .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {
+            background-color: #d1dbe4;
+        }
+    </style>
+}
+
+
+
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">Banners</li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel panel-heading">
+                <h2 class="panel-title">
+                    <span>Banners</span>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div role="tabpanel">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs nav-justified" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#tab_new" role="tab" data-toggle="tab" aria-expanded="true">
+                                        <span class="badge badge-info">1</span>&nbsp;<span id="tab-1-txt">Add New</span>
+                                    </a>
+                                </li>
+                                <li role="presentation" class="">
+                                    <a href="#tab_listing" role="tab" data-toggle="tab" aria-expanded="false">
+                                        <span class="badge badge-info">2</span>&nbsp;<span>Banner List</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active in" id="tab_new">
+                                    <form id="new-form" data-bind="submit:Save_Banner">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Title:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Title" required
+                                                           data-bind="value:Banner.Title, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Link:</label>
+                                                    <input type="url" class="form-control" placeholder="Enter Link" 
+                                                           data-bind="value:Banner.Link, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Active</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <input type="checkbox" value="true" data-bind="checked: Banner.Active" />
+                                                        </div>
+                                                        <span class="form-control" style="padding-top:8px!important;" data-bind="text: Banner.Active()?'YES':'NO'"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Banner (1170x540)</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-picture"></span>
+                                                        </div>
+                                                        <label for="bannerUploader" class="form-control" style="padding:5px!important;">
+                                                            <span class="btn btn-default btn-xs">Choose banner </span>
+                                                        </label>
+                                                        <div class="input-group-btn" data-bind="visible:Banner.ImageUrl()!=''">
+                                                            <button class="btn btn-danger" type="button" title="Delete Banner" data-bind="click:function(){Banner.ImageUrl('');}">
+                                                                <span class="glyphicon glyphicon-trash"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <input type="file" id="bannerUploader" style="display:none;" accept="image/*" />
+                                                </div>
+                                                <div class="form-group" data-bind="visible:Banner.ImageUrl()!=''">
+                                                    <img style="width:100%;" alt="Banner" data-bind="attr:{src: Banner.ImageUrl}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-success" form="new-form" data-bind="disable:IsSaving">
+                                                        <span>Save</span>
+                                                        <span class="fa fa-spinner fa-spin" data-bind="visible:IsSaving"></span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-default" data-bind="click:ClearAllFields">
+                                                        <span>Cancel</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_listing">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:100px;">#</th>                                                    
+                                                    <th>Image</th>
+                                                    <th>Title</th>
+                                                    <th>Active</th>
+                                                    <th>Link</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-bind="foreach:BannerList">
+                                                <tr>
+                                                    <td style="width:100px;" data-bind="text: $index()+1"></td>
+                                                    <td>
+                                                        <img style="max-height:150px;" data-bind="attr:{src: $data.ImageUrl}" />
+                                                    </td>
+                                                    <td data-bind="text: $data.Title"></td>
+                                                    <td data-bind="text: $data.Active"></td>
+                                                    <td>
+                                                        <a href="#" target="_blank" data-bind="attr:{href: $data.Link}, text:$data.Link"></a>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <button type="button" class="btn btn-primary btn-rounded btn-xs"
+                                                                    data-bind="click:$parent.OnClickEditBtn">
+                                                                <i class="fa fa-edit"></i>
+                                                                <span>Edit</span>
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger btn-rounded btn-xs"
+                                                                    data-bind="click:$parent.OnClickDelete_Btn">
+                                                                <i class="fa fa-trash"></i>
+                                                                <span>Delete</span>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tbody data-bind="visible:IsLoading">
+                                                <tr>
+                                                    <td colspan="6">
+                                                        <span class="glyphicon glyphicon-refresh processingIcon"></span>
+                                                        <span>Loading.....</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="6">
+                                                        <span>
+                                                            <span>Total:</span>
+                                                            <span data-bind="text:Total"></span>
+                                                            <span>Records</span>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/lib/knockout/dist/knockout.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function AppViewModel() {
+            var self = this;
+            self.IsLoading = ko.observable(false);
+            self.IsSaving = ko.observable(false);
+            self.IsEditing = ko.observable(false);
+            self.BannerList = ko.observableArray([]);
+
+            self.Total = ko.computed(function () {
+                return self.BannerList().length;
+            }, self);
+
+            self.Banner = {
+                Id: ko.observable(0),
+                Title: ko.observable(''),
+                ImageUrl: ko.observable(''),
+                Link: ko.observable(''),
+                Active: ko.observable(true)
+            };
+
+            self.GetAllBanners = function () {
+                self.IsLoading(true);
+                $.getJSON('/master/get-all-banner', function (data) {
+                    self.IsLoading(false);
+                    self.BannerList(data);
+                });
+            };
+
+            self.Save_Banner = function () {
+                self.IsSaving(true);
+                var api = self.IsEditing() ? '/master/update-banner' : '/master/add-new-banner';
+                $.ajax({
+                    type: 'POST', dataType: "json", url: api,
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(self.Banner),
+                    success: function (data) {                        
+                        toastr.success('Success'); 
+                        self.ClearAllFields();
+                        self.GetAllBanners();
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+            };
+
+            self.OnClickDelete_Btn = function (obj) {
+                $.getJSON('/master/delete-banner/'+obj.Id, function (data) {
+                    self.BannerList.remove(obj);
+                    toastr.success('Success');
+                });
+            };
+
+            self.OnClickEditBtn = function (obj) {
+                self.IsEditing(true);
+                self.Banner.Id(obj.Id);
+                self.Banner.ImageUrl(obj.ImageUrl);
+                self.Banner.Link(obj.Link);
+                self.Banner.Title(obj.Title);
+                self.Banner.Active(obj.Active);
+                $('a[href="#tab_new"]').click();
+                $('#tab-1-txt').text("Update");
+            };
+
+            self.ClearAllFields = function () {
+                self.Banner.Id(0);
+                self.Banner.ImageUrl('');
+                self.Banner.Link('');
+                self.Banner.Title('');
+                self.Banner.Active(true);
+                self.IsSaving(false);
+                self.IsEditing(false);
+                $('#tab-1-txt').text("Add New");
+            };
+
+        };
+
+        
+
+        $(document).ready(function () {
+            var app = new AppViewModel();
+            ko.applyBindings(app);
+            app.GetAllBanners();
+
+            $('#bannerUploader').on('change', function (e) {
+                var _data = new FormData();
+                _data.append("file", e.target.files[0]);
+                $.ajax({
+                    type: "POST", url: "/uploadfile", data: _data,
+                    cache: false, contentType: false, processData: false,
+                    success: function (url) { app.Banner.ImageUrl(url); }
+                });
+            });
+        });
+    </script>
+}

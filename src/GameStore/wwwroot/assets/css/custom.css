@@ -1,0 +1,9 @@
+/* Write your custom CSS here */
+
+.processingIcon{ animation: rotateIcon 1s linear infinite; -webkit-animation:rotateIcon 1s linear infinite; }
+
+@keyframes rotateIcon{ 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+@-webkit-keyframes rotateIcon{ 0%{-webkit-transform:rotate(0deg);} 100%{-webkit-transform:rotate(360deg);} }
+
+#page-selection{text-align:right;}
+#page-selection .pagination{margin:0;}

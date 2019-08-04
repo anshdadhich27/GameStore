@@ -1,0 +1,781 @@
+﻿@{
+    ViewData["Title"] = "My Account";
+    long referral_key = Convert.ToInt64(User.FindFirst(Constant.REFERRAL_KEY)?.Value);
+}
+
+@section styles{
+    <link href="~/css/user-acc.min.css" rel="stylesheet" />
+    <link href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/toastr/toastr.css" rel="stylesheet" />
+    <style type="text/css">
+        .form-control-feedback {
+            right: 15px;
+        }
+
+        a.collapsed {
+            display: block;
+        }
+
+        select.form-control + span.select2 {
+            width: 100% !important;
+        }
+    </style>
+}
+
+<div class="wrapper user-account-page">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-3">
+                    @await Html.PartialAsync("_User_Left_Nav")
+                </div>
+                <div class="col-md-6 col-sm-6" id="user-account">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingOne">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h4 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                                       href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                        <span>#1 Personal Information</span>
+                                                        <span class="glyphicon glyphicon-refresh processingIcon" data-bind="visible:IsLoading"></span>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            @*<div class="col-sm-6">
+                                                    <span class="pull-right">
+                                                        <button type="button" class="btn btn-default btn-xs" title="Edit"
+                                                                data-bind="visible:!self.IsEditingPersonalInfo(), click:self.OnClick_Edit_PersonalInfo">
+                                                            <span>Edit</span>
+                                                            <span class="glyphicon glyphicon-edit"></span>
+                                                        </button>
+                                                        <button type="submit" class="btn btn-success btn-xs" title="Save" form="PersonalInfo_form"
+                                                                data-bind="visible:self.IsEditingPersonalInfo, disable:IsSavingPersonalInfo">
+                                                            <span>Save</span>
+                                                            <span class="glyphicon glyphicon-floppy-save"></span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-default btn-xs" title="Cancel"
+                                                                data-bind="visible:self.IsEditingPersonalInfo, click:OnClick_Cancel_Edit_PersonalInfo">
+                                                            <span>Cancel</span>
+                                                            <span class="glyphicon glyphicon-remove-circle"></span>
+                                                        </button>
+                                                    </span>
+                                                </div>*@
+                                        </div>
+
+                                    </div>
+                                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-sm-12" data-bind="visible:!IsEditingPersonalInfo()">
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">First Name:*</label>
+                                                        <div class="form-control" data-bind="text:Old_User.FirstName"></div>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">Last Name:</label>
+                                                        <div class="form-control" data-bind="text:Old_User.LastName"></div>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 has-feedback"
+                                                         data-bind="css:{'has-success': Old_User.EmailVerified, 'has-warning': !Old_User.EmailVerified() }">
+                                                        <label class="control-label">Email:</label>
+                                                        <div class="form-control" data-bind="text:Old_User.Email"></div>
+                                                        <span class="form-control-feedback glyphicon" aria-hidden="true"
+                                                              data-bind="css:{'glyphicon-ok': Old_User.EmailVerified, 'glyphicon-warning-sign': !Old_User.EmailVerified()}, attr:{title: Old_User.EmailVerified()?'Verified':'Unverified'}"></span>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">Mobile:</label>
+                                                        <div class="form-control" data-bind="text: '+' + Old_User.ISDCode() +' '+ Old_User.PhoneNumber()"></div>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">Gender:</label>
+                                                        <div class="form-control" data-bind="text:Old_User.Gender"></div>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">DOB:</label>
+                                                        <div class="form-control" data-bind="text:Old_User.DOB"></div>
+                                                    </div>
+                                                </div>
+                                                <form id="PersonalInfo_form" class="col-sm-12"
+                                                      data-bind="visible:IsEditingPersonalInfo, submit:OnClick_Save_PersonalInfo">
+                                                    <div class="form-group col-sm-12">
+                                                        <div class="pro-img">
+                                                            <img src="~/images/user.png" alt="image"
+                                                                 data-bind="attr:{src: (User.Avatar()=='')?'/images/user.png':User.Avatar()}">
+                                                        </div>
+                                                        <label for="bannerUploader">
+                                                            <input type="file" id="bannerUploader" class="btn btn-default btn-xs" />
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">First Name:*</label>
+                                                        <input type="text" class="form-control" placeholder="First Name *" required
+                                                               data-bind="value:User.FirstName, valueUpdate:'afterkeydown'" />
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">Last Name:</label>
+                                                        <input type="text" class="form-control" placeholder="Last Name"
+                                                               data-bind="value:User.LastName, valueUpdate:'afterkeydown'" />
+                                                    </div>
+                                                    <div class="form-group col-sm-12 has-feedback"
+                                                         data-bind="css:{'has-success': Old_User.EmailVerified, 'has-warning': !Old_User.EmailVerified() }">
+                                                        <label class="control-label">Email:</label>
+                                                        <div class="form-control" data-bind="text:Old_User.Email"></div>
+                                                        <span class="form-control-feedback glyphicon" aria-hidden="true"
+                                                              data-bind="css:{'glyphicon-ok': Old_User.EmailVerified, 'glyphicon-warning-sign': !Old_User.EmailVerified()}, attr:{title: Old_User.EmailVerified()?'Verified':'Unverified'}"></span>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">Country Code:</label>
+                                                        <select class="form-control" data-bind="options:CountryList, optionsText:'ISDCode', optionsValue:'phonecode', value:User.ISDCode, optionsCaption:'Choose option'"></select>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">Phone Number:</label>
+                                                        <input type="text" class="form-control" placeholder="Phone Number"
+                                                               data-bind="value:User.PhoneNumber, valueUpdate:'afterkeydown'" />
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">Gender:</label>
+                                                        <select class="form-control" data-bind="value:User.Gender">
+                                                            <option data-bind="text:'Choose option',value:''"></option>
+                                                            <option data-bind="text:'Male', value:'Male'"></option>
+                                                            <option data-bind="text:'Female', value:'Female'"></option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">DOB:</label>
+                                                        <input type="text" class="form-control" placeholder="DOB" id="datetimepicker1"
+                                                               data-bind="value:User.DOB, valueUpdate:'afterkeydown'" />
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="panel-footer">
+
+
+                                            <button type="button" class="btn btn-default btn-xs" title="Edit"
+                                                    data-bind="visible:!self.IsEditingPersonalInfo(), click:self.OnClick_Edit_PersonalInfo">
+                                                <span>Edit</span>
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </button>
+                                            <button type="submit" class="btn btn-success btn-xs" title="Save" form="PersonalInfo_form"
+                                                    data-bind="visible:self.IsEditingPersonalInfo, disable:IsSavingPersonalInfo">
+                                                <span>Save</span>
+                                                <span class="glyphicon glyphicon-floppy-save"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-xs" title="Cancel"
+                                                    data-bind="visible:self.IsEditingPersonalInfo, click:OnClick_Cancel_Edit_PersonalInfo">
+                                                <span>Cancel</span>
+                                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingTwo">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h4 class="panel-title">
+                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                                                       href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                        <span> #2 Saved Address</span>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            @*<div class="col-sm-6">
+                                                    <span class="pull-left">
+                                                        <button type="button" class="btn btn-primary btn-xs" title="Add More"
+                                                                data-bind="click:Add_New_Address">
+                                                            <span>Add New</span>
+                                                            <span class="glyphicon glyphicon-plus-sign"></span>
+                                                        </button>
+                                                        <button type="submit" class="btn btn-success btn-xs"
+                                                                title="Save" form="address-form"
+                                                                data-bind="disable:IsSavingAddress">
+                                                            <span>Save</span>
+                                                            <span class="glyphicon glyphicon-floppy-save"></span>
+                                                        </button>
+                                                    </span>
+                                                </div>*@
+                                        </div>
+
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                        <div class="panel-body">
+
+                                            <form id="address-form" data-bind="foreach:AddressList, submit:Save_User_Address">
+                                                <div class="row">
+                                                    <div class="form-group col-sm-12" style="border-bottom:1px solid lightgray;">
+                                                        <p>
+                                                            <label class="pull-left">
+                                                                <span class="glyphicon glyphicon-map-marker"></span>
+                                                                <span data-bind="text:'Address '+($index()+1)"></span>
+                                                            </label>
+                                                            <label class="pull-right">
+                                                                <span class="btn btn-default btn-xs" title="Remove"
+                                                                      data-bind="click:Remove_Address">
+                                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                                </span>
+                                                                <span class="btn btn-default btn-xs" title="Edit"
+                                                                      data-bind="click:function(){$data.IsEditing(true); $('select').select2(); }, visible: !$data.IsEditing()">
+                                                                    <span class="glyphicon glyphicon-edit"></span>
+                                                                </span>
+                                                                <span class="btn btn-default btn-xs" title="Cancel"
+                                                                      data-bind="click:function(){$data.IsEditing(false);}, visible: $data.IsEditing">
+                                                                    <span class="glyphicon glyphicon-remove-circle"></span>
+                                                                </span>
+                                                            </label>
+                                                        </p>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">First Name *</label>
+                                                        <input class="form-control" type="text" name="First_Name"
+                                                               required placeholder="First Name *"
+                                                               data-bind="value:$data.First_Name, valueUpdate:'afterkeydown', attr:{readonly: !$data.IsEditing()}" />
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">Last Name</label>
+                                                        <input class="form-control" type="text" name="Last_Name" placeholder="Last Name"
+                                                               data-bind="value:$data.Last_Name, valueUpdate:'afterkeydown', attr:{readonly: !$data.IsEditing()}" />
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">Country *</label>
+                                                        <select class="form-control" name="Country" data-bind="value:$data.Country,options:CountryList,optionsText:'nicename',optionsValue:'nicename', attr:{readonly: !$data.IsEditing()}">
+                                                            @*<option data-bind="foreach:CountryList"></option><option data-bind="text:'Male', value:'Male'"></option>
+                                                                <option data-bind="text:'Female', value:'Female'"></option>*@
+                                                        </select>
+                                                        @*<input class="form-control" type="text" name="Country" placeholder="Country *" required
+                                                            data-bind="value:$data.Country, valueUpdate:'afterkeydown', attr:{readonly: !$data.IsEditing()}" />*@
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">State *</label>
+                                                        <input class="form-control" type="text" name="State" placeholder="State *" required
+                                                               data-bind="value:$data.State, valueUpdate:'afterkeydown', attr:{readonly: !$data.IsEditing()}" />
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">City *</label>
+                                                        <input class="form-control" type="text" name="City" required placeholder="City *"
+                                                               data-bind="value:$data.City, valueUpdate:'afterkeydown', attr:{readonly: !$data.IsEditing()}" />
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label class="control-label">Area</label>
+                                                        <input class="form-control" type="text" name="Area" placeholder="Area"
+                                                               data-bind="value:$data.Area, valueUpdate:'afterkeydown', attr:{readonly: !$data.IsEditing()}" />
+                                                    </div>
+                                                    <div class="form-group col-sm-12">
+                                                        <label class="control-label">Address Line *</label>
+                                                        <input class="form-control" type="text" name="Address_Line" required placeholder="Address Line *"
+                                                               data-bind="value:$data.Address_Line, valueUpdate:'afterkeydown', attr:{readonly: !$data.IsEditing()}" />
+                                                    </div>
+
+                                                    <div class="form-group col-sm-12">
+                                                        <label class="control-label">Zip Code *</label>
+                                                        <input class="form-control" type="text" name="ZipCode" placeholder="Zip Code *" required max="10"
+                                                               data-bind="value:$data.ZipCode, valueUpdate:'afterkeydown', attr:{readonly: !$data.IsEditing()}" />
+                                                    </div>
+                                                    <div class="form-group col-sm-12" data-bind="visible: !$data.IsEditing()">
+                                                        <label class="control-label">Phone Number</label>
+                                                        <input class="form-control" type="text" name="Mobile" placeholder="Phone Number *" required onkeypress="return isNumber(event);" maxlength="12"
+                                                               data-bind="value:$data.Mobile, valueUpdate:'afterkeydown', attr:{readonly: !$data.IsEditing()}" />
+                                                    </div>
+                                                    <div class="form-group col-sm-6" data-bind="visible: $data.IsEditing">
+                                                        <label class="control-label">Country Code:</label>
+                                                        <select class="form-control" data-bind="options:CountryList, optionsText:'ISDCode', optionsValue:'phonecode', value:$data.ISDCode, optionsCaption:'Choose option'"></select>
+                                                    </div>
+                                                    <div class="form-group col-sm-6" data-bind="visible: $data.IsEditing">
+                                                        <label class="control-label">Phone Number:</label>
+                                                        <input type="text" class="form-control" placeholder="Phone Number"
+                                                               data-bind="value:$data.PhoneNumber, valueUpdate:'afterkeydown'" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <button type="button" class="btn btn-primary btn-xs" title="Add More"
+                                                    data-bind="click:Add_New_Address">
+                                                <span>Add New</span>
+                                                <span class="glyphicon glyphicon-plus-sign"></span>
+                                            </button>
+                                            <button type="submit" class="btn btn-success btn-xs"
+                                                    title="Save" form="address-form"
+                                                    data-bind="disable:IsSavingAddress">
+                                                <span>Save</span>
+                                                <span class="glyphicon glyphicon-floppy-save"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingThree">
+                                        <div class="row">
+                                            <div class="col-sm-9">
+                                                <h4 class="panel-title">
+                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                                                       href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                        <span> #3 My Credits</span>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <span class="pull-right">
+                                                    <span>AED</span>
+                                                    <span data-bind="text: parseFloat(Old_User.CreditAmount()).toFixed(2)"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                        <div class="panel-body" style="max-height:300px;overflow:hidden;overflow-y:auto;">
+                                            <div class="row">
+                                                <div class="col-sm-12 table-responsive">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Amount</th>
+                                                                <th>Type</th>
+                                                                <th>Comment</th>
+                                                                <th>Status</th>
+                                                                <th>Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        @{
+                                                            var logs = ViewBag.CreditLogs as IEnumerable<Credit>;
+                                                            if (logs.Count() > 0)
+                                                            {
+                                                                <tbody>
+                                                                    @{
+                                                                        int index = 1;
+                                                                        foreach (var log in logs)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>@index</td>
+                                                                                <td><small>@string.Format("AED {0}", Math.Round(log.Amount, 2))</small></td>
+                                                                                <td><small>@log.Transaction_Type</small></td>
+                                                                                <td><small>@log.Comments</small></td>
+                                                                                <td><small>@(log.IsBlocked ? "Blocked" : "")</small></td>
+                                                                                <td><small>@log.AddedOn.ToString("dd MMM yyyy")</small></td>
+                                                                            </tr>
+                                                                            index++;
+                                                                        }
+                                                                    }
+                                                                </tbody>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td colspan="6">
+                                                                                        <p>You do not have credits.</p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        }
+                                                        }
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingFour">
+                                        <h4 class="panel-title">
+                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                                               href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                                <span> #4 Security</span>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                                        <div class="panel-body">
+                                            <form class="row" id="security-form" data-bind="submit:Update_User_Password">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label">New Password:</label>
+                                                        <input type="password" placeholder="New Password" required
+                                                               name="pass_confirmation" data-validation="strength"
+                                                               data-validation-strength="2" class="form-control"
+                                                               data-bind="value:Security.Password, valueUpdate:'afterkeydown'" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Confirm Password:</label>
+                                                        <input type="password" placeholder="Confirm Password" required
+                                                               name="pass" data-validation="confirmation" class="form-control"
+                                                               data-bind="value:Security.ConfirmPassword, valueUpdate:'afterkeydown'" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <p data-bind="text:Security_Update_Message"></p>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <button type="submit" form="security-form" class="btn btn-success btn-xs"
+                                                    title="Chnage Password" data-bind="disable:IsSavingPassword">
+                                                <span>Update</span>
+                                                <span class="glyphicon glyphicon-floppy-save"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="prfl-cmplt-box">
+                        @*<h5 class="txt-center">Personal Information</h5>
+                            <div class="c100 @(string.Format("p{0}", ViewBag.ProfileScore))">
+                                @*<div class="c100 p" + data-bind="text:ProfileScore+'%'">
+                                <span data-bind="text:ProfileScore" +%></span>
+                                <div class="slice">
+                                    <div class="bar"></div>
+                                    <div class="fill"></div>
+                                </div>
+                            </div>
+                            <p class="txt-center">
+                                Your Profile is  <span data-bind="text:ProfileScore"></span>% <br>Complete
+                            </p>
+                            <p class="txt-center">
+                                <span>My Referral Key: </span>
+                                <label>@referral_key</label>
+                            </p>*@
+                        <h5 class="txt-center">Personal Information</h5>
+                        <div data-bind="attr:{class:'c100 p'+ProfileScore()}">
+                            <span data-bind="text:ProfileScore()+'%'"></span>
+                            <div class="slice">
+                                <div class="bar"></div>
+                                <div class="fill"></div>
+                            </div>
+                        </div>
+                        <p class="txt-center">
+                            Your Profile is  <span data-bind="text:ProfileScore()+'%'"></span><br>Complete
+                        </p>
+                        <span data-bind="text:'To complete profile please fill: '+ProfileRemainingOptions(), attr:{style: (ProfileRemainingOptions()==''?'display:none':'display:block')}"></span>
+                        <p class="txt-center">
+                            <span>My Referral Key: </span>
+                            <label>@referral_key</label>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/lib/moment/min/moment.min.js"></script>
+    <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+    <script src="~/assets/plugins/select2/js/select2.min.js"></script>
+
+    <script src="~/assets/plugins/toastr/toastr.min.js"></script>
+    <script type="text/javascript">
+
+        var self = this;
+        self.IsLoading = ko.observable(false);
+        self.IsLoadingAddress = ko.observable(false);
+        self.IsEditingPersonalInfo = ko.observable(false);
+        self.IsSavingPersonalInfo = ko.observable(false);
+        self.IsSavingPassword = ko.observable(false);
+        self.IsSavingAddress = ko.observable(false);
+        self.UserId = ko.observable(0);
+        self.Security_Update_Message = ko.observable('');
+        self.AddressList = ko.observableArray([]);
+        self.CountryList = ko.observableArray([]);
+        self.ProfileScore = ko.observable(0);
+        self.ProfileRemainingOptions = ko.observable('');
+        self.User = {
+            Avatar: ko.observable(''),
+            DOB: ko.observable(),
+            Email: ko.observable(''),
+            EmailVerified: ko.observable(false),
+            ISDCode: ko.observable(''),
+            PhoneNumber: ko.observable(''),
+            PhoneVefified: ko.observable(false),
+            FirstName: ko.observable(''),
+            Gender: ko.observable(''),
+            Id: ko.observable(0),
+            LastName: ko.observable(''),
+            Country: ko.observable(''),
+            Background: ko.observable(''),
+            CreditAmount: ko.observable(0),
+
+            Active: ko.observable(false),
+            ReferalCount: ko.observable(0),
+            ProfileScore: ko.observable(0),
+            ProfileRemainingOptions: ko.observable(''),
+            ReferalKey: ko.observable(0),
+            Referal_Id: ko.observable(0)
+        };
+
+        self.Security = {
+            Password: ko.observable(''),
+            ConfirmPassword: ko.observable('')
+        };
+
+        self.Old_User = {
+            Avatar: ko.observable(''),
+            DOB: ko.observable(),
+            Email: ko.observable(''),
+            EmailVerified: ko.observable(false),
+            ISDCode: ko.observable(''),
+            PhoneNumber: ko.observable(''),
+            PhoneVefified: ko.observable(false),
+            FirstName: ko.observable(''),
+            Gender: ko.observable(''),
+            Id: ko.observable(0),
+            LastName: ko.observable(''),
+            Country: ko.observable(''),
+            Background: ko.observable(''),
+            CreditAmount: ko.observable(0)
+        };
+
+        self.Set_User_Data = function (obj) {
+            self.Old_User.Avatar(obj.Avatar);
+            var dob = obj.DOB == null ? '' : moment(obj.DOB).format('DD/MM/YYYY');
+            self.Old_User.DOB(dob || '');
+            self.Old_User.Email(obj.Email);
+            self.Old_User.EmailVerified(obj.EmailVerified);
+            self.Old_User.FirstName(obj.FirstName);
+            self.Old_User.Gender(obj.Gender);
+            self.Old_User.Id(obj.Id);
+            self.Old_User.Background(obj.Background);
+            self.Old_User.LastName(obj.LastName);
+            self.Old_User.Country(obj.Country);
+            self.Old_User.CreditAmount(obj.CreditAmount);
+            var isd = (obj.ISDCode > 0) ? obj.ISDCode : '';
+            var phn = (obj.PhoneNumber > 0) ? obj.PhoneNumber : '';
+            self.Old_User.ISDCode(isd);
+            self.Old_User.PhoneNumber(phn);
+            self.Old_User.PhoneVefified(obj.PhoneVefified);
+            self.ProfileScore(obj.ProfileScore);
+            self.ProfileRemainingOptions(obj.ProfileRemainingOptions);
+        };
+
+        self.OnClick_Edit_PersonalInfo = function () {
+            self.IsEditingPersonalInfo(true);
+            self.User.Avatar(self.Old_User.Avatar());
+            self.User.DOB(self.Old_User.DOB());
+            self.User.Email(self.Old_User.Email());
+            self.User.EmailVerified(self.Old_User.EmailVerified());
+            self.User.FirstName(self.Old_User.FirstName());
+            self.User.Gender(self.Old_User.Gender());
+            self.User.Id(self.Old_User.Id());
+            self.User.Country(self.Old_User.Country());
+            self.User.Background(self.Old_User.Background());
+            self.User.LastName(self.Old_User.LastName());
+            self.User.ISDCode(self.Old_User.ISDCode());
+            self.User.PhoneNumber(self.Old_User.PhoneNumber());
+            self.User.PhoneVefified(self.Old_User.PhoneVefified());
+            self.User.CreditAmount(self.Old_User.CreditAmount());
+            $('select').select2();
+        };
+
+        self.OnClick_Cancel_Edit_PersonalInfo = function () {
+            self.IsEditingPersonalInfo(false);
+        };
+
+        self.OnClick_Save_PersonalInfo = function () {
+            self.IsSavingPersonalInfo(true);
+            if (self.User.ISDCode() == null || self.User.ISDCode() == '') {
+                self.User.ISDCode(0);
+            }
+            if (self.User.PhoneNumber() == null || self.User.PhoneNumber() == '') {
+                self.User.PhoneNumber(0);
+            }
+            //console.log(ko.toJSON(self.User));
+            $.ajax({
+                type: 'POST', dataType: "json",
+                url: '/save-user-data',
+                contentType: "application/json; charset=utf-8",
+                data: ko.toJSON(self.User),
+                success: function (data) {
+                    self.IsSavingPersonalInfo(false);
+                    self.IsEditingPersonalInfo(false);
+                    self.Set_User_Data(data);
+                    toastr.success("Success");
+                    //self.ProfileScore(60);
+                    @*@ViewBag.ProfileScore=60;*@
+                }
+            });
+        };
+
+        self.Get_Profile_Data = function () {
+            self.IsLoading(true);
+            $.getJSON('/get-user-data', function (data) {
+                self.Set_User_Data(data);
+                self.IsLoading(false);
+                //console.log(data);
+            });
+        };
+
+        self.Get_Country_List = function () {
+            $.getJSON('/get-country-list', function (data) {
+                self.CountryList(data);
+                console.log(ko.toJSON(data));
+            });
+        };
+
+        self.Update_User_Password = function () {
+            var pwd = self.Security.Password();
+            var cnf_pwd = self.Security.ConfirmPassword();
+            if (pwd !== cnf_pwd) { return; }
+            self.IsSavingPassword(true);
+            //console.log(ko.toJSON(self.Security));
+            $.ajax({
+                type: 'POST', dataType: "json",
+                url: '/update-user-password',
+                contentType: "application/json; charset=utf-8",
+                data: ko.toJSON(self.Security),
+                success: function (data) {
+                    self.IsSavingPassword(false);
+                    self.Security_Update_Message(data.Message);
+                    toastr.success("Success");
+                }
+            })
+        };
+
+        self.Add_New_Address = function () {
+            var addr = new Address_ViewModel();
+            addr.IsEditing(true);
+            addr.UserId(self.UserId());
+            self.AddressList.push(addr);
+            $('select').select2();
+        };
+
+
+        self.Remove_Address = function (obj) {
+            $.getJSON('/delete-address/' + obj.Id(), function (data) {
+                self.AddressList.remove(obj);
+                toastr.success("Success");
+            });
+        };
+
+        self.Save_User_Address = function () {
+            //console.log(ko.toJSON(self.AddressList()));
+            self.IsSavingAddress(true);
+
+            $(self.AddressList()).each(function (index) {
+                this.ISDCode(this.ISDCode() == null || this.ISDCode() == '' ? 0 : this.ISDCode());
+                this.PhoneNumber(this.PhoneNumber() == null || this.PhoneNumber() == '' ? 0 : this.PhoneNumber());
+            });
+            $.ajax({
+                type: 'POST', dataType: "json",
+                url: '/save-user-address',
+                contentType: "application/json; charset=utf-8",
+                data: ko.toJSON(self.AddressList()),
+                success: function (data) {
+                    self.IsSavingAddress(false);
+                    self.Get_AddressList();
+                    toastr.success("Success");
+                }
+            });
+        };
+
+        self.Get_AddressList = function () {
+            self.IsLoadingAddress(true);
+            $.getJSON('/get-user-address', function (data) {
+                self.IsLoadingAddress(false);
+                console.log(data);
+                self.AddressList.removeAll();
+                $.each(data, function (i, o) {
+                    var addr = new Address_ViewModel();
+                    addr.Id(o.Id); addr.First_Name(o.First_Name);
+                    addr.Last_Name(o.Last_Name); addr.Address_Line(o.Address_Line);
+                    addr.Area(o.Area); addr.City(o.City); addr.State(o.State);
+                    addr.Country(o.Country); addr.ZipCode(o.ZipCode);
+                    addr.Address_Type(o.Address_Type);
+                    addr.IsDefault(o.IsDefault); addr.UserId(o.UserId);
+                    addr.Full_Name(o.Full_Name); addr.Complete_Address(o.Complete_Address);
+                    var isd = o.ISDCode || '';
+                    var phn = o.PhoneNumber || '';
+                    addr.PhoneNumber(phn);
+                    addr.ISDCode(isd);
+                    self.AddressList.push(addr);
+                });
+                $('select').select2();
+            });
+        };
+
+        self.Init = function () {
+            //self.ProfileScore(0);
+            self.Get_Profile_Data();
+            self.Get_Country_List();
+            self.Get_AddressList();
+        };
+
+        function Address_ViewModel() {
+            var x = this;
+            x.IsEditing = ko.observable(false);
+            x.Id = ko.observable(0);
+            x.First_Name = ko.observable('');
+            x.Last_Name = ko.observable('');
+            x.Full_Name = ko.observable('');
+            x.Complete_Address = ko.observable('');
+            x.Address_Line = ko.observable('');
+            x.Area = ko.observable('');
+            x.City = ko.observable('');
+            x.State = ko.observable('');
+            x.Country = ko.observable('');
+            x.ZipCode = ko.observable('');
+            x.ISDCode = ko.observable('');
+            x.PhoneNumber = ko.observable('');
+            x.Address_Type = ko.observable('Shipping');
+            x.IsDefault = ko.observable(true);
+            x.UserId = ko.observable('');
+            x.Mobile = ko.computed(function () {
+                var isd = x.ISDCode() || '';
+                var phn = x.PhoneNumber() || '';
+                return '+' + isd + phn;
+            }, x);
+        };
+
+
+        $(document).ready(function () {
+
+            var userId = $('#game-store-user-id').val() || 0;
+            userId = parseInt(userId);
+            self.UserId(userId);
+            self.Init();
+
+            $('select').select2();
+
+            $('#datetimepicker1').datetimepicker({
+                format: 'DD/MM/YYYY',
+                minDate: moment().subtract(70, 'year'),
+                maxDate: moment(),
+            }).on('dp.change', function (e) {
+                var date = moment(e.date).format('DD/MM/YYYY');
+                self.User.DOB(date);
+                console.log(date);
+            });
+
+            $('#bannerUploader').on('change', function (e) {
+                var _data = new FormData();
+                _data.append("file", e.target.files[0]);
+                $.ajax({
+                    type: "POST", url: "/uploadfile", data: _data,
+                    cache: false, contentType: false, processData: false,
+                    success: function (url) { self.User.Avatar(url); }
+                });
+            });
+
+            $.validate({
+                modules: 'security',
+                onModulesLoaded: function () {
+                    // Show strength of password
+                    $('input[name="pass_confirmation"]').displayPasswordStrength();
+                }
+            });
+        });
+
+    </script>
+}

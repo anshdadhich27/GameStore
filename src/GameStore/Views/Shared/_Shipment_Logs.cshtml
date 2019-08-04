@@ -1,0 +1,14 @@
+﻿@model ShipmentHistory
+
+<ul class="list-group">
+    @{
+        foreach (var x in Model.ShipmentLogs)
+        {
+            <li class="list-group-item">
+                <p>@x.Status_Description</p>
+                <p>@x.Status_Date_Local</p>
+            </li>
+        }
+    }
+    
+</ul>

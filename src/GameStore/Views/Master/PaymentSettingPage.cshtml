@@ -1,0 +1,193 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Payment Settings";
+}
+
+
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">Payment Settings</li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel panel-heading">
+                <h2 class="panel-title">
+                    <span>Payment Settings</span>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12" data-bind="visible: IsEditing">
+                        <form id="new-form" data-bind="submit:Save_Settings">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label class="control-label">Tax:</label>
+                                        <input type="text" class="form-control" placeholder="Enter Tax Rate" required
+                                               data-bind="value:Settings.Tax_New, valueUpdate:'afterkeydown'" onkeypress="return isNumber(event);" />
+                                    </div>                                    
+                                </div> 
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label class="control-label">Shipping Charge:</label>
+                                        <input type="text" class="form-control" placeholder="Enter Shipping Charge" required
+                                               data-bind="value:Settings.ShippingCharge_New, valueUpdate:'afterkeydown'" onkeypress="return isNumber(event);" />
+                                    </div>
+                                </div> 
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label class="control-label">Credit Ratio:</label>
+                                        <input type="text" class="form-control" placeholder="Enter Credit Ratio" required
+                                               data-bind="value:Settings.Credit_Ratio_New, valueUpdate:'afterkeydown'"  />
+                                    </div>
+                                </div>                               
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-12" data-bind="visible: !IsEditing()">
+                        <table class="table table-bordered table-hover"> 
+                            <thead>
+                                <tr>
+                                    <th style="width:10%;">Name</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="width:10%;">Tax:</td>
+                                    <td>
+                                        <span data-bind="text:Settings.Tax"></span>
+                                        <span>%</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:10%;">Shipping Charge:</td>
+                                    <td>
+                                        <span>AED</span> 
+                                        <span data-bind="text:Settings.ShippingCharge"></span> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:10%;">Credit Ratio:</td>
+                                    <td>
+                                        <span>AED</span>
+                                        <span data-bind="text:Settings.Credit_Ratio"></span>
+                                    </td>
+                                </tr>
+                                <tr data-bind="visible: IsLoading">
+                                    <td colspan="2">
+                                        <p>Loading... <span class="fa fa-spinner fa-spin"></span></p>
+                                    </td>
+                                </tr>
+                            </tbody>                           
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <button type="button" class="btn btn-default" data-bind="click:OnClick_Edit_Settings">
+                                            <span>Update</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer" data-bind="visible: IsEditing">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success" form="new-form" data-bind="disable:IsSaving">
+                                <span>Save</span>
+                                <span class="fa fa-spinner fa-spin" data-bind="visible:IsSaving"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" data-bind="click:Clear_All_Fields">
+                                <span>Cancel</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+<script src="~/lib/knockout/dist/knockout.js"></script>
+    <script type="text/javascript">
+        function AppViewModel() {
+            var self = this;
+            self.IsEditing = ko.observable(false);
+            self.IsSaving = ko.observable(false);
+            self.IsLoading = ko.observable(false);
+
+            self.Settings = {
+                Id: ko.observable(0),
+                Tax: ko.observable(0),
+                Tax_New: ko.observable(0),
+                Credit_Ratio: ko.observable(0),
+                Credit_Ratio_New: ko.observable(0),
+                ShippingCharge: ko.observable(0),
+                ShippingCharge_New: ko.observable(0)
+            };
+
+            self.Update_Changes = function (obj) {
+                self.Settings.Tax(self.Settings.Tax_New());
+                self.Settings.Credit_Ratio(self.Settings.Credit_Ratio_New());
+                self.Settings.ShippingCharge(self.Settings.ShippingCharge_New());
+            };
+
+            self.OnClick_Edit_Settings = function (obj) {
+                self.IsEditing(true);
+                self.Settings.Tax_New(self.Settings.Tax());
+                self.Settings.Credit_Ratio_New(self.Settings.Credit_Ratio());
+                self.Settings.ShippingCharge_New(self.Settings.ShippingCharge());
+            };
+
+            self.Clear_All_Fields = function () {
+                self.IsEditing(false);
+                self.IsSaving(false);
+                self.Settings.Tax_New(0);
+                self.Settings.Credit_Ratio_New(0);
+                self.Settings.ShippingCharge_New(0);
+            };
+
+            self.Save_Settings = function () {
+                self.Update_Changes();
+                self.IsSaving(true);
+                $.ajax({
+                    type: 'POST', dataType: "json",
+                    url: '/master/update-payment-setting',
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(self.Settings),
+                    success: function (data) { toastr.success('Success'); },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                }).done(function () { self.Clear_All_Fields(); });
+            };
+
+            self.Get_Settings = function () {
+                self.IsLoading(true);
+                $.getJSON('/master/get-payment-setting', function (obj) {
+                    self.IsLoading(false);
+                    self.Settings.Id(obj.Id);
+                    self.Settings.Tax(obj.Tax);
+                    self.Settings.Credit_Ratio(obj.Credit_Ratio);
+                    self.Settings.ShippingCharge(obj.ShippingCharge);
+                });
+            };
+
+        };
+        $(document).ready(function () {
+            var app = new AppViewModel();
+            ko.applyBindings(app);
+            app.Get_Settings();
+
+        });
+    </script>
+}

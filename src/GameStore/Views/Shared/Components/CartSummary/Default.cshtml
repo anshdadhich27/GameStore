@@ -1,0 +1,174 @@
+﻿@model Cart_DTO
+
+<div class="order-rvw-box">
+    <h4>Order Review</h4>
+    @{
+        int index = 1;
+        if (Model.CartType == "Shopping")
+        {
+            <div class="cart-box">
+                <table>
+                    <thead>
+                        <tr class="even">
+                            <th>ITEM</th>
+                            <th>Price</th>
+                            <th>QTY</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            index = 1;
+                            foreach (var item in Model.ShopingCart)
+                            {
+                                
+                                <tr class="@((index / 2 == 0) ? "odd" : "row-bg")">
+                                    <td>
+                                        <div class="prd-itm">
+                                            <div class="prd-img">
+                                                <a href="@item.PageUrl" target="_blank">
+                                                    <img style="max-height:100px;" src="@item.ImageUrl" alt="@item.Product_Name">
+                                                </a>
+                                            </div>
+                                            <div class="prd-name">
+                                                @item.Product_Name<br>
+                                                <span class="type">@item.Product_TypeName</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="txt-center">
+                                        <span class="newPric">AED @Math.Round(item.Price, 2)</span>
+                                    </td>                                    
+                                    <td class="txt-center">
+                                        <div class="qutBox-1">@item.Quantity</div>
+                                    </td>
+
+                                    <td class="txt-center">
+                                        <span class="newPric">AED @Math.Round(item.TotalPrice, 2)</span>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        }
+
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>
+                                <span>Shipping Charge:</span>
+                            </td>
+                            <td>
+                                <span>AED @Math.Round(Model.ShippingCharge, 2)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>
+                                <span>Tax Rate:</span>
+                            </td>
+                            <td>
+                                <span>@string.Format("{0}%", Model.Tax_Rate)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>
+                                <span>Tax Amount:</span>
+                            </td>
+                            <td>
+                                <span>AED @Math.Round(Model.Tax_Amount, 2)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <a href="/shopping-cart" class="clr-red">Edit Cart</a>
+                            </td>
+                            <td>
+                                <strong>Grand Total</strong>
+                            </td>
+                            <td>
+                                <strong>AED @Math.Round(Model.Total_Sum, 2)</strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+                            }
+                            else
+                            {
+                                <small>Credit Ratio: AED 1 = @Math.Round(Model.Credit_Ratio, 2) </small>
+                                <div class="cart-box">
+                                    <table>
+                                        <thead>
+                                            <tr class="even">
+                                                <th>ITEM</th>
+                                                <th>Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                index = 1;
+                                                foreach (var item in Model.SellingCart)
+                                                {                                                    
+                                                    <tr class="@((index / 2 == 0) ? "odd" : "row-bg")">
+                                                        <td>
+                                                            <div class="prd-itm">
+                                                                <div class="prd-img">
+                                                                    <a href="@item.PageUrl" target="_blank">
+                                                                        <img style="max-height:100px;" src="@item.ImageUrl" alt="@item.Product_Name">
+                                                                    </a>
+                                                                </div>
+                                                                <div class="prd-name">
+                                                                    @item.Product_Name<br>
+                                                                    <span class="type">@item.Product_TypeName</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>  
+                                                        <td class="txt-center">
+                                                            <span class="newPric">AED @Math.Round(item.TotalPrice - item.Deduction, 2)</span>
+                                                        </td>                                                        
+                                                    </tr>
+                                                    index++;
+                                                }
+                                            }
+
+
+                                            <tr>                                               
+                                                <td class="txt-center">
+                                                    <span>Total Price</span>
+                                                </td>
+                                                <td class="txt-center">
+                                                    <span>AED @Math.Round(Model.Total_Price - Model.Total_Deduction, 2)</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="txt-center">
+                                                    <span>Shipping charge</span>
+                                                </td>
+                                                <td class="txt-center">
+                                                    <span>- AED @Math.Round(Model.ShippingCharge, 2)</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="txt-center">
+                                                    <span>Total Cash Value</span>
+                                                </td>
+                                                <td class="txt-center">
+                                                    <span>AED @Math.Round(Model.Total_Sum, 2)</span>
+                                                </td>
+                                            </tr>
+                                            <tr>                                               
+                                                <td>
+                                                    <span class="gtotal">Total Credit</span>                                                    
+                                                </td>
+                                                <td>
+                                                    <span class="gtotal">AED @Math.Round(Model.Total_Sum * Model.Credit_Ratio, 2)</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                                }
+    }
+
+</div>

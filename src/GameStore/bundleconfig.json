@@ -1,0 +1,116 @@
+﻿[
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/header-footer.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/blog.min.css",
+    "inputFiles": [
+      "wwwroot/css/header-footer.css",
+      "wwwroot/css/blog.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/checkout.min.css",
+    "inputFiles": [
+      "wwwroot/css/header-footer.css",
+      "wwwroot/css/checkout.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/home.min.css",
+    "inputFiles": [
+      "wwwroot/css/header-footer.css",
+      "wwwroot/css/pre-own.css",
+      "wwwroot/css/product-box.css",
+      "wwwroot/css/easy-responsive-tabs.css",
+      "wwwroot/css/home.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/policy-terms.min.css",
+    "inputFiles": [
+      "wwwroot/css/header-footer.css",
+      "wwwroot/css/policy-terms.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/pre-own.min.css",
+    "inputFiles": [
+      "wwwroot/css/header-footer.css",
+      "wwwroot/css/pre-own.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/product-detail.min.css",
+    "inputFiles": [
+      "wwwroot/css/header-footer.css",
+      "wwwroot/css/product-box.css",
+      "wwwroot/css/pre-own.css",
+      "wwwroot/css/product-detail.css",
+      "wwwroot/css/owl.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/product-listing.min.css",
+    "inputFiles": [
+      "wwwroot/css/header-footer.css",
+      "wwwroot/css/product-box.css",
+      "wwwroot/css/pre-own.css",
+      "wwwroot/css/product-listing.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/sign-login.min.css",
+    "inputFiles": [
+      "wwwroot/css/header-footer.css",
+      "wwwroot/css/sign-login.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/user-acc.min.css",
+    "inputFiles": [
+      "wwwroot/css/header-footer.css",
+      "wwwroot/css/progress-circle.css",
+      "wwwroot/css/user-acc.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.js",
+    "inputFiles": [
+      "wwwroot/js/jquery-mobile-mega-menu-min.js",
+      "wwwroot/js/imagescroll.js",
+      "wwwroot/js/site.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/home.min.js",
+    "inputFiles": [
+      "wwwroot/js/easy-responsive-tabs.js",
+      "wwwroot/js/jquery.caroufredsel-6.0.4-packed.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/assets/js/meteor.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js/meteor.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  }
+]

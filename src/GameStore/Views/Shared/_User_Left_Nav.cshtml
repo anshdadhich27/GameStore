@@ -1,0 +1,48 @@
+﻿@using System.Security.Claims
+@{ 
+    string name = User.FindFirst(ClaimTypes.Name)?.Value;
+    string email = User.FindFirst(ClaimTypes.Email)?.Value;
+    string img = User.FindFirst(ClaimTypes.Actor)?.Value;
+    long referral_key = Convert.ToInt64(User.FindFirst(Constant.REFERRAL_KEY)?.Value);
+}
+
+<div class="profile-fld">
+    <div class="my-acc">
+        <h5 class="">My Account</h5>
+        <div class="pro-img">
+            <img src="@(string.IsNullOrEmpty(img)?"/images/user.png":img)" alt="@name">
+        </div>
+        <div class="pro-nme">
+            <span class="usr-name">@name</span>
+            <span class="usr-mail">@email</span>
+        </div>        
+    </div>
+    <div class="profile-pnts my-acc">
+        <h5 class="">Profile Complete</h5>
+        <ul>
+            <li>
+                <a href="/user-account#collapseOne">Personal Information</a>
+            </li>
+            <li>
+                <a href="/user-account#collapseTwo">Saved Address</a>
+            </li> 
+            <li>
+                <a href="/user-account#collapseFour">Security</a>
+            </li> 
+        </ul>
+    </div>
+    <div class="profile-pnts my-acc">
+        <h5 class="">My Items</h5>
+        <ul>           
+            <li>
+                <a href="/my-orders">My Orders</a>
+            </li>
+            <li>
+                <a href="/my-wishlist">My Wishlist</a>
+            </li>
+            <li>
+                <a href="/my-sold-items">Sold Items</a>
+            </li>            
+        </ul>
+    </div>
+</div>

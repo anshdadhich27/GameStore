@@ -1,0 +1,934 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Accessories";
+}
+
+@section styles{
+    <link href="~/assets/plugins/summernote-master/summernote.css" rel="stylesheet" />
+    <link href="~/assets/plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .bs-example-modal-lg .modal-dialog .modal-dialog {
+            border: 1px solid #9c9797;
+            box-shadow: #bfb3b3 3px 3px 20px 8px;
+        }
+
+        .modal-header {
+            background-color: #dadada;
+        }
+
+        .tab-content {
+            border-bottom: 1px solid lightgray;
+            border-left: 1px solid lightgray;
+            border-right: 1px solid lightgray;
+        }
+
+        .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {
+            background-color: #d1dbe4;
+        }
+
+        .img-box {
+            height: 200px;
+            border: 1px solid lightgray;
+            margin: 0px;
+            padding: 2px;
+            text-align: center;
+        }
+
+            .img-box img {
+                max-height: 140px;
+            }
+    </style>
+}
+
+
+
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">Accessories</li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel panel-heading">
+                <h2 class="panel-title">
+                    <span>Accessories</span>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div role="tabpanel">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs nav-justified" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#tab_1" role="tab" data-toggle="tab" aria-expanded="true">
+                                        <span class="badge badge-info">1</span>&nbsp;<span id="tab-1-txt">Add New</span>
+                                    </a>
+                                </li>
+                                <li role="presentation" class="">
+                                    <a href="#tab_2" role="tab" data-toggle="tab" aria-expanded="false">
+                                        <span class="badge badge-info">2</span>&nbsp;<span>Accessory List</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active in" id="tab_1">
+                                    <form id="new-form" data-bind="submit:Save_Accessories">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Name:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Name" required
+                                                           data-bind="value:Accessories.Name, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Brand:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Brand"
+                                                           data-bind="value:Accessories.Publisher, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Popularity:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Popularity"
+                                                           data-bind="value:Accessories.Popularity, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Barcode:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Barcode"
+                                                           data-bind="value:Accessories.Barcode, valueUpdate:'afterkeydown'" />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label">SKU:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter SKU" readonly
+                                                           data-bind="value:Accessories.SKU, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+
+
+
+                                                <div class="form-group">
+                                                    <label class="control-label">Condition: *</label>
+                                                    <select id="condition_select" class="form-control" required
+                                                            data-bind="options:Conditions, optionsText:'Text', optionsValue:'Id', value: Accessories.Condition_Id, optionsCaption:'Choose option'"></select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Best Selling?:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <input type="checkbox" value="true" data-bind="checked: Accessories.IsBestSelling" />
+                                                        </div>
+                                                        <div class="form-control" style="padding:8px 13px!important;" data-bind="text:Accessories.IsBestSelling()?'Yes':'No'">Yes</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Pre Order?:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <input type="checkbox" value="true" data-bind="checked: Accessories.PreOrder" />
+                                                        </div>
+                                                        <div class="form-control" style="padding:8px 13px!important;" data-bind="text:Accessories.PreOrder()?'Yes':'No'">Yes</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Accessory Type:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoadingAccessoriesTypes, 'fa-th-list': !IsLoadingAccessoriesTypes()}"></span>
+                                                        </div>
+                                                        <select class="form-control" id="PlatformList_select" required
+                                                                data-bind="options:AccessoriesTypes, optionsText:'Name', optionsValue:'Id', value:Accessories.ProductTypeId, optionsCaption:'Choose option'"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Vendor:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoadingVendors, 'fa-th-list': !IsLoadingVendors()}"></span>
+                                                        </div>
+                                                        <select class="form-control" id="vendor_select" required
+                                                                data-bind="options:VendorList, optionsText:'Name', optionsValue:'Id', value:Accessories.Vendor_Id, optionsCaption:'Choose option'"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Quantity:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Quantity" required
+                                                           data-bind="value:Accessories.Quantity, valueUpdate:'afterkeydown'" onkeypress="return isNumber(event);" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Buying Price:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Buying Price" required
+                                                           data-bind="value:Accessories.Buying_Price, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Selling Price:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Selling Price" required
+                                                           data-bind="value:Accessories.Selling_Price, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Original Price:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Original Price" required
+                                                           data-bind="value:Accessories.Original_Price, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Release Date:</label>
+                                                    <input id="datetimepicker1" type="text" class="form-control" placeholder="Enter Release Date"
+                                                           data-bind="datePicker:Accessories.Added_On, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">Platform:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoadingPlatforms, 'fa-th-list': !IsLoadingPlatforms()}"></span>
+                                                        </div>
+                                                        <select class="form-control" id="PlatformList_select" required
+                                                                data-bind="options:PlatformList, optionsText:'Name', optionsValue:'Code', value:Accessories.Platform_Code, optionsCaption:'Choose option'"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="form-group">
+                                                    <label class="control-label">&nbsp;</label>
+                                                    <div class="form-control" style="padding-top:4px!important;">
+                                                        <span>Images</span>
+                                                        <button type="button" class="btn btn-xs btn-info" title="Add New Image"
+                                                                data-bind="click:Add_New_Images">
+                                                            <span class="glyphicon glyphicon-plus-sign"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" data-bind="foreach:Accessories.ImageList">
+                                            <div class="col-sm-3 img-box">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-picture"></span>
+                                                        </div>
+                                                        <label class="form-control" style="padding:5px!important;"
+                                                               data-bind="attr:{for: 'imageUploader'+$index()}">
+                                                            <span class="btn btn-default btn-xs">Choose Image (210x250)</span>
+                                                        </label>
+                                                        <div class="input-group-btn" data-bind="visible:$data.Url()!=''">
+                                                            <button class="btn btn-danger" type="button" title="Delete Logo"
+                                                                    data-bind="click:$parent.OnClick_Remove_Images">
+                                                                <span class="glyphicon glyphicon-trash"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <input type="file" style="display:none;" accept="image/*"
+                                                           data-bind="attr:{id: 'imageUploader'+$index()}, event:{change: $data.ImageUploader}" />
+                                                </div>
+                                                <div class="form-group" data-bind="visible:$data.Url()!=''">
+                                                    <img alt="img" data-bind="attr:{src: $data.Url}" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Sort Info:</label>
+                                                    <textarea class="form-control" rows="3"
+                                                              data-bind="value:Accessories.SortInfo, valueUpdate:'afterkeydown'"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Description:</label>
+                                                    <div id="summernote-body"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-success" form="new-form" data-bind="disable:IsSaving">
+                                                        <span>Save</span>
+                                                        <span class="fa fa-spinner fa-spin" data-bind="visible:IsSaving"></span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-default" data-bind="click:ClearAllFields">
+                                                        <span>Cancel</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_2">
+                                    <button type="submit" form="console-filter-form" class="btn btn-default btn-rounded">Export</button>
+                                    <form action="/manage-products/download-csv-console" method="post" id="console-filter-form" target="_blank">
+                                        <input type="hidden" name="searchTxt" value="Accessories" />
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Image</th>
+                                                        <th>Name</th>
+                                                        <th>Type</th>
+                                                        <th>Price</th>
+                                                        <th>Numbers</th>
+                                                        <th>Condition</th>
+                                                        <th>Added On</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-bind="foreach:AccessoriesList">
+                                                    <tr>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <a href="javascript:void(0);" class="dropdown-toggle"
+                                                                   data-toggle="dropdown" aria-expanded="false">
+                                                                    <span data-bind="text: ($index()+1)+'). '"></span>
+                                                                    <span>Options</span>
+                                                                </a>
+                                                                <ul class="dropdown-menu dropdown-list" role="menu">
+                                                                    <li role="presentation">
+                                                                        <a href="javascript:void(0);" title="Update"
+                                                                           data-bind="click:$parent.OnClickCreateAsNewBtn">
+                                                                            <i class="fa fa-edit"></i>
+                                                                            <span>Create as New</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li role="presentation">
+                                                                        <a href="javascript:void(0);" title="Update"
+                                                                           data-bind="click:$parent.OnClickEditBtn">
+                                                                            <i class="fa fa-edit"></i>
+                                                                            <span>Update</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li role="presentation">
+                                                                        <a href="javascript:void(0);" title="Delete"
+                                                                           data-bind="click:$parent.Delete_Accessories">
+                                                                            <i class="fa fa-trash"></i>
+                                                                            <span>Delete</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <img style="max-height:200px;" alt="img" data-bind="attr:{src: $data.ImageUrl}" />
+                                                        </td>
+                                                        <td data-bind="text: $data.Name"></td>
+                                                        <td>
+                                                            <span><span>Product Type: </span><b data-bind="text: $data.ProductTypeName"></b></span><br />
+                                                            <span><span>Platform: </span><b data-bind="text: $data.Platform"></b></span><br />
+                                                            <span><span>Brand: </span><b data-bind="text: $data.Publisher"></b></span><br />
+                                                            <span><span>Condition: </span><b data-bind="text: $data.Condition"></b></span>
+                                                        </td>
+                                                        <td>
+                                                            <span><span>Buying Price: </span><b data-bind="text: $data.Buying_Price"></b></span><br />
+                                                            <span><span>Selling Price: </span><b data-bind="text: $data.Selling_Price"></b></span><br />
+                                                            <span><span>Original Price: </span><b data-bind="text: $data.Original_Price"></b></span>
+                                                        </td>
+                                                        <td>
+                                                            <span><span>Quantity: </span><b data-bind="text: $data.Quantity"></b></span><br />
+                                                            <span><span>SKU: </span><b data-bind="text: $data.SKU"></b></span><br />
+                                                            <span><span>Barcode: </span><b data-bind="text: $data.Barcode"></b></span>
+                                                        </td>
+                                                        <td>
+                                                            <span><span>Pre Order: </span><b data-bind="text: $data.PreOrder()?'Yes':'No'"></b></span><br />
+                                                            <span><span>Best Selling: </span><b data-bind="text: $data.IsBestSelling()?'Yes':'No'"></b></span><br />
+                                                            <span><span>Available to Buy: </span><b data-bind="text: $data.Available_To_Buy()?'Yes':'No'"></b></span><br />
+                                                            <span><span>Available to Sell: </span><b data-bind="text: $data.Available_To_Sell()?'Yes':'No'"></b></span>
+
+                                                        </td>
+                                                        <td data-bind="text: moment($data.AddedOn).format('Do MMM YYYY')"></td>
+
+                                                    </tr>
+                                                </tbody>
+                                                <tbody data-bind="visible:IsLoading">
+                                                    <tr>
+                                                        <td colspan="9">
+                                                            <span class="glyphicon glyphicon-refresh processingIcon"></span>
+                                                            <span>Loading.....</span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <select id="row-select" data-bind="options:[10,20,50,100], value:Rows, optionsCaption:'Rows'"
+                                                                    class="form-control"></select>
+                                                        </td>
+                                                        <td colspan="2">
+                                                            <span>
+                                                                <span>Total:</span>
+                                                                <span data-bind="text:Total"></span>
+                                                                <span>Records</span>
+                                                            </span>
+                                                        </td>
+                                                        <td colspan="5">
+                                                            <div id="page-selection"></div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+    <script>
+        (function (h, q) {
+            h.fn.bootpag = function (p) {
+                function m(c, b) {
+                    b = parseInt(b, 10); var d, e = 0 == a.maxVisible ? 1 : a.maxVisible, k = 1 == a.maxVisible ? 0 : 1, n = Math.floor((b - 1) / e) * e, f = c.find("li"); a.page = b = 0 > b ? 0 : b > a.total ? a.total : b; f.removeClass(a.activeClass); d = 1 > b - 1 ? 1 : a.leaps && b - 1 >= a.maxVisible ? Math.floor((b - 1) / e) * e : b - 1; a.firstLastUse && f.first().toggleClass(a.disabledClass, 1 === b); e = f.first(); a.firstLastUse && (e = e.next()); e.toggleClass(a.disabledClass, 1 === b).attr("data-lp", d).find("a").attr("href", g(d)); k = 1 == a.maxVisible ?
+            0 : 1; d = b + 1 > a.total ? a.total : a.leaps && b + 1 < a.total - a.maxVisible ? n + a.maxVisible + k : b + 1; e = f.last(); a.firstLastUse && (e = e.prev()); e.toggleClass(a.disabledClass, b === a.total).attr("data-lp", d).find("a").attr("href", g(d)); f.last().toggleClass(a.disabledClass, b === a.total); e = f.filter("[data-lp=" + b + "]"); k = "." + [a.nextClass, a.prevClass, a.firstClass, a.lastClass].join(",."); if (!e.not(k).length) {
+                var m = b <= n ? -a.maxVisible : 0; f.not(k).each(function (b) {
+                    d = b + 1 + n + m; h(this).attr("data-lp", d).toggle(d <= a.total).find("a").html(d).attr("href",
+                    g(d))
+                }); e = f.filter("[data-lp=" + b + "]")
+            } e.not(k).addClass(a.activeClass); l.data("settings", a)
+                } function g(c) { return a.href.replace(a.hrefVariable, c) } var l = this, a = h.extend({
+                    total: 0, page: 1, maxVisible: null, leaps: !0, href: "javascript:void(0);", hrefVariable: "{{number}}", next: "&raquo;", prev: "&laquo;", firstLastUse: !1, first: '<span aria-hidden="true">&larr;</span>', last: '<span aria-hidden="true">&rarr;</span>', wrapClass: "pagination", activeClass: "active", disabledClass: "disabled", nextClass: "next", prevClass: "prev",
+                    lastClass: "last", firstClass: "first"
+                }, l.data("settings") || {}, p || {}); if (0 >= a.total) return this; h.isNumeric(a.maxVisible) || a.maxVisible || (a.maxVisible = parseInt(a.total, 10)); l.data("settings", a); return this.each(function () {
+                    var c, b, d = h(this); c = ['<ul class="', a.wrapClass, ' bootpag">']; a.firstLastUse && (c = c.concat(['<li data-lp="1" class="', a.firstClass, '"><a href="', g(1), '">', a.first, "</a></li>"])); a.prev && (c = c.concat(['<li data-lp="1" class="', a.prevClass, '"><a href="', g(1), '">', a.prev, "</a></li>"])); for (b =
+                    1; b <= Math.min(a.total, a.maxVisible) ; b++) c = c.concat(['<li data-lp="', b, '"><a href="', g(b), '">', b, "</a></li>"]); a.next && (b = a.leaps && a.total > a.maxVisible ? Math.min(a.maxVisible + 1, a.total) : 2, c = c.concat(['<li data-lp="', b, '" class="', a.nextClass, '"><a href="', g(b), '">', a.next, "</a></li>"])); a.firstLastUse && (c = c.concat(['<li data-lp="', a.total, '" class="last"><a href="', g(a.total), '">', a.last, "</a></li>"])); c.push("</ul>"); d.find("ul.bootpag").remove(); d.append(c.join("")); c = d.find("ul.bootpag"); d.find("li").click(function () {
+                        var b =
+                        h(this); if (!b.hasClass(a.disabledClass) && !b.hasClass(a.activeClass)) { var c = parseInt(b.attr("data-lp"), 10); l.find("ul.bootpag").each(function () { m(h(this), c) }); l.trigger("page", c) }
+                    }); m(c, a.page)
+                })
+            }
+        })(jQuery, window);
+    </script>
+    <script src="~/assets/plugins/summernote-master/summernote.min.js"></script>
+    <script src="~/assets/plugins/summernote-master/summernote-ext-video.js"></script>
+    <script src="~/assets/plugins/summernote-master/summernote-ext-fontstyle.js"></script>
+    <script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/assets/plugins/select2/js/select2.min.js"></script>
+    <script src="~/lib/knockout/dist/knockout.js"></script>
+    <script src="~/lib/moment/moment.js"></script>
+
+    <script type="text/javascript">
+
+        function AppViewModel() {
+            var self = this;
+            self.IsEditing = ko.observable(false);
+            self.IsLoading = ko.observable(false);
+            self.IsSaving = ko.observable(false);
+            self.IsDeleting = ko.observable(false);
+            self.IsLoadingPlatforms = ko.observable(false);
+            self.IsLoadingAccessoriesTypes = ko.observable(false);
+
+            self.Offset = ko.observable(0);
+            self.Rows = ko.observable(10).extend({ rateLimit: 500 });
+            self.Total = ko.observable(0);
+            self.SearchText = ko.observable('').extend({ rateLimit: 500 });
+            self.AccessoriesList = ko.observableArray([]);
+            self.PlatformList = ko.observableArray([]);
+            self.AccessoriesTypes = ko.observableArray([]);
+            self.IsLoadingPlatforms = ko.observable(false);
+
+            self.IsLoadingVendors = ko.observable(false);
+            self.VendorList = ko.observableArray([]);
+
+            self.Conditions = [{ Id: 1, Text: 'NEW' }, { Id: 2, Text: 'PRE-OWNED' }];
+
+            self.Accessories = {
+                Id: ko.observable(0),
+                Name: ko.observable(''),
+                NameUrl: ko.observable(''),
+                Platform: ko.observable(''),
+                Publisher: ko.observable(''),
+                Popularity: ko.observable(''),
+                SortInfo: ko.observable(''),
+                Description: ko.observable(''),
+                Buying_Price: ko.observable(0),
+                Selling_Price: ko.observable(0),
+                Original_Price: ko.observable(0),
+                RatingCount: ko.observable(0),
+                RatingValue: ko.observable(0),
+
+                Quantity: ko.observable(0),
+                ProductTypeId: ko.observable(0),
+                ProductType: ko.observable('Accessories'),
+                ProductTypeName: ko.observable(''),
+                SKU: ko.observable(''),
+                CategoryCode: 'ACC',
+                Added_On: ko.observable(),
+                Platform_Code: ko.observable(''),
+                Barcode: ko.observable(0),
+                Condition_Id: ko.observable(0),
+                Vendor_Name: ko.observable(''),
+                Vendor_Id: ko.observable(0),
+                PreOrder: ko.observable(false),
+                IsBestSelling: ko.observable(false),
+                Available_To_Buy: ko.observable(false),
+                Available_To_Sell: ko.observable(true),
+
+
+                ImageList: ko.observableArray([])
+            };
+
+            self.Accessories.Name.subscribe(function (newValue) {
+                newValue = newValue || '';
+                newValue = GetWithoutSpecialChar(newValue);
+                self.Accessories.NameUrl(newValue.toLowerCase());
+            });
+
+            self.Rows.subscribe(function (newValue) {
+                self.AccessoriesList.removeAll();
+                self.Get_AccessoriesList();
+            });
+
+            self.SearchText.subscribe(function (newValue) {
+                newValue = newValue || '';
+                if (newValue.length == 0) {
+                    self.AccessoriesList.removeAll();
+                    self.Get_AccessoriesList();
+                }
+                self.GetSearchResult();
+            });
+
+            self.GetAllPlatforms = function () {
+                self.IsLoadingPlatforms(true);
+                $.getJSON('/master/get-all-active-platform', function (data) {
+                    self.IsLoadingPlatforms(false);
+                    self.PlatformList(data);
+                    $('#PlatformList_select').trigger('change');
+                });
+            };
+
+            self.GetAllVendors = function () {
+                self.IsLoadingVendors(true);
+                $.getJSON('/vendor/get-all', function (data) {
+                    self.IsLoadingVendors(false);
+                    self.VendorList(data);
+                });
+            };
+
+            self.Get_AccessoriesTypes = function () {
+                self.IsLoadingAccessoriesTypes(true);
+                $.get('/master/get-all-common-name-url', function (obj) {
+                    self.IsLoadingAccessoriesTypes(false);
+                    $.each(obj, function (i, o) {
+                        if (o.Type === 'Accessories') {
+                            self.AccessoriesTypes.push(o);
+                        }
+                    });
+                    console.log(obj);
+                });
+            };
+
+            self.Get_AccessoriesList = function (Offset, index) {
+                self.IsLoading(true);
+                Offset = Offset || 0;
+                index = index || 1;
+                var _data = { offset: Offset, rows: self.Rows(), searchTxt: self.Accessories.ProductType() };
+                console.log('Get_AccessoriesList', _data);
+                $.ajax({
+                    type: 'POST', dataType: "json", url: '/manage-products/get-paginated',
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(_data),
+                    success: function (obj) {
+                        var totalPage = (obj.TotalCount > self.Rows()) ? obj.TotalCount / self.Rows() : 1;
+                        var reminder = (obj.TotalCount > self.Rows()) ? obj.TotalCount % self.Rows() : 0;
+                        if (reminder > 0) { totalPage += 1; }
+                        $.each(obj.PagedSet, function (i, o) { self.AccessoriesList.push(new AccessoriesViewModel(o)); });
+                        $('#page-selection').bootpag({ total: parseInt(totalPage), page: index, maxVisible: 10 });
+                        self.Total(obj.TotalCount);
+                        self.IsLoading(false);
+                        console.log(obj);
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.Add_New_Images = function () {
+                var img = new ImageViewModel();
+                img.Reference_Id(self.Accessories.Id());
+                self.Accessories.ImageList.push(img);
+            };
+
+            self.OnClick_Remove_Images = function (obj) {
+                var url = obj.Url() || '';
+                if (url != null && url != '' && url != undefined) {
+                    $.ajax({
+                        type: 'POST', dataType: "json",
+                        url: '/master/delete-images',
+                        contentType: "application/json; charset=utf-8",
+                        data: ko.toJSON(obj),
+                        success: function (data) {
+                            console.log(data);
+                            self.Accessories.ImageList.remove(obj);
+                        },
+                        error: function (result) { console.log(result); }
+                    });
+                }
+            };
+
+            self.Save_Accessories = function () {
+                var name = self.Accessories.Name() || '';
+                if (name.length == 0) { return; }
+                var bodyContent = $('#summernote-body').code();
+                self.Accessories.Description(bodyContent);
+
+                //console.log(ko.toJSON(self.Accessories)); return;
+
+                self.IsSaving(true);
+                var api = self.IsEditing() ? '/manage-products/update-product' : '/manage-products/add-new-product';
+                $.ajax({
+                    type: 'POST', dataType: "json", url: api,
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(self.Accessories),
+                    success: function (data) {
+                        self.IsSaving(false); console.log(data);
+                        toastr.success('Success'); self.IsEditing(false);
+                        self.AccessoriesList.removeAll(); self.ClearAllFields();
+                        self.Get_AccessoriesList(0);
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.Delete_Accessories = function (obj) {
+                console.log(ko.toJSON(obj));
+                obj.IsDeleting(true);
+                $.ajax({
+                    type: 'POST', dataType: "json",
+                    url: '/manage-products/delete-product',
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(obj),
+                    success: function (data) {
+                        obj.IsDeleting(false);
+                        self.AccessoriesList.removeAll();
+                        self.Get_AccessoriesList(self.Offset(), self.Rows());
+                        console.log(data);
+                        toastr.success('Success');
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.OnClickCreateAsNewBtn = function (obj) {
+                self.Accessories.Name(obj.Name());
+                self.Accessories.NameUrl(obj.NameUrl());
+                self.Accessories.Platform(obj.Platform());
+                self.Accessories.Publisher(obj.Publisher());
+                self.Accessories.Popularity(obj.Popularity());
+                self.Accessories.SortInfo(obj.SortInfo());
+
+                self.Accessories.Buying_Price(obj.Buying_Price());
+                self.Accessories.Original_Price(obj.Original_Price());
+                self.Accessories.Description(obj.Description());
+                self.Accessories.ProductTypeId(obj.ProductTypeId());
+                self.Accessories.ProductTypeName(obj.ProductTypeName());
+                self.Accessories.Selling_Price(obj.Selling_Price());
+
+                self.Accessories.Condition_Id(obj.Condition_Id());
+                self.Accessories.Quantity(obj.Quantity());
+                self.Accessories.ImageList(obj.ImageList());
+                self.Accessories.Platform_Code(obj.Platform_Code());
+                self.Accessories.Vendor_Id(obj.Vendor_Id());
+                self.Accessories.Vendor_Name(obj.Vendor_Name());
+
+                self.Accessories.PreOrder(obj.PreOrder());
+                self.Accessories.IsBestSelling(obj.IsBestSelling());
+                self.Accessories.Available_To_Buy(obj.Available_To_Buy());
+                self.Accessories.Available_To_Sell(obj.Available_To_Sell());
+
+                self.Accessories.Added_On(new Date(obj.Added_On()));
+
+                var desc = obj.Description() || '';
+                $('#summernote-body').code(desc);
+
+                $('a[href="#tab_1"]').click();
+                $('#tab-1-txt').text("Update");
+
+                $('select').trigger('change');
+
+                console.log(ko.toJSON(self.Accessories));
+
+            };
+
+            self.OnClickEditBtn = function (obj) {
+                console.log('OnClickEditBtn', ko.toJSON(obj));
+
+                self.IsEditing(true);
+                self.Accessories.Id(obj.Id);
+                self.Accessories.Name(obj.Name());
+
+                self.Accessories.SKU(obj.SKU());
+                self.Accessories.Barcode(obj.Barcode());
+                self.Accessories.NameUrl(obj.NameUrl());
+                self.Accessories.Platform(obj.Platform());
+                self.Accessories.Publisher(obj.Publisher());
+                self.Accessories.Popularity(obj.Popularity());
+                self.Accessories.SortInfo(obj.SortInfo());
+
+                self.Accessories.Buying_Price(obj.Buying_Price());
+                self.Accessories.Original_Price(obj.Original_Price());
+                self.Accessories.Description(obj.Description());
+                self.Accessories.ProductTypeId(obj.ProductTypeId());
+                self.Accessories.ProductTypeName(obj.ProductTypeName());
+                self.Accessories.Selling_Price(obj.Selling_Price());
+
+                self.Accessories.Condition_Id(obj.Condition_Id());
+                self.Accessories.Quantity(obj.Quantity());
+                self.Accessories.ImageList(obj.ImageList());
+                self.Accessories.Platform_Code(obj.Platform_Code());
+                self.Accessories.Vendor_Id(obj.Vendor_Id());
+                self.Accessories.Vendor_Name(obj.Vendor_Name());
+
+                self.Accessories.PreOrder(obj.PreOrder());
+                self.Accessories.IsBestSelling(obj.IsBestSelling());
+                self.Accessories.Available_To_Buy(obj.Available_To_Buy());
+                self.Accessories.Available_To_Sell(obj.Available_To_Sell());
+
+
+                self.Accessories.Added_On(new Date(obj.Added_On()));
+
+                var desc = obj.Description() || '';
+                $('#summernote-body').code(desc);
+
+                $('a[href="#tab_1"]').click();
+                $('#tab-1-txt').text("Update");
+
+                $('select').trigger('change');
+
+                console.log(ko.toJSON(self.Accessories));
+            };
+
+            self.ClearAllFields = function () {
+                self.IsEditing(false);
+                self.Accessories.Id(0);
+                self.Accessories.Name('');
+                self.Accessories.NameUrl('');
+                self.Accessories.Platform('');
+                self.Accessories.Publisher('');
+                self.Accessories.Popularity('');
+                self.Accessories.SortInfo('');
+                self.Accessories.Description('');
+                self.Accessories.Buying_Price(0);
+                self.Accessories.Selling_Price(0);
+                self.Accessories.Original_Price(0);
+                self.Accessories.Barcode('');
+                self.Accessories.SKU('');
+                self.Accessories.Vendor_Id(0);
+                self.Accessories.Vendor_Name('');
+                self.Accessories.PreOrder(false);
+                self.Accessories.IsBestSelling(false);
+                self.Accessories.Available_To_Buy(false);
+                self.Accessories.Available_To_Sell(true);
+                self.Accessories.Quantity(0);
+                self.Accessories.ImageList.removeAll();
+                self.Accessories.Added_On('');
+                $('#summernote-body').code('');
+                $('#tab-1-txt').text("Add New");
+                $('a[href="#tab_1"]').click();
+            };
+
+            self.Init = function () {
+                self.Get_AccessoriesList();
+                self.Get_AccessoriesTypes();
+                self.GetAllPlatforms();
+                self.GetAllVendors();
+            };
+
+        };
+
+        function AccessoriesViewModel(obj) {
+            var x = this;
+            x.Id = obj.Id;
+            x.IsDeleting = ko.observable(false);
+            x.Name = ko.observable(obj.Name);
+            x.NameUrl = ko.observable(obj.NameUrl);
+            x.SKU = ko.observable(obj.SKU);
+            x.Barcode = ko.observable(obj.Barcode);
+            x.Platform = ko.observable(obj.Platform);
+            x.Publisher = ko.observable(obj.Publisher);
+            x.Popularity = ko.observable(obj.Popularity);
+            x.SortInfo = ko.observable(obj.SortInfo);
+            x.Description = ko.observable(obj.Description);
+            x.Buying_Price = ko.observable(obj.Buying_Price);
+            x.Selling_Price = ko.observable(obj.Selling_Price);
+            x.Original_Price = ko.observable(obj.Original_Price);
+            x.RatingCount = ko.observable(obj.RatingCount);
+            x.RatingValue = ko.observable(obj.RatingValue);
+            x.Condition_Id = ko.observable(obj.Condition_Id);
+            x.Quantity = ko.observable(obj.Quantity);
+            x.ProductType = ko.observable(obj.ProductType);
+            x.ProductTypeId = ko.observable(obj.ProductTypeId);
+            x.ProductTypeName = ko.observable(obj.ProductTypeName);
+            x.Platform_Code = ko.observable(obj.Platform_Code);
+            x.CategoryCode = obj.CategoryCode;
+            x.Added_On = ko.observable(obj.Added_On);
+            x.Condition = ko.observable(obj.Condition);
+            x.PreOrder = ko.observable(obj.PreOrder);
+            x.Vendor_Id = ko.observable(obj.Vendor_Id);
+            x.Vendor_Name = ko.observable(obj.Vendor_Name);
+            x.IsBestSelling = ko.observable(obj.IsBestSelling);
+            x.Available_To_Buy = ko.observable(obj.Available_To_Buy);
+            x.Available_To_Sell = ko.observable(obj.Available_To_Sell);
+
+
+            x.ImageUrl = ko.observable(obj.ImageUrl);
+            x.ImageList = ko.observableArray([]);
+            if (obj.ImageList != null) {
+                $.each(obj.ImageList, function (i, o) {
+                    var img = new ImageViewModel();
+                    img.Id(o.Id); img.Url(o.Url);
+                    img.Reference_Id(o.Reference_Id);
+                    x.ImageList.push(img);
+                });
+            }
+        };
+
+        function ImageViewModel() {
+            var x = this;
+            x.Id = ko.observable(0);
+            x.Url = ko.observable('');
+            x.Width = ko.observable(0);
+            x.Height = ko.observable(0);
+            x.ImageOf = ko.observable('Accessories');
+            x.ImageType = ko.observable('Thumbnail');
+            x.ImageCategory = ko.observable('Cover');
+            x.Reference_Id = ko.observable(0);
+            x.ImageUploader = function (o, e) {
+                console.log(o, e);
+                var _data = new FormData();
+                _data.append("file", e.target.files[0]);
+                $.ajax({
+                    type: "POST", url: "/uploadfile", data: _data,
+                    cache: false, contentType: false, processData: false,
+                    success: function (url) { x.Url(url); }
+                });
+            };
+        };
+
+
+
+        $(document).ready(function () {
+
+            ko.bindingHandlers.datePicker = {
+                init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+                    var unwrap = ko.utils.unwrapObservable;
+                    var dataSource = valueAccessor();
+                    var binding = allBindingsAccessor();
+                    var options = {
+                        keyboardNavigation: true,
+                        todayHighlight: true,
+                        autoclose: true,
+                        daysOfWeekDisabled: [0, 6],
+                        format: 'mm/dd/yyyy'
+                    };
+                    if (binding.datePickerOptions) {
+                        options = $.extend(options, binding.datePickerOptions);
+                    }
+                    $(element).datepicker(options);
+                    $(element).datepicker('update', dataSource());
+                    $(element).on("changeDate", function (ev) {
+                        var observable = valueAccessor();
+                        if ($(element).is(':focus')) {
+                            // Don't update while the user is in the field...
+                            // Instead, handle focus loss
+                            $(element).one('blur', function (ev) {
+                                var dateVal = $(element).datepicker("getDate");
+                                observable(dateVal);
+                            });
+                        }
+                        else {
+                            observable(ev.date);
+                        }
+                    });
+                    //handle removing an element from the dom
+                    ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                        $(element).datepicker('remove');
+                    });
+                },
+                update: function (element, valueAccessor) {
+                    var value = ko.utils.unwrapObservable(valueAccessor());
+                    $(element).datepicker('update', value);
+                }
+            };
+
+
+            var app = new AppViewModel();
+            ko.applyBindings(app);
+            app.Rows(10);
+            app.Init();
+
+            $('select').select2();
+
+
+            $('#summernote-body').summernote({
+                placeholder: 'Enter content', height: 100,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ],
+                popover: {
+                    image: [
+                      ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                      ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                      ['remove', ['removeMedia']]
+                    ]
+                }, dialogsFade: true,
+                onImageUpload: function (files, editor, welEditable) {
+                    var _data = new FormData();
+                    _data.append("file", files[0]);
+                    $.ajax({
+                        type: "POST", url: "/uploadfile", data: _data,
+                        cache: false, contentType: false, processData: false,
+                        success: function (url) { editor.insertImage(welEditable, url); }
+                    });
+                }
+            });
+
+            $('#page-selection').bootpag({ total: 10, page: 1, maxVisible: 10 });
+
+            $('#page-selection').on('page', function (event, num) {
+                console.log('bootpag', event, num);
+                var offset = (app.Rows() * (num - 1));
+                app.AccessoriesList.removeAll();
+                if (app.SearchText().length > 0) {
+                    app.Get_AccessoriesList(offset, num);
+                } else { app.Get_AccessoriesList(offset, num); }
+            });
+
+        });
+    </script>
+
+}

@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Confirm Email";
+}
+@section styles{
+    <link href="~/css/policy-terms.min.css" rel="stylesheet" />
+}
+
+<div class="wrapper">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="textInfoContent">
+                        <h1 class="pageHeading">@ViewData["Title"]</h1>
+                        <div class="infoContent">
+                            <p>
+                                Thank you for confirming your email. Please <a asp-controller="Account" asp-action="Login">Click here to Log in</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

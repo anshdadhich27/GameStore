@@ -1,0 +1,58 @@
+﻿@{ 
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@ViewBag.Title</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+
+    <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link href="~/css/sign-login.min.css" rel="stylesheet" />
+    <!-- CSS STYLE-->
+
+
+
+
+</head>
+<body>
+    <div class="wrapper signup-sec">
+        <div class="signup-container">
+            <div class="sign-logo txt-center">
+                <a href="/"><img src="/images/logo.png" alt="Game Store"></a>
+            </div>
+            <div class="row">
+                <div class="reg-form logIn">
+                    <div class="col-sm-6">
+                        <div class="sigup-bnr">
+                            <img src="/images/sign-up-bnr.jpg" alt="Game Store">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        @RenderBody()                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <p class="txt-center gray-clr sign-policy">
+                        Copyright &copy; @DateTime.Now.Year @Context.Request.Host | <a href="/terms-of-use">Term & condition </a>| <a href="/privacy-policy">Privacy Policy</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @RenderSection("scripts", required: false)
+    
+
+</body>
+</html>

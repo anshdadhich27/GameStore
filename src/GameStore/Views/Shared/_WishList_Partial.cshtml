@@ -1,0 +1,198 @@
+﻿@model WishList_DTO
+
+@{
+    
+        if (Model.GameList.Count() == 0 && Model.ConsoleList.Count() == 0 && Model.AccessoriesList.Count() == 0)
+        {
+            <p>There is no item in your wishlist.</p>
+        }
+   
+        int index = 1;
+        if (Model.GameList.Count() > 0)
+        {
+        <table class="table table-bordered table-hover">
+            <caption>
+                <h4 class="text-center">Games</h4>
+            </caption>
+            <thead>
+                <tr>
+                    <th style="width:5%;">#</th>
+                    <th style="width:25%;">Image</th>
+                    <th style="width:40%;">Name</th>
+                    <th style="width:20%;">Added On</th>
+                    <th style="width:10%;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    index = 1;
+                    foreach (var x in Model.GameList)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>
+                                <a href="@x.ProductLink" target="_blank">
+                                    <img style="max-width:100px;max-height:200px;" alt="@x.ProductName" src="@x.ImageUrl" />
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@x.ProductLink" target="_blank">
+                                    <span>@x.ProductName</span>
+                                </a>
+                                <br />
+                                <small>@x.ProductTypeName</small>
+                                <br />
+                                <button type="button" class="btn btn-default btn-sm" 
+                                        data-bind="click: Add_To_Shoping_Cart.bind($data, @x.Product_Id, @x.ProductType_Id, 'Game', @Math.Round(x.Price, 2), '@x.SKU')">
+                                    <span>Add to Cart</span>
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm"
+                                        data-bind="click: function(){ _app.Add_To_Shoping_Cart(@x.Product_Id, @x.ProductType_Id, 'Game', @Math.Round(x.Price, 2), '@x.SKU'); window.location.href='/shopping-cart';}">
+                                    <span>Buy Now</span>
+                                </button>
+                            </td>
+                            <td>@x.AddedOn.ToString("dd MMM yyyy")</td>
+                            <td>
+                                <form data-ajax="true" data-ajax-method="POST" data-method="post"
+                                      action="@string.Format("/remove-my-wishlist/{0}", x.Id)" 
+                                      data-ajax-mode="replace" data-ajax-update="#wishlist-container">
+                                    <button type="submit" class="btn btn-default btn-sm">                                        
+                                        <span>Remove</span>
+                                        <span class="glyphicon glyphicon-remove-circle"></span>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+
+                }
+            </tbody>
+        </table>
+                    }
+                    if (Model.ConsoleList.Count() > 0)
+                    {
+                        <table class="table table-bordered table-hover">
+                            <caption>
+                                <h4 class="text-center">Consoles</h4>
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th style="width:5%;">#</th>
+                                    <th style="width:25%;">Image</th>
+                                    <th style="width:40%;">Name</th>
+                                    <th style="width:20%;">Added On</th>
+                                    <th style="width:10%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    index = 1;
+                                    foreach (var x in Model.ConsoleList)
+                                    {
+                                        <tr>
+                                            <td>@index</td>
+                                            <td>
+                                                <a href="@x.ProductLink" target="_blank">
+                                                    <img style="max-width:100px;max-height:200px;" alt="@x.ProductName" src="@x.ImageUrl" />
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="@x.ProductLink" target="_blank">
+                                                    <span>@x.ProductName</span>
+                                                </a>
+                                                <br />
+                                                <small>@x.ProductTypeName</small>
+                                                <br />
+                                                <button type="button" class="btn btn-default btn-sm"
+                                                        data-bind="click: Add_To_Shoping_Cart.bind($data, @x.Product_Id, @x.ProductType_Id, 'Console', @Math.Round(x.Price, 2), '@x.SKU')">
+                                                    <span>Add to Cart</span>
+                                                </button>
+                                                <button type="button" class="btn btn-default btn-sm"
+                                                        data-bind="click: function(){ _app.Add_To_Shoping_Cart(@x.Product_Id, @x.ProductType_Id, 'Console', @Math.Round(x.Price, 2), '@x.SKU'); window.location.href='/shopping-cart';}">
+                                                    <span>Buy Now</span>
+                                                </button>
+                                            </td>
+                                            <td>@x.AddedOn.ToString("dd MMM yyyy")</td>
+                                            <td>
+                                                <form data-ajax="true" data-ajax-method="POST" data-method="post"
+                                                      action="@string.Format("/remove-my-wishlist/{0}", x.Id)"
+                                                      data-ajax-mode="replace" data-ajax-update="#wishlist-container">
+                                                    <button type="submit" class="btn btn-default btn-sm">
+                                                        <span>Remove</span>
+                                                        <span class="glyphicon glyphicon-remove-circle"></span>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        index++;
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+                                    }
+                                    if (Model.AccessoriesList.Count() > 0)
+                                    {
+                                        <table class="table table-bordered table-hover">
+                                            <caption>
+                                                <h4 class="text-center">Accessories</h4>
+                                            </caption>
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:5%;">#</th>
+                                                    <th style="width:25%;">Image</th>
+                                                    <th style="width:40%;">Name</th>
+                                                    <th style="width:20%;">Added On</th>
+                                                    <th style="width:10%;">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    index = 1;
+                                                    foreach (var x in Model.AccessoriesList)
+                                                    {
+                                                        <tr>
+                                                            <td>@index</td>
+                                                            <td>
+                                                                <a href="@x.ProductLink" target="_blank">
+                                                                    <img style="max-width:100px;max-height:200px;" alt="@x.ProductName" src="@x.ImageUrl" />
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="@x.ProductLink" target="_blank">
+                                                                    <span>@x.ProductName</span>
+                                                                </a>
+                                                                <br />
+                                                                <small>@x.ProductTypeName</small>
+                                                                <br />
+                                                                <button type="button" class="btn btn-default btn-sm"
+                                                                        data-bind="click: Add_To_Shoping_Cart.bind($data, @x.Product_Id, @x.ProductType_Id, 'Accessories', @Math.Round(x.Price, 2), '@x.SKU')">
+                                                                    <span>Add to Cart</span>
+                                                                </button>
+                                                                <button type="button" class="btn btn-default btn-sm"
+                                                                        data-bind="click: function(){ _app.Add_To_Shoping_Cart(@x.Product_Id, @x.ProductType_Id, 'Accessories', @Math.Round(x.Price, 2), '@x.SKU'); window.location.href='/shopping-cart';}">
+                                                                    <span>Buy Now</span>
+                                                                </button>
+                                                            </td>
+                                                            <td>@x.AddedOn.ToString("dd MMM yyyy")</td>
+                                                            <td>
+                                                                <form data-ajax="true" data-ajax-method="POST" data-method="post"
+                                                                      action="@string.Format("/remove-my-wishlist/{0}", x.Id)"
+                                                                      data-ajax-mode="replace" data-ajax-update="#wishlist-container">
+                                                                    <button type="submit" class="btn btn-default btn-sm">
+                                                                        <span>Remove</span>
+                                                                        <span class="glyphicon glyphicon-remove-circle"></span>
+                                                                    </button>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                        index++;
+                                                    }
+
+                                                }
+                                            </tbody>
+                                        </table>
+                                                    }
+
+}

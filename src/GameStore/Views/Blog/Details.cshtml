@@ -1,0 +1,230 @@
+﻿@model Blog
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaKeywords"] = Model.MetaKeyword;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+}
+
+@section styles{
+    <link href="~/css/blog.min.css" rel="stylesheet" />
+}
+
+<div class="wrapper">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="blg-detail">
+                        <h2 class="blg-title clr-black">@Model.Title</h2>
+                        <div class="blgr-detail">
+                            <div class="img pull-left">
+                                @{
+                                    if (!string.IsNullOrEmpty(Model.Category_Logo))
+                                    {
+                                        <img src="@Model.Category_Logo" alt="@Model.Category_Name">
+                                    }
+                                }
+                                
+                            </div>
+                            <div class="blg-time pull-left">
+                                <ul>
+                                    <li>
+                                        <a href="javascript:;" class="pull-left">@Model.Category_Name</a>
+                                        <span class="pull-left">&nbsp; | &nbsp;</span>
+                                        <a href="javascript:;" class="pull-left">@Model.Author</a>
+                                    </li>
+                                    <li>
+                                        <span class="pull-left">Posted @Model.AddedOn.ToString("dd MMMM yyyy") </span>
+                                        <span class="pull-left">&nbsp; | &nbsp;</span>
+                                        <span class="pull-left">@Model.AddedOn.ToString("hh:mm tt")</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="blg-share">
+                                <div class="pull-left ttl-share">
+                                    <span class="big txt-center">300</span><br>
+                                    <span class="txt-upr">Shares</span>
+                                </div>
+                                <div class="pull-left scl-share">
+                                    <ul>
+                                        <li>
+                                            <a target="_blank" href="" title="Game Store fb">
+                                                <img src="/images/blg-fb.jpg" alt="">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a target="_blank" href="" title="Game Store Twitter">
+                                                <img src="/images/blg-twit.jpg" alt="">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a target="_blank" href="" title="Game Store  G+">
+                                                <img src="/images/blg-ggl.jpg" alt="">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a target="_blank" href="" title="Game Store  pintrest">
+                                                <img src="/images/blg-pint.jpg" alt="">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="scl-like" target="_blank" href="" title="Game Store  fb">
+                                                <img src="/images/blg-fb-like.png" alt="">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="scl-like" target="_blank" href="" title="Game Store  fb">
+                                                <img src="/images/blg-twit-like.png" alt="">
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="blg-full-des">
+                                <img src="@Model.Banner" alt="@Model.Title">
+                                <div>@Html.Raw(Model.BlogContent)</div>
+                            </div>
+                            <div class="blg-more no-border">
+                                @{
+                                    if (!string.IsNullOrEmpty(Model.PreviousLink))
+                                    {
+                                        <a href="/blog/@Model.PreviousLink" class="pull-left txt-upr txt-center">Prev</a>
+                                    }
+                                    if (!string.IsNullOrEmpty(Model.NextLink))
+                                    {
+                                        <a href="/blog/@Model.NextLink" class="pull-right txt-upr txt-center">Next</a>
+                                    }
+                                }
+                                
+                                
+                            </div>
+                            <div class="blg-share mrgn-btm">
+                                <div class="pull-left ttl-share">
+                                    <span class="big txt-center">300</span><br>
+                                    <span class="txt-upr">Shares</span>
+                                </div>
+                                <div class="pull-left scl-share">
+                                    <ul>
+                                        <li>
+                                            <a target="_blank" href="" title="Game Store fb">
+                                                <img src="/images/blg-fb.jpg" alt="">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a target="_blank" href="" title="Game Store Twitter">
+                                                <img src="/images/blg-twit.jpg" alt="">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a target="_blank" href="" title="Game Store  G+">
+                                                <img src="/images/blg-ggl.jpg" alt="">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a target="_blank" href="" title="Game Store  pintrest">
+                                                <img src="/images/blg-pint.jpg" alt="">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="scl-like" target="_blank" href="" title="Game Store  fb">
+                                                <img src="/images/blg-fb-like.png" alt="">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="scl-like" target="_blank" href="" title="Game Store  fb">
+                                                <img src="/images/blg-twit-like.png" alt="">
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="new-ltr-block">
+                        <h5 class="txt-upr txt-center clr-red">News Letter </h5>
+                        <hr>
+                        <div class="ltr-sec txt-center">
+                            <h6>Subscribe GameStoreMe</h6>
+                            <p>
+                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has...
+                            </p>
+                            <form data-ajax="true" data-ajax-begin="onBegin" data-ajax-complete="onComplete" 
+                                  action="/newsletter" data-ajax-method="POST" data-method="post" 
+                                  id="form-content-home" data-ajax-mode="replace" data-ajax-update="#form-content-home">
+                                <input type="email" name="Email" required placeholder="Enter email address" class="pull-left">
+                                <input type="submit" value="Subscribe" class="txt-upr red-btn pull-left">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="fblike">
+                        <img src="/images/fb-like.jpg" alt="fblike">
+                    </div>
+                    <div class="new-ltr-block">
+                        
+                        @{
+                            var news_list = ViewBag.TopNews as IEnumerable<Blog>;
+                            if (news_list != null)
+                            {
+                                if (news_list.Count() > 0)
+                                {
+                                    <h5 class="txt-upr txt-center clr-red">Latest news</h5>
+                                    <hr>
+                                    foreach (var x in news_list)
+                                    {
+                                        <div class="nws-blck">
+                                            <div class="img pull-left">
+                                                <img src="@x.Banner" alt="@x.Title">
+                                            </div>
+                                            <div class="news pull-left">
+                                                <p>
+                                                    <a href="/blog/@x.Link">@x.Title</a>
+                                                </p>
+                                                <span class="time"> @x.AddedOn.ToString("dd MMM yyyy hh:mm tt")</span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            }
+                        }
+                        
+                        
+                    </div>
+
+                    <div class="new-ltr-block">
+                        @{
+                            var editors_list = ViewBag.TopNews as IEnumerable<Blog>;
+                            if (editors_list != null)
+                            {
+                                if (editors_list.Count() > 0)
+                                {
+                                    <h5 class="txt-upr txt-center clr-red">Editor’s pick</h5>
+                                    <hr>
+                                    foreach (var x in editors_list)
+                                    {
+                                        <div class="nws-blck">
+                                            <div class="img pull-left">
+                                                <img src="@x.Banner" alt="@x.Title">
+                                            </div>
+                                            <div class="news pull-left">
+                                                <p>
+                                                    <a href="/blog/@x.Link">@x.Title</a>
+                                                </p>
+                                                <span class="time"> @x.AddedOn.ToString("dd MMM yyyy hh:mm tt")</span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            }
+                        }
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

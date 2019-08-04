@@ -1,0 +1,291 @@
+﻿@using System.Security.Claims
+@{
+
+    string name = User.FindFirst(ClaimTypes.GivenName)?.Value;
+    string _id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    var location = string.Format("{0}://{1}{2}{3}", Context.Request.Scheme, Context.Request.Host, Context.Request.Path, Context.Request.QueryString);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="@ViewData["MetaDescription"]" />
+    <meta name="keywords" content="@ViewData["MetaKeywords"]" />
+
+
+    <meta name="theme-color" content="#ff0000">
+    <meta name="msapplication-navbutton-color" content="#ff0000">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#ff0000">
+
+    <link rel="canonical" href="@location" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    @RenderSection("styles", required: false)
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108839129-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-108839129-1');
+
+
+    </script>
+</head>
+<body>
+    <div class="loader">
+        <div>&quot;Perfect palace to buy & sell games&quot;</div>
+    </div>
+    <header class="header wrapper">
+        <div class="container">
+            <div class="row top-head-part">
+                <div class="col-md-12">
+                    <div class="pull-left">
+                        <div class="top-links clr-gray">
+                            <input type="hidden" id="game-store-user-id" value="@_id" />
+                            <a href="/faq" class="clr-gray pull-left">FAQ's &nbsp; </a>
+                            <span class="pull-left"> |</span>
+                            <span class="phn">
+                                <span class="icon"></span>
+                                <span class="text"> @Constant.Phone_NumberTxt </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <a href="/hotdeals" class="red-btn btn-brdr hot-deal txt-center">Hot Deals</a>
+                    </div>
+                </div>
+            </div>
+            <div class="logoRow">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div id="menu-toggle" class="mob">
+                            <a href="#" class="button mmm main-menu-toggle">
+                                <span class="glyphicon glyphicon-align-justify"></span>
+                            </a>
+                        </div>
+                        <div class="logo">
+                            <a href="/">
+                                <img src="/images/logo.png" alt="Game Stor Me">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <form class="searchBox" method="get" action="/search">
+                            <div class="inpt-srch">
+                                <input type="text" class="key-search" id="search-box" value="@ViewBag.Search_Query"
+                                       name="q" placeholder="Search for Games, Consoles, accessories and more…" autocomplete="off">
+                                <span class="glyphicon glyphicon-remove search-remove-icon" style="display: none;cursor:pointer;"></span>
+                                <span class="glyphicon glyphicon-refresh processingIcon search-processing-icon"></span>
+                                <button type="submit"></button>
+                                <div class="key-word" id="search-result">
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="signInBox">
+                            <li class="cart">
+                                <a href="/shopping-cart">
+                                    <span class="icon"></span>
+                                    <span class="text">Shopping Cart</span>
+                                    <span class="badge badge-info"
+                                          data-bind="text:Total_Item_In_ShoppingCart, visible:Total_Item_In_ShoppingCart()>0"></span>
+                                </a>
+                            </li>
+                            <li class="sellingcart">
+                                <a href="/selling-cart">
+                                    <span class="icon"></span>
+                                    <span class="text">Selling Cart</span>
+                                    <span class="badge badge-info"
+                                          data-bind="text:Total_Item_In_SellingCart, visible:Total_Item_In_SellingCart()>0"></span>
+                                </a>
+                            </li>
+                            @await Html.PartialAsync("_LoginPartial")
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="navigation dtp">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="menu">
+                            <ul class="txt-upr">
+                                <li class="active">
+                                    <a href="/">Home</a>
+                                </li>
+
+                                @await Component.InvokeAsync("PlatformMenu")
+
+                                <li>
+                                    <a href="/blog">Blog</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="pull-right right-link">
+                            <a href="/sell-yours" class="red-btn txt-upr pull-left">Sell Yours</a>
+                            @*<a href="/search?c=pre-order" class="blue-btn txt-upr pull-left">Preorder</a>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @await Component.InvokeAsync("MobileNav")
+
+        </div>
+    </header>
+
+    @RenderBody()
+
+    <div class="wrapper game-logo">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="game-ticker">
+                        <ul id="imgs">
+                            <li><img src="/images/need-for-speed.png" alt="need-for-speed" /></li>
+                            <li><img src="/images/counter-strike.png" alt="counter-strike" /></li>
+                            <li><img src="/images/far_cry_logo.png" alt="far_cry_logo" /></li>
+                            <li><img src="/images/battlefield_logo.png" alt="battlefield" /></li>
+                            <li><img src="/images/far_cry_logo.png" alt="far_cry" /></li>
+                            <li><img src="/images/counter-strike.png" alt="counter-strike" /></li>
+                            <li><img src="/images/need-for-speed.png" alt="need-for-speed" /></li>
+                            <li><img src="/images/counter-strike.png" alt="counter-strike" /></li>
+                            <li><img src="/images/far_cry_logo.png" alt="far_cry" /></li>
+                            <li><img src="/images/counter-strike.png" alt="counter-strike" /></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <a href="/"><img src="/images/ftr-logo.png" alt="Game Store"></a>
+
+                    <p>
+                        GameStoreME.com is a Dubai based online gaming marketplace that aims at becoming the largest gaming destination for the people of United Arab Emirates (UAE) and GCC. GameStoreME.com connects the consumers to the largest collection of games, consoles merchandise and gaming accessories through some of the most reputable and trusted vendors in the region.
+                        <span class="more"><a href="/about-us">More</a></span>
+                    </p>
+                    <div class="nw-signUp">
+                        <h4 class="clr-white pull-left">Subscribe to our newsletter</h4>
+                        <form class="nws-ltr pull-left" data-ajax="true" data-ajax-begin="onBegin" data-ajax-complete="onComplete"
+                              action="/newsletter" data-ajax-method="POST" data-method="post"
+                              data-ajax-mode="replace" data-ajax-update="#form-content-footer">
+                            <input type="email" name="Email" placeholder="Enter Mail" required>
+                            <button type="submit" class="btn search-button submitBtn"></button>
+                        </form>
+                        <div id="form-content-footer" class="nwsLtrMsg"></div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-4">
+                    <h4 class="clr-white txt-upr">Policies</h4>
+
+                    <ul class="ftr-link">
+                        <li><a href="@Url.Action("ReturnAndRefundPolicy", "Home")">Refund</a></li>
+                        <li><a href="@Url.Action("TermsOfUse", "Home")">Terms of Use</a></li>
+                        <li><a href="@Url.Action("ShippingPolicy", "Home")">Shipping</a></li>
+                        <li><a href="/pages/rewards">Rewards</a></li>
+                        <li><a href="@Url.Action("PrivacyPolicy", "Home")">Privacy</a></li>
+                        <li><a href="/pages/disclaimer">Disclaimer</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 col-sm-4">
+                    <h4 class="clr-white txt-upr">company</h4>
+
+                    <ul class="ftr-link">
+                        <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                        <li><a href="@Url.Action("About", "Home")">About Us</a></li>
+                        <li><a href="@Url.Action("Contact", "Home")">Contact Us</a></li>
+                        <li><a href="@Url.Action("FAQ", "Home")">FAQ's</a></li>
+                        <li><a href="@Url.Action("Career", "Home")">Career</a></li>
+                        <li><a href="@Url.Action("Index", "Blog")">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 col-sm-4">
+                    <h4 class="clr-white txt-upr">How it works</h4>
+
+                    <ul class="ftr-link">
+                        <li><a href="/pages/buy">Buy</a></li>
+                        <li><a href="/pages/sell">Sell</a></li>
+                        <li><a href="@Url.Action("ReferAndEarn", "Home")">Refer and Earn</a></li>
+                        @*<li><a href="/pages/in-store-credits">In Store Credit</a></li>*@
+                    </ul>
+                    <div class="ftr-social">
+                        <ul>
+                            <li>
+                                <a class="twitter" rel="nofollow" target="_blank" href="https://twitter.com/gamestoreme" title="Game Store Twitter">
+                                    <span>Twitter</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="yt" rel="nofollow" target="_blank" href="https://www.youtube.com/channel/UCHwWPKXJdbyN_zcUDzwtgvQ" title="Game Store Youtube">
+                                    <span>Youtube</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="facebook" rel="nofollow" target="_blank" href="https://www.facebook.com/gamestoreme/" title="Game Store  Facebook">
+                                    <span>Facebook</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="instagram" rel="nofollow" target="_blank" href="https://www.instagram.com/gamestoreme/" title="Game Store  Instagram">
+                                    <span>Instagram</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+    <div class="wrapper copy">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="payment-opt txt-center">
+                        <p> <span><img style="max-height:20px;" src="~/images/visa.jpg" alt="we accept visa and master card" /></span> Copyright &copy; @DateTime.Now.Year - @DateTime.Now.AddYears(1).Year, Gamestoreme.com. All Rights Reserved</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @{
+        string aaa = Context.Request.Cookies["WebsiteCookies"];
+    }
+    @if (string.IsNullOrEmpty(aaa) || aaa == "false")
+    {
+        <div class="cookies" id="cookies">
+            <h4>This website uses cookies</h4>
+            <p>This site uses cookies for analytics, personalized content and ads. By continuing to browse this site, you agree to this use. </p>
+            <button onclick="create_cookies('cookies')">Ok</button>
+            <button onclick="hide_cookies('cookies')">Cancel</button>
+        </div>
+    }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/knockout/dist/knockout.js"></script>
+    <script src="~/js/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/js/jquery-mobile-mega-menu-min.js"></script>
+    <script src="~/js/imagescroll.js"></script>
+    <script src="~/js/site.js"></script>
+
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,608 @@
+/*----------PRODUCT DETAIL PAGE----*/
+hr {
+border-top: solid 1px #666 !important;
+}
+
+.game-type ul li span select{
+    margin-left: -4px;
+    outline: none;
+    cursor: pointer;
+}
+
+.games, .consols{
+    overflow-x: hidden;
+}
+.proList {
+    display: inline-block;
+    width:100%;
+    border-bottom: solid 1px #ccc;
+}
+.proList li {
+    display: inline-block;
+    margin: 0px 10px -1px 0px;
+    list-style: none;
+    cursor: pointer;
+    color: #939393;
+    border-radius: 5px 5px 0px 0px;
+}
+.proList li span {padding: 10px 15px; display: inline-block; font-weight: bold; font-size: 16px;}
+.proList li.active, .pro-list li:hover {
+    color: #fff; background: #f92828;
+}
+.gallerySlideBlock {position: relative; margin: 20px 0px;}
+.galleryControlles {position: relative; display: inline-block; width: 92%;margin:0px 4%; overflow: hidden;}
+.smallImages {
+    list-style: none;
+    text-align: center;
+    transition: all .5s linear 0s;
+    position: relative;
+    max-height: 78px;
+    overflow-y: hidden;
+    display: block;
+    float: left;
+}
+.smallImages li {display: inline-block; height: 77px; line-height: 75px; vertical-align: middle; margin:0px 3px;
+    border: solid 1px #fff; cursor: pointer; background: #000; position: relative; float: left;width: 107px;}
+.smallImages li img {max-width: 100%;}
+.smallImages li.active {border-color: #ff2b2b;}
+.smallImages li.video:before {position: absolute; left: 50%; top: 50%; cursor: pointer; width: 1px; height: 1px;
+    text-align: center; line-height: 28px; font-size: 32px;font-family: 'Glyphicons Halflings'; 
+    color: #fff;content: "\e029"; z-index: 10; margin: -17px 0px 0px -17px; display: none;}
+.smallImages li:hover img {opacity: 0.8;}
+.smallImages li.video:hover:before {display: block;}
+
+.controles span {background: #f6f4f5; border: solid 1px #ccc; height: 75px; width: 20px;
+    position: absolute; left: 0px; top: 2px; cursor: pointer; line-height: 70px; text-align: center;}
+.controles span.right {left: inherit; right: 0px;}
+.controles span:before {content: "\e257"; font-family: 'Glyphicons Halflings';}
+.controles span.right:before {content: "\e258";}
+.controles span.disable {opacity: 0.2;}
+.proContainer {margin: 20px 0px;}
+
+.videoBlock {    
+    position: relative;
+    background: #0e0101;
+    cursor: pointer;
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+.videoBlock img {
+    display: inline;
+    max-width: 100%;
+    opacity: .8;
+}
+
+.videoBlock.videoOnly:before {position: absolute; left: 50%; top: 50%; width: 1px; height: 1px;
+    text-align: center; line-height: 28px; font-size: 80px;font-family: 'Glyphicons Halflings'; 
+    color: #fff;content: "\e029"; z-index: 10; margin:-21px 0px 0px -36px;}
+.videoBlock:hover:before {color: #ff2b2b;}
+#videoPopup .popupClose {
+    background: #ff2b2b; height: 30px; width: 30px;  border-radius: 50%;
+    position: absolute; right: -12px; top: -16px;
+    display: inline-block; color: #fff;  text-align: center; line-height: 30px; z-index: 1; cursor: pointer;
+}
+.game-des-box {
+    display: block;
+    float: left;
+    width: 100%;
+    max-height: 458px;
+    overflow-y: auto;
+}
+
+.game-des-box h5{
+    font:700 18px/30px 'PT sans', sans-serif;
+    color: #333;
+}
+
+.game-des-box p{
+  font:400 14px/22px 'PT sans', sans-serif;   
+  color: #666666;
+  margin:10px 0 15px;
+}
+.pre-own.prdct-detail-pr-own{
+    background: #fff;
+    margin-bottom: 35px;
+}
+.pre-own.prdct-detail-pr-own .pre-box h3{
+  font: 700 25px/30px 'PT sans',sans-serif;
+}
+
+.pre-own.prdct-detail-pr-own .round-box .img{
+    background:none;
+    box-shadow: none;
+}
+
+.cstmr-reviews .rating{
+  display: block;
+  width: 100%;
+  max-width: 126px;
+}
+
+.cstmr-reviews a{
+  font-size: 14px;
+  color: #333333;
+  display: block;
+  width: 100%;
+}
+
+.cstmr-reviews .rating > input{ display: none; } 
+.cstmr-reviews .rating > label:before { 
+  margin: 3px;
+  font-size: 12px;
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  content: "\e006";
+}
+
+.item .prodcut-box .price .pull-left {
+    clear: both;
+}
+
+.cstmr-reviews  .rating > label { 
+  color: #333; 
+ float: right; 
+}
+
+.cstmr-reviews .rating > input:checked ~ label,
+.cstmr-reviews .rating > input:checked ~ label, 
+.cstmr-reviews .rating:not(:checked) > label:hover,
+.cstmr-reviews .rating:not(:checked) > label:hover ~ label { color: #68bd45;} 
+
+.cstmr-reviews .rating > input:checked + label:hover, 
+.cstmr-reviews .rating > input:checked ~ label:hover,
+.cstmr-reviews .rating > label:hover ~ input:checked ~ label, 
+.cstmr-reviews .rating > input:checked ~ label:hover ~ label {color: #68bd45;  } 
+
+
+.rate-box {
+    color: #333;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.review-sec .cmnt-sec, .review-sec {
+    clear: both;
+    float: left;
+    width:100%;
+}
+
+.review-sec .cmnt-sec textarea{
+    width: 100%;
+}
+
+.review-sec .cmnt-sec button{
+    border:none;
+    border-radius: 5px;
+    width: 114px;
+    transition: all 0.8s ease;
+    margin-top: 10px;
+}
+
+.review-sec .cmnt-sec button:hover{
+    background: #ec2424;
+}
+
+
+/*------PRDUCT DETAIL PAGE----------*/
+.conainerSection.prdct-detail-page{
+    box-shadow: 0px 9px 14px 2px rgba(51,51,51,0.3);
+    margin-top: -7px;
+}
+.product-detail-sec {
+    border-bottom: solid 1px #ddd;
+    padding: 0 0 25px 15px;
+}
+.imagesTab {
+       float: left;
+    width: 80px;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.imagesTab a {
+    display: inline-block;
+    width: 100%;
+    border: solid 1px #ccc;
+    margin: 0px 0px 10px 0px;
+    background: #000;
+    border:solid 1px transparent;
+    overflow: hidden;
+}
+
+.imagesTab a img{
+    max-width: 100%;
+}
+
+.imagesTab a:hover{
+    border:solid 1px #ff2b2a;
+}
+.productGallery {
+    display: table;
+    width: 100%;
+    min-height: 320px;
+}
+.imageContent {
+    max-height: 500px;
+    overflow: hidden;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.imageContent img {
+    cursor: -moz-zoom-in;
+    /*height: 400px;*/
+    max-width:100%;
+}
+
+#galleryPopup .popupClose {
+    background: #fff;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    position: absolute;
+    right: -12px;
+    top: -16px;
+    display: inline-block;
+    color: #333;
+    text-align: center;
+    line-height: 30px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+#galleryPopup .modal-content {
+    min-width: 450px;
+}
+
+#galleryPopup .modal-body {
+    position: relative;
+    padding: 0 !important;
+    display: table;
+    width:100%;
+
+}
+
+.largeImage {
+    height: 380px;
+    width: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    margin:0 auto;
+    text-align: center;
+}
+
+.lightBoxContr span.prev {
+    transform: rotate(180deg);
+}
+
+.lightBoxContr span.next {
+    left: inherit;
+    right: 3px;
+}
+
+.lightBoxContr span {
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    width: 47px;
+    height: 62px;
+    display: inline-block;
+    color: #000;
+    cursor: pointer;
+    font-size: 0px;
+    background: url(../images/right-arrow.png) no-repeat 8px 6px;
+    margin-top: -15px;
+}
+
+#galleryPopup .modal-dialog {
+    min-width:300px;
+    height: 380px;
+    margin-top:50px;
+}
+
+.prdct-detail {
+    padding: 0 5%;
+    position: relative;
+    float: left;
+    width: 100%;
+    position: relative;
+}
+
+.prdct-detail .outr-link{
+    position: absolute;
+    right: 0;
+    top:27%;
+    bottom:27%;
+    width:43px;
+    height: 110px;
+}
+
+.prdct-detail .outr-link a{
+    display: block;
+    margin-bottom: 8px;
+}
+
+/*.prdct-name,*/ .prdct-name h1 {
+    font: 700 30px/30px "PT sans",sans-serif;
+    color: #333;
+    max-width: 475px;
+    border-bottom: solid 1px #ddd;
+    float: left;
+    padding-bottom: 5px;
+    margin-top: 0px;
+}
+
+.prdct-name .rating {
+    display: block;
+    width: 100%;
+    clear: both;
+    float: left;
+}
+
+.prdct-name .rating span{
+    margin: 10px 4px 5px 0;
+    display: block;
+    clear: initial;
+    height: auto;
+}
+
+.prdct-name a.wish span {
+    background: url(../images/sprite.png) no-repeat top left;
+    background-position: 1px -216px;
+    height: 25px;
+    width: 33px;
+    display: inline-block;
+}
+
+.price-chart {display: inline-block; width: 100%; margin-bottom: 20px;}
+.price-chart ul#r {
+    float: left;
+    width: 287px;
+}
+.otrLink {
+    display: block;
+    width: 70px;
+    overflow: hidden;
+}
+.price-chart li {position: relative; max-width: 250px; margin: 0px 0px 5px 0px; font-size: 18px;}
+.price-chart .radiobLable {/*margin: 0px 0px 0px 30px;*/ display: block; cursor: pointer; font-weight: normal;    font-size: 18px;}
+.price-chart .radio {opacity: 0;display: inline-block; position: absolute;}
+.price-chart .radiobLable span {font-weight: bold;}
+.price-chart input[type=radio] ~ label:after {
+    display: inline-block;
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    top: 5px;
+    left: 3px;
+    border-radius: 50%;
+    border: solid 1px #ccc;
+    content: "";
+}
+.price-chart input[type=radio] ~ label:before {
+    display: inline-block;
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    top: 8px;
+    left: 6px;
+    border-radius: 50%;
+    content: "";
+}
+.price-chart input[type=radio]:checked ~ label:before {
+    background: #f92929;   
+}
+
+
+.game-type {
+    display: block;
+    clear: both;
+    width: 100%;
+    max-width:200px;
+    margin: 20px 0;
+    float: left;
+}
+
+.game-type ul li{
+    float: left;
+    margin-right: 50px; 
+}
+
+.game-type ul li span.cat, .shipping-info > span{
+    font-size: 15px
+}
+
+.game-type ul li span, .shipping-info span.dlvry{
+    font-size: 13px;
+}
+
+.shipping-info{
+    clear: both;
+    float: left;
+    width: 100%;
+    text-align: left;
+    line-height: 20px;
+}
+
+.buy-cart {
+    clear: both;
+    float: left;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.buy-cart a{
+    display: block;
+    float: left;
+    font-weight: 700;
+    width:150px;
+    border-radius: 3px;
+    margin-right: 12px;
+    transition: all 0.8s linear;
+    padding: 14px 15px;
+}
+.buy-cart a:hover{
+    color: #fff;
+}
+
+.buy-cart a.red-btn:hover{
+    background: #333;
+}
+.buy-cart a.blue-btn:hover{
+    background: #333;
+}
+.buy-cart a.black-btn:hover{
+    background: #ef2525;
+}
+
+.green-btn {
+    background: #3f8e3e;
+    color:#fff;
+}
+
+.doubt {
+    clear: both;
+    float: left;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.doubt p{
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 15px;
+}
+.doubt a{
+    width: 159px;
+    border-radius: 3px;
+}
+.doubt a:hover{
+    color: #fff;
+}
+.conainerSection .pro-container{
+    padding:0 15px !important; 
+    clear: both;
+    float: left;
+    width: 100%;
+}
+/*.games.prdct-view-title .page-title{
+    width:100%;
+    max-width: 800px;
+    padding: 7px 20px;
+}
+
+.consols.recommended .page-title{
+    width:100%;
+    max-width: 350px;
+    padding: 7px 20px;
+}*/
+
+.games .page-title{
+    width:100%;
+    max-width: 800px;
+    padding: 7px 20px;
+}
+
+.consols .page-title{
+    width:100%;
+    max-width: 350px;
+    padding: 7px 20px;
+}
+.des-box {
+    display: block;
+    padding: 15px 25px;
+}
+.des-box .pro-list li{
+    font:700 15px/18px 'PT sans', sans-serif;
+    color: #939393;
+}
+
+.des-box  .pro-list li.resp-tab-active, .des-box  .pro-list li:hover {
+    color: #fff;
+    background: #f92828;
+    border-radius: 5px 5px 0 0;
+}
+
+
+@media (max-width:1199px) {
+    .imagesTab {
+    width: 70px;
+    }   
+}
+@media (max-width:1024px){
+.buy-cart a{
+    margin-bottom: 10px;
+    width: 150px;
+    }
+   
+}
+
+@media (max-width: 767px){
+.proList li {max-width: 90px; margin: 0px; vertical-align: bottom; text-align: center; }
+    .proList li span {padding: 10px 5px;font-size: 12px;}
+
+.des-box {
+    padding: 15px 0;
+}
+
+.proList li {
+    max-width: 120px;
+    }
+
+ .prdct-detail {
+    margin-top: 25px;
+ }
+ 
+ .games, 
+ .consols{
+     display: none;
+ }
+
+ .buy-cart a {
+    width: 150px;
+}
+
+.controles span.right {
+    left: inherit;
+    right: -10px;
+}
+.controles span {
+    left: inherit;
+    left: -10px;
+}
+
+.prdct-name {
+    width: 100%;
+    max-width: 100%;
+}
+.videoGallery {
+    clear: both;
+}   
+
+#galleryPopup .modal-content {
+    min-width: 100%;
+}
+
+}
+
+@media (max-width: 567px) {
+    .buy-cart a {
+        margin-bottom: 10px;
+        width: 162px;
+        float: none;
+        margin: 0 auto 10px;
+        width: 150px;
+    }
+}
+
+
+@media (max-width:359px) {
+    .imagesTab {
+    width: 60px;
+    }
+}
+
+

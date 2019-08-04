@@ -1,0 +1,208 @@
+/*-----------------USER ACCOUNT STYLES--------------------*/
+.user-account-page{
+	margin-bottom: 35px;
+}
+.profile-fld, .prfl-cmplt-box {
+    display: block;
+    background: #fff;
+    width: 100%;
+    float: left;
+    box-shadow: 2px 1px 11px 0px rgba(51,51,51,0.2);
+}
+
+.user-account-page h5 {
+	font:700 15px/30px 'PT sans', sans-serif;
+	color: #333334;
+	margin-bottom: 18px;
+}
+
+.profile-fld .my-acc {
+    display: block;
+    width: 100%;
+    float: left;
+    border-bottom: solid 1px #ddd;
+    padding: 18px;
+    }
+
+.my-acc .pro-img, .pro-img img {
+    display: block;
+    /*width: 65px;
+    height: 65px;
+    border-radius: 50%;*/
+    /*overflow:hidden;*/
+        max-width: 100px;
+    margin-left: 10px;
+}
+
+/*.my-acc .pro-img img{
+	max-width: 100%;
+}*/  
+
+.my-acc .pro-nme {
+	width:60%;
+	display: block;
+	margin-left: 15px;
+}
+.my-acc .pro-nme span{
+	color: #666;
+}
+.my-acc .pro-nme .usr-name{
+	font:700 15px/25px 'PT sans', sans-serif;
+} 
+
+.my-acc .pro-nme .usr-mail{
+	font:400 15px/25px 'PT sans', sans-serif;
+} 
+
+.my-acc .chnge-pw {
+    clear: both;
+    float: left;
+    width: 100%;
+    margin-top: 10px;
+    padding: 0 0 0 10px;
+}
+
+.my-acc .chnge-pw a{
+	color: #666;
+}
+
+.my-acc .chnge-pw a:hover{
+	color: #ec2424;
+}
+
+
+.profile-pnts ul li a{
+	display: block;
+	width: 100%;
+	padding: 0 0 0 10px;
+	margin-bottom: 18px;
+	color: #333;
+	font-size: 15px;
+}
+
+.profile-pnts ul li:hover a, .profile-pnts ul li.active a{
+	color: #ec2424
+}
+
+
+.user-detail{
+	margin:0 auto;
+	max-width: 75%;
+	padding:18px;
+}
+
+.user-detail form {
+    padding: 0 15px;
+}
+
+.user-detail form label{
+	font:400 14px/32px 'PT sans', sans-serif;
+	width:80px;
+}
+
+.user-detail form .prfl-inpt, .user-detail form select{
+	display: block;
+    border: solid 1px #b3b3b3;
+    padding: 7px 9px;
+    font: 400 14px/18px 'PT Sans', sans-serif;
+    margin-bottom: 14px;
+    margin-left: 8px;
+    color: #666;
+    outline: none;
+}
+.user-detail form .prfl-inpt{
+	max-width: 266px;
+	width: 100%;
+}
+.user-detail form select{
+	float: left;
+	width:72px;
+}
+
+.frmRow{
+	clear: both;
+	float: left;
+	width: 100%;
+}
+
+.prfl-updt{
+	border:none;
+	font-weight: 700;
+	width: 110px;
+	margin-left: 73px;
+	margin-right: 10px;
+}
+
+.prfl-updt:hover{
+	background: #333;
+}
+
+.clr{
+	line-height: 37px;
+	color: #333;
+}
+
+.prfl-cmplt-box {
+	padding: 18px;
+}
+
+.prfl-cmplt-box .c100{
+	margin:0 auto;
+	float: none;
+}
+
+.prfl-cmplt-box p{
+	margin-top: 15px;
+	color: #333;
+}
+
+
+
+@media (max-width:1199px){
+.user-detail {
+    max-width: 90%;
+    }
+}
+
+@media (max-width:991px){
+	.profile-fld .my-acc{
+		padding: 18px 10px;
+	}
+
+	.user-account-page h5{
+		text-align: center;
+	}
+	.my-acc .pro-img{
+		float: none !important;
+		margin:0 auto;
+	}
+
+	.my-acc .pro-nme{
+		width: 100%;
+		text-align: center;
+		margin:0;
+	}
+
+	.user-detail {
+    	max-width: 100%;
+    	padding: 18px 0;
+	}
+
+	.user-detail form .prfl-inpt {
+    	max-width: 230px;
+	}
+}
+
+@media (max-width:767px){
+.my-acc .pro-nme span{
+	width: 100%;
+	clear: both;
+	 display: block;
+}
+.prfl-cmplt-box {
+    margin-top: 30px;
+    }
+ .col-md-6.col-sm-6{
+ 	clear: both;
+ }   
+}

@@ -1,0 +1,82 @@
+﻿@model TransactionDetails
+@{ 
+    ViewData["Title"] = Model.auth_message;
+}
+@section styles{
+    <link href="~/css/checkout.min.css" rel="stylesheet" />
+    <link href="~/css/sign-login.min.css" rel="stylesheet" />
+}
+<div class="wrapper checout-page">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>Success!</strong> Payment Successfull.
+                    </div>
+                </div>
+                <div class="col-sm-12" id="msg-section" style="padding:10px;">
+                    <p>Placing your order...<span class="glyphicon glyphicon-refresh processingIcon"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hidden">
+    <div id="waring-msg">
+        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <strong>Warning!</strong> Something went wrong. Please try again.
+        </div>
+    </div>
+    <div id="success-msg">
+        <div class="alert alert-success alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <strong>Success!</strong> Your order is successfully placed.
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        this.IsPlacingOrder = ko.observable(false);
+        function CreateShipmentOrder() {
+            if (IsPlacingOrder()) { return; }
+            IsPlacingOrder(true);
+            $.ajax({
+                type: 'POST', dataType: "json", url: '/create-order',
+                contentType: "application/json; charset=utf-8",
+                data: ko.toJSON({ Cart_Id: '@ViewBag.TrackingId', PaymentType: 'cc', PaymentStatus: true }),
+                success: function (obj) {
+                    console.log(obj);
+                    IsPlacingOrder(false);
+                    if (obj == false) {
+                        $('#msg-section').html($('#waring-msg').html());
+                    } else {
+                        $('#msg-section').html($('#success-msg').html());
+                        $('#place-order').addClass('active');
+                    }
+                }
+            }).done(function () {
+                localStorage.clear();
+                _app.Cart.ShopingCart.removeAll();
+
+                setTimeout(function () {
+                    window.location.href = '/my-orders';
+                }, 3000);
+            });
+        };
+        $(document).ready(function () {
+            CreateShipmentOrder();
+        });
+    </script>
+}

@@ -1,0 +1,309 @@
+﻿@model PageContent
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaKeywords"] = Model.MetaKeywords;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+    var payment = ViewBag.Payments as PaymentSetting;
+}
+
+@section styles{
+<link href="~/css/product-listing.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .product-selling-list{
+            position:absolute;
+            z-index: 2;
+            max-height:500px;
+            overflow:auto;
+        }
+      .product-selling-list .list-group-item .media .media-left.media-middle  a {
+    display: block;
+    width: 75px;
+    overflow: hidden;
+}
+
+            .product-selling-list .list-group-item .media .media-left.media-middle a img{
+                max-width:100%;
+            }
+            .product-credit{
+                display:table;
+                text-align:center;
+                width: 100%;
+                height: 80px;
+            }
+
+        .product-credit h4{
+            display:table-cell;
+            height:25px;
+            vertical-align:middle;
+        }
+    </style>
+}
+
+<div class="wrapper brd-crum">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="/">Home</a> &nbsp;>&nbsp;
+                <a href="/sell-yours">
+                    <span class="text-capitalize">Sell Yours</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper product-view">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.Raw(Model.HeaderContent)
+                </div>
+            </div>
+            <div class="row">  
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label class="control-label">Select Product Type:</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-list"></span>
+                            </div>
+                            <select class="form-control" data-bind="options:ProductTypes, optionsCaption:'Choose option', value:Selected_ProductType"></select>
+                        </div>                        
+                    </div>
+                </div>              
+                <div class="col-sm-10">
+                    <div class="form-group" style="position:relative;">
+                        <label class="control-label">Search Product:</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-list" data-bind="visible: !IsSearching_ForSell()"></span>
+                                <span class="glyphicon glyphicon-refresh processingIcon" data-bind="visible: IsSearching_ForSell"></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Search your product"
+                                   data-bind="value:Search_Key_For_Sell, valueUpdate:'afterkeydown'" />
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" data-bind="visible: Search_Key_For_Sell() !='', click: function(){Search_Key_For_Sell('');}">
+                                    <span class="glyphicon glyphicon-remove-circle" title="Remove"></span>
+                                </button>
+                                <button class="btn btn-default">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <ul class="list-group product-selling-list" data-bind="foreach:GameList_ForSell">
+                            <li class="list-group-item">
+                                <div class="media">
+                                    <div class="media-left media-middle">
+                                        <a href="#" target="_blank" data-bind="attr:{href: $data.PageUrl}">
+                                            <img class="media-object" src="" data-bind="attr:{src: $data.ImageUrl}" />
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="javascript:void(0);" data-bind="click:$parent.On_Selling_Item_Selected">
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <h4 class="media-heading" data-bind="text:$data.Name"></h4>
+                                                    <p data-bind="text:$data.PlatformName"></p>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="product-credit">
+                                                        <h4 data-bind="text: 'Credit AED '+ ($data.Buying_Price)"></h4>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="list-group product-selling-list" data-bind="foreach:ConsoleList_ForSell">
+                            <li class="list-group-item">
+                                <div class="media">
+                                    <div class="media-left media-middle">
+                                        <a href="#" target="_blank" data-bind="attr:{href: $data.PageUrl}">
+                                            <img class="media-object" src="" data-bind="attr:{src: $data.ImageUrl}" />
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="javascript:void(0);" data-bind="click:$parent.On_Selling_Item_Selected">
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <h4 class="media-heading" data-bind="text:$data.Name"></h4>
+                                                    <p data-bind="text:$data.ProductTypeName"></p>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="product-credit">
+                                                        <h4 data-bind="text: 'Credit AED '+ ($data.Buying_Price)"></h4>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="list-group product-selling-list" data-bind="foreach:AccessoriesList_ForSell">
+                            <li class="list-group-item">
+                                <div class="media">
+                                    <div class="media-left media-middle">
+                                        <a href="#" target="_blank" data-bind="attr:{href: $data.PageUrl}">
+                                            <img class="media-object" src="" data-bind="attr:{src: $data.ImageUrl}" />
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="javascript:void(0);" data-bind="click:$parent.On_Selling_Item_Selected">
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <h4 class="media-heading" data-bind="text:$data.Name"></h4>
+                                                    <p data-bind="text:$data.ProductTypeName"></p>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="product-credit">
+                                                        <h4 data-bind="text: 'Credit AED '+ ($data.Buying_Price)"></h4>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="productListing" data-bind="foreach:Temp_Selling_Cart">
+                <div class="row" data-bind="visible: !$data.IsItemProcessed()">
+                    <div class="col-sm-2">
+                        <div class="prodcut-box-one prodcut-box">
+                            <div class="prdct-img">
+                                <a href="#" target="_blank" data-bind="attr:{href: $data.PageUrl}">
+                                    <img src="#" alt="" data-bind="attr:{src: $data.ImageUrl, alt: $data.Product_Name}" />
+                                </a>
+                            </div>
+                            <div class="prdct-title">
+                                <a href="#" target="_blank" data-bind="attr:{href: $data.PageUrl}">
+                                    <span data-bind="text: $data.Product_Name"></span>
+                                </a>
+                            </div>
+                            <div class="prdct-type">
+                                <a href="javascript:void(0);">
+                                    <span data-bind="text: $data.Product_TypeName"></span>
+                                </a>
+                            </div>
+                            <div class="price hidden">
+                                <div class="clr-black">
+                                    <span data-bind="text: 'AED '+ parseFloat($data.Price()).toFixed(2)"></span>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-10">
+                        <div class="form-group hidden">
+                            <label class="control-label">Price:</label>
+                            <div class="form-control">
+                                <span class="newPric">
+                                    AED <span data-bind="text: $data.TotalPrice"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group hidden">
+                            <label class="control-label">Deduction:</label>
+                            <div class="form-control">
+                                <span class="newPric">
+                                    AED <span data-bind="text: $data.Deduction"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Condition:</label>
+                            <select class="form-control" data-bind="value:$data.Condition, attr: { id: 'dd_Condition' }">
+                                <option value="-1">Choose option</option>
+                                <option value="0">Perfect Condition (Best)</option>
+                                <option value="10">Minor Wear and Tear (Good)</option>
+                                <option value="20">Thoroughly Enjoyed (Average)</option>
+                                <option value="30">Not Sure if this work (Poor)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Box Available?</label>
+                            <select class="form-control" data-bind="value:$data.BoxValue , attr: { id: 'dd_Boxavailable' }">
+                                <option value="-1">Choose option</option>
+                                <option value="0">Yes</option>
+                                <option value="20">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Booklet/Manual Available?</label>
+                            <select class="form-control" data-bind="value:$data.ManualValue , attr: { id: 'dd_manualavailable' }">
+                                <option value="-1">Choose option</option>
+                                <option value="0">Yes</option>
+                                <option value="10">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" data-bind="visible:!$data.IsItemProcessed()">
+                    <div class="col-sm-12">
+                        <hr />
+                    </div>
+                </div>
+                <div class="row" data-bind="visible:!$data.IsItemProcessed() && $data.IsAllConditionSelected()">
+                    <div class="col-sm-8">
+                        <h4>Product:</h4>
+                        <p data-bind="text: $data.Product_Name"></p>
+                        <p>
+                            <span>Shipping charge: </span>
+                            <span data-bind="text: 'AED '+ parseFloat($parent.ShippingCharge()).toFixed(2)"></span>
+                        </p>
+                    </div>
+                    <div class="col-sm-4 text-right">
+                        <label>Credit Value:</label><br />
+                        <button type="button" class="btn btn-default" data-bind="text: 'AED '+ parseFloat($data.Sub_Total()).toFixed(2)"></button><br /><br />
+                        <button type="button" class="btn btn-primary" data-bind="click:$parent.Sell_This_Product, disable:$data.IsProcessing">
+                            <span>Add to Cart</span>
+                            <span class="glyphicon glyphicon-refresh processingIcon" data-bind="visible:$data.IsProcessing"></span>
+                        </button>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row" data-bind="visible:Can_Display_Sell_Credits()>0">
+                <div class="col-sm-12 text-right">
+                    <a class="btn btn-success" href="/selling-cart" >
+                        <span>Check out Now</span>
+                        <span class="glyphicon glyphicon-shopping-cart"></span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.Raw(Model.BodyContent)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        
+            $(document).ready(function () {
+                var tax = parseInt('@payment.Tax');
+                var shippimg = parseInt('@payment.ShippingCharge');
+                _app.ShippingCharge(shippimg);
+               
+
+                
+            });
+
+    </script>
+}

@@ -1,0 +1,379 @@
+﻿@{
+    ViewData["Title"] = "Check Out";
+    var payment = ViewBag.Payments as PaymentSetting;
+    string addrs = (ViewBag.CartType == "Shopping") ? "Delivery" : "Pickup";
+}
+
+@section styles{
+    <link href="~/css/checkout.min.css" rel="stylesheet" />
+    <link href="~/css/sign-login.min.css" rel="stylesheet" />
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+}
+
+<div class="wrapper checout-page">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="chk-out-process">
+                        <ul>
+                            <li class="active">
+                                <div class="prcs-icn prcs-login">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    Login/Register
+                                </div>
+                            </li>
+                            <li class="active">
+                                <div class="prcs-icn location">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    @addrs Address
+                                </div>
+                            </li>
+                            <li>
+                                <div class="prcs-icn payment">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    Payment Info
+                                </div>
+                            </li>
+                            <li>
+                                <div class="prcs-icn plce-order">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    Place Order
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="billing-title">Select Your @addrs Address</h4>
+
+                    <div class="cstmr-adrs-blck">
+                        <div class="cstmr-address" data-bind="foreach:Check_Out_Step_Two.Address_List">
+                            <div class="adrs-block">
+                                <div class="adrs-box pull-left">
+                                    <input class="radio" type="radio" name="address_selector"
+                                           data-bind="value:$data.Id, checked:Check_Out_Step_Two.Shipping_Address_Id, attr:{id: 'billing'+$index()}" />
+                                    <label class="radiobLable" data-bind="attr:{for: 'billing'+$index()}">
+                                        <span data-bind="text:$data.Full_Name"></span><br>
+                                        <span data-bind="text:$data.Address_Line"></span><br>
+                                        <span data-bind="text:$data.Area"></span><br>
+                                        <span data-bind="text:$data.City"></span>, <span data-bind="text:$data.State"></span><br>
+                                        <span data-bind="text:$data.Country"></span>, <span data-bind="text:$data.ZipCode"></span><br>
+                                        Mobile: <span data-bind="text:$data.Mobile"></span>
+                                    </label>
+                                </div>
+                                <div class="pull-right adrs-edit">
+                                    <a href="#" class="clr-red" data-bind="click:OnClick_Edit_Address">
+                                        <span>Edit</span>
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="cstmr-address nw-drs-block txt-center">
+                            <a href="javascript:;" class="addAddress" data-bind="click:AddNewAddress">
+                                <img src="/images/add-new-address.png" alt="Add more">
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="cstmr-adrs-blck" data-bind="visible:Check_Out_Step_Two.NewAddress_List().length>0">
+                        <form class="cstmr-address" data-bind="submit:Save_Shipping_Address">
+                            <h4 class="billing-title">Enter Your @addrs Address</h4>
+                            <div class="row">
+                                <div class="addNewAddess" data-bind="foreach:Check_Out_Step_Two.NewAddress_List">
+                                    <div class="fill-address">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <p>
+                                                    <label class="pull-left">
+                                                        <span class="glyphicon glyphicon-map-marker"></span>
+                                                        <span data-bind="text:'Address '+($index()+1)"></span>
+                                                    </label>
+                                                    <label class="pull-right">
+                                                        <span class="btn btn-default btn-xs" data-bind="click:Remove_Address">
+                                                            <span class="glyphicon glyphicon-trash"></span>
+                                                        </span>
+                                                    </label>
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" name="First_Name" required placeholder="First Name *"
+                                                           data-bind="value:$data.First_Name, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" name="Last_Name" placeholder="Last Name"
+                                                           data-bind="value:$data.Last_Name, valueUpdate:'afterkeydown'" />
+                                                </div>
+
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <select class="form-control" required data-bind="value:$data.Country,options:CountryList,optionsText:'nicename',optionsValue:'nicename'"></select>
+                                                    @*<input class="form-control" type="text" name="Country" placeholder="Country *" required
+                                                        data-bind="value:$data.Country, valueUpdate:'afterkeydown'" />*@
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" name="State" placeholder="State *" required
+                                                           data-bind="value:$data.State, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" name="City" required placeholder="City *"
+                                                           data-bind="value:$data.City, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" name="Area" placeholder="Area"
+                                                           data-bind="value:$data.Area, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" name="Address_Line" required placeholder="Address Line *"
+                                                           data-bind="value:$data.Address_Line, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" name="ZipCode" placeholder="Zip Code *" required max="10"
+                                                           data-bind="value:$data.ZipCode, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <select class="form-control" required data-bind="options:CountryList, optionsText:'ISDCode', optionsValue:'phonecode', value:$data.ISDCode, optionsCaption:'Choose option'"></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" name="Mobile" placeholder="Mobile *" required onkeypress="return isNumber(event);" maxlength="12"
+                                                           data-bind="value:$data.PhoneNumber, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="text-center" style="margin-top:15px;">
+                                        <button type="submit" class="btn btn-default btn-primary"
+                                                data-bind="disable:Check_Out_Step_Two.IsSavingAddress">
+                                            <span>Save Address</span>
+                                            <span class="glyphicon glyphicon-floppy-save"></span>
+                                            <span class="glyphicon glyphicon-refresh processingIcon"
+                                                  data-bind="visible: Check_Out_Step_Two.IsSavingAddress"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    @await Component.InvokeAsync("CartSummary", new { id = ViewBag.TrackingId })
+                </div>
+                <div class="col-md-12">
+                    <div class="prcd-buy">
+                        <a href="javascript:void(0);" class="red-btn txt-upr"
+                           data-bind="visible:Check_Out_Step_Two.Shipping_Address_Id()>0, click:Proceed_To_Buy">
+                            <span>Proceed to Checkout</span>
+                            <span class="glyphicon glyphicon-refresh processingIcon"
+                                  data-bind="visible: Check_Out_Step_Two.IsMovingNext"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/plugins/select2/js/select2.min.js"></script>
+@section scripts{
+    <script type="text/javascript">
+        //$(".addNewAddess").hide();
+        $("#checkIt-l").click(function () {
+            if ($(this).is(":checked")) {
+                $(".addNewAddess").hide();
+            } else {
+                $(".addNewAddess").show();
+            }
+        });
+
+        this.CountryList = ko.observableArray([]);
+        this.Check_Out_Step_Two = {
+            TrackingId: '@ViewBag.TrackingId',
+            UserId: ko.observable(''),
+            IsSameAsBilling: ko.observable(false),
+            IsMovingNext: ko.observable(false),
+            IsSavingAddress: ko.observable(false),
+            Address_List: ko.observableArray([]),
+            NewAddress_List: ko.observableArray([]),
+            Shipping_Address_Id: ko.observable(0)
+        };
+
+
+
+        function Proceed_To_Buy() {
+            var _data={ Id: '@ViewBag.TrackingId', UserId: Check_Out_Step_Two.UserId(), Shipping_Address_Id: Check_Out_Step_Two.Shipping_Address_Id(), Billing_Address_Id: Check_Out_Step_Two.Shipping_Address_Id() };
+            Check_Out_Step_Two.IsMovingNext(true);
+            $.ajax({
+                type: 'POST', dataType: "json", url: '/shopping-cart/update-shipping-address',
+                contentType: "application/json; charset=utf-8",
+                data: ko.toJSON(_data),
+                success: function(obj){
+                    //Check_Out_Step_Two.IsMovingNext(false);
+                    window.location.href="@ViewBag.NextStep";
+                }
+            });
+        };
+
+        function OnClick_Edit_Address(obj){
+            var addr = new Address_ViewModel();
+            addr.Id(obj.Id());addr.First_Name(obj.First_Name());
+            addr.Last_Name(obj.Last_Name()); addr.Address_Line(obj.Address_Line());
+            addr.Area(obj.Area()); addr.City(obj.City()); addr.State(obj.State());
+            addr.Country(obj.Country()); addr.ZipCode(obj.ZipCode());
+            addr.ISDCode(obj.ISDCode()); addr.Address_Type(obj.Address_Type());
+            addr.IsDefault(obj.IsDefault()); addr.UserId(obj.UserId());
+            addr.Full_Name(obj.Full_Name()); addr.Complete_Address(obj.Complete_Address());
+            addr.PhoneNumber(obj.PhoneNumber());
+            Check_Out_Step_Two.NewAddress_List.push(addr);
+        };
+
+        function Remove_Address(obj){
+            $.getJSON('/delete-address/' + obj.Id(), function (data) {
+                Check_Out_Step_Two.NewAddress_List.remove(obj);
+            });
+        };
+
+        function Save_Shipping_Address(){
+            Check_Out_Step_Two.IsSavingAddress(true);
+            $.when($.ajax({
+                type: 'POST', dataType: "json", url: '/shopping-cart/add-new-address',
+                contentType: "application/json; charset=utf-8",
+                data: ko.toJSON(Check_Out_Step_Two.NewAddress_List)
+            })).then(function(result){
+                $.ajax({
+                    type: 'GET', dataType: "json", url: '/shopping-cart/get-address/'+Check_Out_Step_Two.UserId(),
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(Check_Out_Step_Two.NewAddress_List),
+                    success: function(data){
+                        Check_Out_Step_Two.IsSavingAddress(false);
+                        Check_Out_Step_Two.NewAddress_List.removeAll();
+                        if(data!=null){
+                            Check_Out_Step_Two.Address_List.removeAll();
+                            $.each(data, function(i, o){
+                                var addr = new Address_ViewModel();
+                                addr.Id(o.Id);addr.First_Name(o.First_Name);
+                                addr.Last_Name(o.Last_Name); addr.Address_Line(o.Address_Line);
+                                addr.Area(o.Area); addr.City(o.City); addr.State(o.State);
+                                addr.Country(o.Country); addr.ZipCode(o.ZipCode);
+                                addr.ISDCode(o.ISDCode); addr.Address_Type(o.Address_Type);
+                                addr.IsDefault(o.IsDefault); addr.UserId(o.UserId);
+                                addr.Full_Name(o.Full_Name); addr.Complete_Address(o.Complete_Address);
+                                addr.PhoneNumber(o.PhoneNumber);
+                                Check_Out_Step_Two.Address_List.push(addr);
+                            });
+                        }
+                    }
+                });
+            });
+
+        };
+
+        function AddNewAddress(){
+            var userId = $('#game-store-user-id').val() || 0;
+            var addr=new Address_ViewModel();
+            addr.UserId(userId);
+            Check_Out_Step_Two.NewAddress_List.push(addr);
+        };
+
+
+        function Address_ViewModel() {
+            var x = this;
+            x.IsEditing = ko.observable(false);
+            x.Id = ko.observable(0);
+            x.First_Name = ko.observable('');
+            x.Last_Name = ko.observable('');
+            x.Full_Name = ko.observable('');
+            x.Complete_Address = ko.observable('');
+            x.Address_Line = ko.observable('');
+            x.Area = ko.observable('');
+            x.City = ko.observable('');
+            x.State = ko.observable('');
+            x.Country = ko.observable('');
+            x.ZipCode = ko.observable('');
+            x.ISDCode = ko.observable('');
+            x.PhoneNumber = ko.observable('');
+            x.Address_Type = ko.observable('Shipping');
+            x.IsDefault = ko.observable(true);
+            x.UserId = ko.observable(0);
+            x.Mobile = ko.computed(function () {
+                var isd = x.ISDCode() || '';
+                var phn = x.PhoneNumber() || '';
+                return '+' + isd + phn;
+            }, x);
+        };
+
+
+
+        $(document).ready(function () {
+            var userId = $('#game-store-user-id').val() || 0;
+            Check_Out_Step_Two.UserId(userId);
+
+
+            var tax = parseInt('@payment.Tax');
+            var shippimg = parseInt('@payment.ShippingCharge');
+            _app.Tax_Rate(tax);
+            _app.ShippingCharge(shippimg);
+            //_app.Manage_Shopping_Cart();
+            //_app.Manage_Selling_Cart();
+
+            $.when($.getJSON('/get-country-list')).then(function(result){
+                //console.log('result', result);
+                CountryList(result);
+                var list=@Json.Serialize(ViewBag.AddressList);
+                console.log(list);
+                $.each(list, function(i, o){
+                    var addr = new Address_ViewModel();
+                    addr.Id(o.Id);addr.First_Name(o.First_Name);
+                    addr.Last_Name(o.Last_Name); addr.Address_Line(o.Address_Line);
+                    addr.Area(o.Area); addr.City(o.City); addr.State(o.State);
+                    addr.Country(o.Country); addr.ZipCode(o.ZipCode);
+                    addr.ISDCode(o.ISDCode); addr.Address_Type(o.Address_Type);
+                    addr.IsDefault(o.IsDefault); addr.UserId(o.UserId);
+                    addr.Full_Name(o.Full_Name); addr.Complete_Address(o.Complete_Address);
+                    addr.PhoneNumber(o.PhoneNumber);
+                    Check_Out_Step_Two.Address_List.push(addr);
+                });
+            });
+
+
+
+        });
+
+    </script>
+}

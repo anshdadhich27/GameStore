@@ -1,0 +1,545 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Add New Game";
+}
+
+@section styles{
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/summernote-master/summernote.css" rel="stylesheet" />    
+    <link href="~/assets/plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
+    <style type="text/css">
+        .bs-example-modal-lg .modal-dialog .modal-dialog {
+            border: 1px solid #9c9797;
+            box-shadow: #bfb3b3 3px 3px 20px 8px;
+        }
+
+        .modal-header {
+            background-color: #dadada;
+        }
+        .tab-content{border-bottom:1px solid lightgray; border-left:1px solid lightgray; border-right:1px solid lightgray; }
+        .nav-tabs.nav-justified>.active>a, .nav-tabs.nav-justified>.active>a:focus, .nav-tabs.nav-justified>.active>a:hover{
+            background-color:#d1dbe4;
+        }
+    </style>
+}
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">New Game</li>
+    </ol>
+}
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel panel-heading">
+                <h2 class="panel-title">
+                    <span>New Game</span>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs nav-justified" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#tab_basic" role="tab" data-toggle="tab" aria-expanded="true">
+                                <span class="badge badge-info">1</span>&nbsp;<span>Basic Info</span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="disabled">
+                            <a href="#tab_price" aria-expanded="false">
+                                <span class="badge badge-info">2</span>&nbsp;<span>Price Details</span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="disabled">
+                            <a href="#tab_images" aria-expanded="false">
+                                <span class="badge badge-info">3</span>&nbsp;<span>Images</span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="disabled">
+                            <a href="#tab_videos" aria-expanded="false">
+                                <span class="badge badge-info">4</span>&nbsp;<span>Videos</span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="hidden">
+                            <a href="#tab_reviews" role="tab" data-toggle="tab" aria-expanded="false">
+                                <span class="badge badge-info">5</span>&nbsp;<span>Reviews</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade active in" id="tab_basic">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <form id="new-game-form" data-bind="submit:Save_Game_Details">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Name:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Game Name" required
+                                                           data-bind="value:Game.Name, valueUpdate:'afterkeydown'" />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label">Popularity:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Popularity"
+                                                           data-bind="value:Game.Popularity, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Pre Order:</label>
+                                                    <div class="form-control" style="padding:5px 5px !important;">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" value="true" data-bind="checked:Game.PreOrder" />
+                                                            <span data-bind="text:Game.PreOrder()?'YES':'NO'">YES</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Active:</label>
+                                                    <div class="form-control" style="padding:5px 5px !important;">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" value="true" data-bind="checked:Game.Active" />
+                                                            <span data-bind="text:Game.Active()?'YES':'NO'">YES</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">PEGI Rating:</label>
+                                                    <select id="pegi-selection" class="form-control" data-bind="value:Game.PEGI_Rating">
+                                                        <option data-bind="text:'Choose option', value:0"></option>
+                                                        <option data-bind="text:'Everyone (3+)', value:1"></option>
+                                                        <option data-bind="text:'Everyone (7+)', value:2"></option>
+                                                        <option data-bind="text:'Everyone (12+)', value:3"></option>
+                                                        <option data-bind="text:'Teen (16+)', value:4"></option>
+                                                        <option data-bind="text:'Mature (18+)', value:5"></option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label">Vendor:</label>
+                                                    <select id="vendor_select" class="form-control"
+                                                            data-bind="value:Game.Vendor_Id, options:VendorList, optionsText:'Name', optionsValue:'Id', optionsCaption:'Choose option'"></select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">First Release Date:</label>
+                                                    <input id="datetimepicker1" type="text" class="form-control" placeholder="Enter Release Date"
+                                                           data-bind="datePicker:Game.First_release_date, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Barcode:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Barcode"
+                                                           data-bind="value:Game.Barcode, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Condition: *</label>
+                                                    <select id="condition_select" class="form-control" multiple
+                                                            data-bind="selectedOptions:Game.Selected_Conditions, options:Conditions, optionsText:'Text', optionsValue:'Id', optionsCaption:'Choose option'"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Game Modes</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoading_Game_modes, 'fa-th-list': !IsLoading_Game_modes()}"></span>
+                                                        </div>
+                                                        <select class="form-control" id="Game_modeList_select" multiple
+                                                                data-bind="options:Game_modeList, optionsText:'Name', optionsValue:'Id', selectedOptions:Game.Selected_Game_modes"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Keywords</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoading_Keywords, 'fa-th-list': !IsLoading_Keywords()}"></span>
+                                                        </div>
+                                                        <select class="form-control" id="KeywordList_select" multiple
+                                                                data-bind="options:KeywordList, optionsText:'Name', optionsValue:'Id', selectedOptions:Game.Selected_Keywords"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Genres</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoadingGenres, 'fa-th-list': !IsLoadingGenres()}"></span>
+                                                        </div>
+                                                        <select class="form-control" id="GenreList_select" multiple
+                                                                data-bind="options:GenreList, optionsText:'Name', optionsValue:'Id', selectedOptions:Game.Selected_Genres"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Platforms</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoadingPlatforms, 'fa-th-list': !IsLoadingPlatforms()}"></span>
+                                                        </div>
+                                                        <select class="form-control" id="PlatformList_select" multiple
+                                                                data-bind="options:PlatformList, optionsText:'Name', optionsValue:'Id', selectedOptions:Game.Selected_Platforms"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Summary:</label>
+                                                    <div id="Summary-box"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Storyline:</label>
+                                                    <div id="Storyline-box"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="tab_price">
+
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="tab_images">
+
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="tab_videos">
+
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="tab_reviews">
+                            <p>TODO..</p>
+                        </div>
+                    </div>
+                   
+                </div>
+                
+            </div>
+            <div class="panel-footer">
+                <button type="submit" class="btn btn-success" form="new-game-form" data-bind="disable:IsSaving">
+                    <span>Save & Next</span>
+                    <span class="fa fa-spinner fa-spin" data-bind="visible:IsSaving"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    
+    <script src="/assets/plugins/select2/js/select2.min.js"></script>
+    <script src="~/assets/plugins/summernote-master/summernote.min.js"></script>
+<script src="~/assets/plugins/summernote-master/summernote-ext-video.js"></script>
+<script src="~/assets/plugins/summernote-master/summernote-ext-fontstyle.js"></script>
+
+    <script src="~/lib/moment/moment.js"></script>
+    <script src="~/lib/knockout/dist/knockout.debug.js"></script>    
+   <script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+    <script type="text/javascript">
+        
+        function AppViewModel() {
+            var self = this;
+            self.Total = ko.observable(0);
+            self.IsSaving = ko.observable(false);
+            self.IsEditing = ko.observable(false);
+            self.IsLoading = ko.observable(false);
+            self.IsLoadingPlatforms = ko.observable(false);
+            self.IsLoadingGenres = ko.observable(false);
+            self.IsLoading_Game_modes = ko.observable(false);
+            self.IsLoading_Keywords = ko.observable(false);
+            self.GameList = ko.observableArray([]);
+            self.PlatformList = ko.observableArray([]);
+            self.GenreList = ko.observableArray([]);
+            self.Game_modeList = ko.observableArray([]);
+            self.KeywordList = ko.observableArray([]);
+
+            self.IsLoadingVendors = ko.observable(false);
+            self.VendorList = ko.observableArray([]);
+            self.Conditions = [{ Id: 1, Text: 'NEW' }, { Id: 2, Text: 'PRE-OWNED' }];
+
+            self.Game = {
+                Id: ko.observable(0),
+                Name: ko.observable(''),
+                Summary: ko.observable(''),
+                Storyline: ko.observable(''),
+                Currency: ko.observable('AED'),
+                Price: ko.observable(0),
+                Pre_owned_Price: ko.observable(0),
+                Popularity: ko.observable(0),
+                Availability: ko.observable('Available'),
+                First_release_date: ko.observable(),
+                PreOrder: ko.observable(false),
+                Active: ko.observable(true),
+                Game_modes: ko.observable(''),
+                Keywords: ko.observable(''),
+                Genres: ko.observable(''),
+                Platforms: ko.observable(''),
+                Conditions: ko.observable(''),
+                Barcode: ko.observable(0),
+
+                Selected_Game_modes: ko.observableArray([]),
+                Selected_Keywords: ko.observableArray([]),
+                Selected_Genres: ko.observableArray([]),
+                Selected_Platforms: ko.observableArray([]),
+                Selected_Conditions: ko.observableArray([]),
+
+                PEGI_Rating: ko.observable(0),
+                ESRB_Rating: ko.observable(0),
+
+                ESRB_Synopsis: ko.observable(''),
+                PEGI_Synopsis: ko.observable(''),
+
+                Vendor_Name: ko.observable(''),
+                Vendor_Id: ko.observable(0)
+            };
+
+            
+
+            self.OnCLick_AddNewGame = function () {
+                self.IsEditing(false);
+                self.IsSaving(false);
+            };
+
+            
+
+            self.Save_Game_Details = function () {
+                console.log(ko.toJSON(self.Game));
+                var summary = $('#Summary-box').code();
+                var story = $('#Storyline-box').code();
+                self.Game.Summary(summary);
+                self.Game.Storyline(story);
+
+                var platforms = ',';
+                $.each(self.Game.Selected_Platforms(), function (i, o) { platforms += o + ',' });
+                self.Game.Platforms(platforms);
+
+                var genre = ',';
+                $.each(self.Game.Selected_Genres(), function (i, o) { genre += o + ',' });
+                self.Game.Genres(genre);
+
+                var game_mode = ',';
+                $.each(self.Game.Selected_Game_modes(), function (i, o) { game_mode += o + ',' });
+                self.Game.Game_modes(game_mode);
+
+                var keyword = ',';
+                $.each(self.Game.Selected_Keywords(), function (i, o) { keyword += o + ',' });
+                self.Game.Keywords(keyword);
+
+                var condition = ',';
+                $.each(self.Game.Selected_Conditions(), function (i, o) { condition += o + ',' });
+                self.Game.Conditions(condition);
+
+                //console.log(ko.toJSON(self.Game)); return;
+                
+                self.IsSaving(true);
+
+                $.ajax({
+                    type: 'POST', dataType: "json", url: '/master/add-new-game',
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(self.Game),
+                    success: function (obj) {
+                        console.log(obj);
+                        if (obj.Success) {
+                            toastr.success(obj.Message);
+                            setTimeout(function () { window.location.href = '/master/update-game/' + obj.Data.Id; }, 3000);
+                        }
+                        else { toastr.warning(obj.Message);}
+                    },
+                    error: function (result) { toastr.warning('Error'); }
+                }).done(function () { self.IsSaving(false); });
+            };
+
+            self.GetAllVendors = function () {
+                self.IsLoadingVendors(true);
+                $.getJSON('/vendor/get-all', function (data) {
+                    self.IsLoadingVendors(false);
+                    self.VendorList(data);
+                });
+            };
+
+            self.GetAllPlatforms = function () {
+                self.IsLoadingPlatforms(true);
+                $.getJSON('/master/get-all-active-platform', function (data) {
+                    self.IsLoadingPlatforms(false);
+                    self.PlatformList(data);
+                });
+            };
+
+            self.GetAllGenres = function () {
+                self.IsLoadingGenres(true);
+                $.getJSON('/master/get-all-active-genre', function (data) {
+                    self.IsLoadingGenres(false);
+                    self.GenreList(data);
+                });
+            };
+
+            self.GetAll_Game_modes = function () {
+                self.IsLoading_Game_modes(true);
+                $.getJSON('/master/get-all-active-game-mode', function (data) {
+                    self.IsLoading_Game_modes(false);
+                    self.Game_modeList(data);
+                });
+            };
+
+            self.GetAll_Keywords = function () {
+                self.IsLoading_Keywords(true);
+                $.getJSON('/master/get-all-active-keyword', function (data) {
+                    self.IsLoading_Keywords(false);
+                    self.KeywordList(data);
+                });
+            };
+
+            self.Init = function () {
+                self.GetAllGenres();
+                self.GetAllPlatforms();
+                self.GetAll_Keywords();
+                self.GetAll_Game_modes();
+                self.GetAllVendors();
+            };
+
+            
+
+        };
+        $(document).ready(function () {
+
+            ko.bindingHandlers.datePicker = {
+                init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+                    var unwrap = ko.utils.unwrapObservable;
+                    var dataSource = valueAccessor();
+                    var binding = allBindingsAccessor();
+                    var options = {
+                        keyboardNavigation: true,
+                        todayHighlight: true,
+                        autoclose: true,
+                        daysOfWeekDisabled: [0, 6],
+                        format: 'mm/dd/yyyy'
+                    };
+                    if (binding.datePickerOptions) {
+                        options = $.extend(options, binding.datePickerOptions);
+                    }
+                    $(element).datepicker(options);
+                    $(element).datepicker('update', dataSource());
+                    $(element).on("changeDate", function (ev) {
+                        var observable = valueAccessor();
+                        if ($(element).is(':focus')) {
+                            // Don't update while the user is in the field...
+                            // Instead, handle focus loss
+                            $(element).one('blur', function (ev) {
+                                var dateVal = $(element).datepicker("getDate");
+                                observable(dateVal);
+                            });
+                        }
+                        else {
+                            observable(ev.date);
+                        }
+                    });
+                    //handle removing an element from the dom
+                    ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                        $(element).datepicker('remove');
+                    });
+                },
+                update: function (element, valueAccessor) {
+                    var value = ko.utils.unwrapObservable(valueAccessor());
+                    $(element).datepicker('update', value);
+                }
+            };
+
+
+            var app = new AppViewModel();
+            ko.applyBindings(app);
+            app.Init();
+            app.Game.Selected_Conditions.push(1);
+
+            $('#pegi-selection').select2();
+            $('#Availability_select').select2();
+            $('#vendor_select').select2();
+            $('#Game_modeList_select').select2({
+                tags: true,
+                placeholder: 'Select options',
+                tokenSeparators: [',', ' ']
+            });
+            $('#GenreList_select').select2({
+                tags: true,
+                placeholder: 'Select options',
+                tokenSeparators: [',', ' ']
+            });
+            $('#KeywordList_select').select2({
+                tags: true,
+                placeholder: 'Select options',
+                tokenSeparators: [',', ' ']
+            });
+            $('#PlatformList_select').select2({
+                tags: true,
+                placeholder: 'Select options',
+                tokenSeparators: [',', ' ']
+            });
+            $('#condition_select').select2({
+                tags: true,
+                placeholder: 'Select options',
+                tokenSeparators: [',', ' ']
+            });
+
+            $('#Storyline-box, #Summary-box').summernote({
+                placeholder: 'Enter content', height: 100,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ],
+                popover: {
+                    image: [
+                      ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                      ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                      ['remove', ['removeMedia']]
+                    ]
+                }, dialogsFade: true,
+                onImageUpload: function (files, editor, welEditable) {
+                    var _data = new FormData();
+                    _data.append("file", files[0]);
+                    $.ajax({
+                        type: "POST", url: "/uploadfile", data: _data,
+                        cache: false, contentType: false, processData: false,
+                        success: function (url) { editor.insertImage(welEditable, url); }
+                    });
+                }
+            });
+
+           
+        });
+    </script>
+
+}

@@ -1,0 +1,10 @@
+﻿@model GuestViewModel
+
+<p>
+    Thank you, We successfully verified your email. <br>
+    You can now procced to checkout.    
+</p>
+<form method="get" asp-controller="ShopingCart" asp-action="Check_Out_Step_Two"
+      asp-route-id="@Model.CartId">
+    <input type="submit" value="Proceed" class="txt-center">
+</form>

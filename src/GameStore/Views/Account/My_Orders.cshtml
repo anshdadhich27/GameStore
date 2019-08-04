@@ -1,0 +1,284 @@
+﻿@model IEnumerable<Cart_DTO>
+@{
+    ViewData["Title"] = "My Orders";
+
+}
+
+@section styles{
+    <link href="~/css/user-acc.min.css" rel="stylesheet" />
+    <link href="~/css/checkout.min.css" rel="stylesheet" />
+<link href="~/assets/plugins/toastr/toastr.css" rel="stylesheet" />
+}
+
+<div class="wrapper user-account-page">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-3">
+                    @await Html.PartialAsync("_User_Left_Nav")
+                </div>
+                <div class="col-md-9 col-sm-9">
+                    <div class="order-rvw-box cart-sec no-border">
+                        <h4 class="txt-upr">My Orders (@Model.Count(x => x.CartType == "Shopping") item)</h4>
+                        <div class="cart-box">
+                            @{
+                                foreach (var x in Model)
+                                {
+                                    if (x.CartType == "Selling") { continue; }
+                                    string order = x.CartType == "Shopping" ? "ORDER" : "PICKUP ORDER";
+                                    <div class="panel panel-default" id="@string.Format("panel-{0}", x.Id)">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <small>ORDER PLACED</small><br />
+                                                    <small>@x.OrderDate.ToString("dd MMM yyyy")</small>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <small>TOTAL</small><br />
+                                                    <small>AED @Math.Round(x.Total_Sum, 2)</small>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <a tabindex="0" role="button" style="color:#333333;" data-placement="bottom"
+                                                       data-toggle="popover" data-trigger="focus" title="@x.ShippingAddress.Full_Name" 
+                                                       data-content="@x.ShippingAddress.Complete_Address" data-html="true">
+                                                        <small>@(x.CartType == "Shopping" ? "SHIP TO" : "PICKUP FROM")</small>
+                                                        <small style="font-size:8px;" class="glyphicon glyphicon-triangle-bottom"></small>
+                                                    </a><br />
+                                                    <small>@x.ShippingAddress.Full_Name</small>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <small>@string.Format("{0} #{1}", order, x.Id)</small><br />
+                                                    <a href="javascript:void(0);" data-toggle="modal" data-target="@string.Format("#myModal-{0}", x.Id)">
+                                                        <small>Order Details </small>
+                                                    </a>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <a href="javascript:void(0);" onclick="Delete_Order('@x.Id');">
+                                                        <small>Delete</small>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body" style="padding:0;">
+                                            @{
+                                                    IList<CartItem> list = new List<CartItem>();
+                                                    if (x.CartType == "Shopping") { list = x.ShopingCart; }
+                                                    else { list = x.SellingCart; }
+                                                    int index = 0;
+                                                    foreach (var xx in list)
+                                                    {
+                                                    <div class="row a-box">
+                                                        <div class="col-sm-2">
+                                                            <div class="prd-img">
+                                                                <a href="@xx.PageUrl">
+                                                                    <img style="max-height:50px;" src="@xx.ImageUrl" alt="@xx.Product_Name">
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="prd-name">
+                                                                <a href="@xx.PageUrl">@xx.Product_Name</a>
+                                                                <br>
+                                                                <small class="type">@xx.Product_TypeName</small>
+                                                            </div>
+                                                            @{
+                                                                if (xx.Cancelation_Request_Submitted)
+                                                                {
+                                                                    <p>&nbsp;</p>
+                                                                    <p>Order Cancelation request submitted.</p>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <div class="col-sm-4 text-center">
+                                                            @{
+                                                                if (!string.IsNullOrEmpty(xx.Shipment_Id) && x.Status != "Completed")
+                                                                {
+                                                                    if (x.CartType == "Selling")
+                                                                    {
+                                                                        if (index == 0)
+                                                                        {
+                                                                            <div class="form-group">
+                                                                                <a class="btn btn-primary btn-sm" href="javascript:void(0);" onclick="Track_Package('@xx.Shipment_Id');">
+                                                                                    <span>Track package</span>
+                                                                                    <i class="glyphicon glyphicon-refresh processingIcon hidden" id="@string.Format("loader{0}", xx.Shipment_Id)"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="form-group">
+                                                                            <a class="btn btn-primary btn-sm" href="javascript:void(0);" onclick="Track_Package('@xx.Shipment_Id');">
+                                                                                <span>Track package</span>
+                                                                                <i class="glyphicon glyphicon-refresh processingIcon hidden" id="@string.Format("loader{0}", xx.Shipment_Id)"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    }
+                                                                }
+
+                                                                if (!xx.Cancelation_Request_Submitted && x.Status != "Completed")
+                                                                {
+                                                                    <div class="form-group">
+                                                                        <button type="button" class="btn btn-default btn-sm" onclick="Submit_Cancelation_Request('@xx.Tracking_Id', '@xx.SKU');">
+                                                                            <span>Cancel Order</span>
+                                                                        </button>
+                                                                    </div>
+                                                                }
+                                                               
+
+                                                            }
+                                                            
+                                                            
+                                                            <div class="form-group">
+                                                                <a class="btn btn-default btn-sm" target="_blank" href="@string.Format("{0}#review-block", xx.PageUrl)">
+                                                                    <span>Write a product review</span>
+                                                                </a>
+                                                            </div>                                                           
+                                                        </div>
+                                                    </div>
+                                                    index++;
+                                                }
+                                            }
+                                            
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Track Package</h4>
+            </div>
+            <div class="modal-body" id="packageHistory">
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    foreach (var x in Model)
+    {
+        <div class="modal fade" id="@string.Format("myModal-{0}", x.Id)" tabindex="-1" role="dialog" 
+             aria-labelledby="@string.Format("myModalLabel-{0}", x.Id)">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="@string.Format("myModalLabel-{0}", x.Id)">Order Details</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p class="text-center">
+                                    <span>Ordered on @x.OrderDate.ToString("dd MMMM yyyy") </span>
+                                    <span>|</span>
+                                    <span>@string.Format("Order #{0}", x.Id)</span>
+                                </p>
+                            </div>
+                            <div class="col-sm-12">
+                                <p class="text-center">
+                                    <span>Current Status: </span>
+                                    <span>@x.Status</span>
+                                </p>
+                            </div>
+                            <div class="col-sm-12"><hr /></div>                            
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <p><b>Shipping Address</b></p>
+                                <p>@x.ShippingAddress.Full_Name</p>
+                                <p>@Html.Raw(x.ShippingAddress.Complete_Address)</p>
+                            </div>
+                            <div class="col-sm-4">
+                                <p><b>Payment Method</b></p>
+                                <p>@(x.PaymentType=="cc"?"Credit Card":"Cash on Delivery (COD).")</p>
+                            </div>
+                            <div class="col-sm-4">
+                                <p><b>Order Summary</b></p>
+                                <p class="clearfix">
+                                    <span class="pull-left">Subtotal:</span>
+                                    <span class="pull-right">AED @Math.Round(x.Total_Price, 2)</span>
+                                </p>
+                                <p class="clearfix">
+                                    <span class="pull-left">Shipping:</span>
+                                    <span class="pull-right">AED @Math.Round(x.ShippingCharge, 2)</span>
+                                </p>
+                                <p class="clearfix">
+                                    <span class="pull-left">Tax:</span>
+                                    <span class="pull-right">AED @Math.Round(x.Tax_Amount, 2)</span>
+                                </p>
+                                <p class="clearfix">
+                                    <label class="pull-left">Grand Total:</label>
+                                    <label class="pull-right">AED @Math.Round(x.Total_Sum, 2)</label>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+@section scripts{
+<script src="~/assets/plugins/toastr/toastr.min.js"></script>
+    <script type="text/javascript">
+        function Track_Package(id){
+            var loader=$('#loader'+id);
+            loader.removeClass('hidden');
+            $('#packageHistory').html('');
+            $.ajax({
+                type: 'GET', dataType: "html", 
+                url: '/get-shipment-history/'+id, 
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $('#packageHistory').html(data);
+                    $('#myModal').modal('show');
+                    loader.addClass('hidden');
+                }
+            });
+        };
+
+        function Submit_Cancelation_Request(tracking_id, sku) {
+            var _data = { Tracking_Id: tracking_id, SKU: sku };
+            $.ajax({
+                type: 'POST', dataType: "json",
+                url: '/submit-cancelation-request',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(_data),
+                success: function (data) {
+                    toastr.success("Success");
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    }, 1000);
+                }
+            });
+        };
+
+        function Delete_Order(id) {
+            console.log(id);
+            $.getJSON("/delete-order-by-id/"+id, function(obj){
+                var panel_id = '#panel-'+ id;
+                $(panel_id).hide();
+            });
+        };
+
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover();
+        });
+    </script>
+}

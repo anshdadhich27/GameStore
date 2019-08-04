@@ -1,0 +1,98 @@
+﻿@model GuestViewModel
+@{
+    ViewData["Title"] = "Check Out";
+    var payment = ViewBag.Payments as PaymentSetting;
+}
+
+@section styles{
+    <link href="~/css/checkout.min.css" rel="stylesheet" />
+    <link href="~/css/sign-login.min.css" rel="stylesheet" />
+}
+
+<div class="wrapper checout-page">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="chk-out-process">
+                        <ul>
+                            <li class="active">
+                                <div class="prcs-icn prcs-login">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    Login/Register
+                                </div>
+                            </li>
+                            <li>
+                                <div class="prcs-icn location">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    Delivery Address
+                                </div>
+                            </li>
+                            <li>
+                                <div class="prcs-icn payment">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    Payment Info
+                                </div>
+                            </li>
+                            <li>
+                                <div class="prcs-icn plce-order">
+                                    <span></span>
+                                </div>
+                                <div class="text">
+                                    Place Order
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">                
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="wthOut-reg">
+                        <div class="gst-mail">                            
+                            <div id="guest-checkout-form">
+                                <p>
+                                    Checking out as a <b>Guest?</b><br> 
+                                    You'll be able to save your details to create an account with us later.
+                                </p>
+                                <form method="post" asp-controller="Account" asp-action="Guest_Checkout_Step_One"
+                                      data-ajax="true" data-ajax-begin="onBegin" data-ajax-complete="onComplete"
+                                      data-ajax-method="POST" data-method="post" data-ajax-mode="replace" 
+                                      data-ajax-update="#guest-checkout-form">
+                                    <input type="hidden" name="CartId" value="@ViewBag.TrackingId" /> 
+                                    <input asp-for="Email" placeholder="Email" required />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                    <input type="submit" value="Continue as a Guest" class="txt-center">
+                                </form>
+                            </div>                           
+                            <br>
+                            Already have an account? 
+                            <a asp-controller="Account" asp-action="Login" 
+                                asp-route-returnurl="@ViewData["ReturnUrl"]">Sign in now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var tax = parseInt('@payment.Tax');
+            var shippimg = parseInt('@payment.ShippingCharge');
+            _app.Tax_Rate(tax);
+            _app.ShippingCharge(shippimg);
+            //_app.Manage_Shopping_Cart();
+            //_app.Manage_Selling_Cart();
+        });
+    </script>
+}

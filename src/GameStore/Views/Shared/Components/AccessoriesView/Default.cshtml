@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Product>
+
+<div class="consols game-accessry">
+    <div class="page-title-block animation-element">
+        <h2 class="page-title txt-upr txt-center clr-black">Gaming Accessories</h2>
+    </div>
+    <a href="/accessories" class="view-all">View all</a>
+    <div class="row">
+        @{
+            if (Model != null)
+            {
+                foreach (var x in Model)
+                {
+                    double avgRating = x.Rating;// (x.RatingCount > 0) ? x.RatingValue / x.RatingCount : 0;
+                    if (avgRating > 5) { avgRating = 5; }
+                    string ratingStyle = "good";
+                    if (Math.Round(avgRating, 1) > 3.5) { ratingStyle = "good"; }
+                    if (Math.Round(avgRating, 1) <= 3.5 && Math.Round(avgRating, 1) >= 2.5) { ratingStyle = "avrage"; }
+                    if (Math.Round(avgRating, 1) < 2.5) { ratingStyle = "bad"; }
+                    //string Rating = @Math.Round(avgRating, 1) == 5 ? "5" : @Math.Round(avgRating, 1) + "+";
+                    double Rating = @Math.Round(avgRating, 1);
+                    <div class="col-md-2 col-sm-3 col-xs-6">
+                        <div class="prodcut-box-three prodcut-box">
+                            <div class="prdct-img txt-center">
+                                <a href="@x.PageUrl">
+                                    <img title="@x.Name" src="@(string.IsNullOrEmpty(x.ImageUrl)?"/images/imagenotavailable.jpg":x.ImageUrl)" alt="@x.Name" />
+                                </a>
+                            </div>
+                            <div class="prdct-title">
+                                <a href="@x.PageUrl">
+                                    @(string.IsNullOrEmpty(x.Name) ? "N/A" : (x.Name.Length > 15) ? x.Name.Substring(0, 15) + "..." : x.Name)
+                                </a>
+                            </div>
+                            <div class="prdct-type txt-upr">
+                                <a href="javascript:void(0);">@x.ProductTypeName</a>
+                            </div>
+                            <div class="rating">
+                                <span class="@ratingStyle clr-white txt-center">@Rating</span>
+                            </div>
+                            <div class="price">
+                                <div class="pull-left clr-black">
+                                    <span>@string.Format("AED {0}", Math.Round(x.Selling_Price, 2))</span>
+                                </div>
+                                <div class="pull-left">
+                                    <a href="javascript:void(0);" class="red-btn cart"
+                                       data-bind="click: Add_To_Shoping_Cart.bind($data, @x.Id, @x.ProductTypeId, 'Accessories', @Math.Round(x.Selling_Price, 2), '@x.SKU')">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+
+
+    </div>
+</div>

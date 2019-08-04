@@ -1,0 +1,259 @@
+﻿@{ 
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Dashboard";
+}
+
+@section styles{
+
+}
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>    
+    <script type="text/javascript">
+        var _self = this;
+        _self.poolColors = function (count) {
+            var pool = [];
+            for (i = 0; i < count; i++) {
+                pool.push(dynamicColors());
+            }
+            return pool;
+        };
+
+        _self.dynamicColors = function () {
+            var r = Math.floor(Math.random() * 255);
+            var g = Math.floor(Math.random() * 255);
+            var b = Math.floor(Math.random() * 255);
+            return "rgb(" + r + "," + g + "," + b + ")";
+        };
+
+        _self.Draw_Total_Sell_Graph = function () {
+            $.getJSON('/dashboard/get-selling-count-by-product-type', function (obj) {
+                var graph_data = {
+                    datasets: [{ data: [], backgroundColor: _self.poolColors(obj.length) }],
+                    labels: []
+                };
+                $.each(obj, function (i, o) {
+                    graph_data.datasets[0].data.push(o.Count);
+                    graph_data.labels.push(o.Name + " (" + o.Count + ")");
+                });
+                var ctx = document.getElementById('chart1').getContext('2d');
+                var myDoughnutChart = new Chart(ctx, {
+                    type: 'doughnut', data: graph_data,
+                    options: { legend: { display: true, position: 'right' } }
+                });
+            });
+        };
+
+        _self.Draw_Total_Buy_Graph = function () {
+            $.getJSON('/dashboard/get-buying-count-by-product-type', function (obj) {
+                var graph_data = {
+                    datasets: [{ data: [], backgroundColor: _self.poolColors(obj.length) }],
+                    labels: []
+                };
+                $.each(obj, function (i, o) {
+                    graph_data.datasets[0].data.push(o.Count);
+                    graph_data.labels.push(o.Name + " (" + o.Count + ")");
+                });
+                var ctx = document.getElementById('chart2').getContext('2d');
+                var myDoughnutChart = new Chart(ctx, {
+                    type: 'doughnut', data: graph_data,
+                    options: { legend: { display: true, position: 'right' } }
+                });
+            });
+        };
+
+        _self.Draw_Pending_Order_Graph = function () {
+            $.getJSON('/dashboard/get-pending-order-count', function (obj) {
+                var graph_data = {
+                    datasets: [{ data: [], backgroundColor: _self.poolColors(obj.length) }],
+                    labels: []
+                };
+                $.each(obj, function (i, o) {
+                    graph_data.datasets[0].data.push(o.Count);
+                    graph_data.labels.push(o.Name + " (" + o.Count + ")");
+                });
+                var ctx = document.getElementById('chart3').getContext('2d');
+                var myDoughnutChart = new Chart(ctx, {
+                    type: 'doughnut', data: graph_data,
+                    options: { legend: { display: true, position: 'right' } }
+                });
+            });
+        };
+
+        _self.Draw_Todays_Order_Graph = function () {
+            $.getJSON('/dashboard/get-todays-order-count', function (obj) {
+                var graph_data = {
+                    datasets: [{ data: [], backgroundColor: _self.poolColors(obj.length) }],
+                    labels: []
+                };
+                $.each(obj, function (i, o) {
+                    graph_data.datasets[0].data.push(o.Count);
+                    graph_data.labels.push(o.Name + " (" + o.Count + ")");
+                });
+                var ctx = document.getElementById('chart4').getContext('2d');
+                var myDoughnutChart = new Chart(ctx, {
+                    type: 'doughnut', data: graph_data,
+                    options: { legend: { display: true, position: 'right' } }
+                });
+            });
+        };
+
+        _self.Draw_Daily_Selling_Order_Graph = function () {
+            $.getJSON('/dashboard/get-per-day-order-count/Shopping/0/0', function (obj) {
+                console.log('Draw_Daily_Selling_Order_Graph', obj);
+                var ctx = document.getElementById('chart5').getContext('2d');
+                var myDoughnutChart = new Chart(ctx, {
+                    type: 'line', data: obj,
+                    options: { legend: { display: true, position: 'top' } }
+                });
+            });
+        };
+
+        _self.Draw_Daily_Buying_Order_Graph = function () {
+            $.getJSON('/dashboard/get-per-day-order-count/Selling/0/0', function (obj) {
+                console.log('Draw_Daily_Buying_Order_Graph', obj);
+                var ctx = document.getElementById('chart6').getContext('2d');
+                var myDoughnutChart = new Chart(ctx, {
+                    type: 'line', data: obj,
+                    options: { legend: { display: true, position: 'top' } }
+                });
+            });
+        };
+
+        _self.Init = function () {
+            _self.Draw_Total_Sell_Graph();
+            _self.Draw_Total_Buy_Graph();
+            _self.Draw_Pending_Order_Graph();
+            _self.Draw_Todays_Order_Graph();
+            _self.Draw_Daily_Selling_Order_Graph();
+            _self.Draw_Daily_Buying_Order_Graph();
+        };
+
+        $(document).ready(function () {
+            _self.Init();
+        });
+    </script>
+}
+
+@section breadcrumb{
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li class="active">Dashboard</li>
+</ol>
+}
+
+
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-white">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title">Total Selling Graph</h3>
+                <div class="panel-control">
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" 
+                       class="panel-reload" data-original-title="Reload" onclick="Draw_Total_Sell_Graph();">
+                        <i class="icon-reload"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">        
+                <div>
+                    <canvas id="chart1" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="panel panel-white">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title">Total Buying Graph (Pre Owned)</h3>
+                <div class="panel-control">
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top"
+                       class="panel-reload" data-original-title="Reload" onclick="Draw_Total_Buy_Graph();">
+                        <i class="icon-reload"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <canvas id="chart2" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="panel panel-white">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title">Total Pending Orders</h3>
+                <div class="panel-control">
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top"
+                       class="panel-reload" data-original-title="Reload" onclick="Draw_Pending_Order_Graph();">
+                        <i class="icon-reload"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <canvas id="chart3" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="panel panel-white">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title">Today's Orders</h3>
+                <div class="panel-control">
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top"
+                       class="panel-reload" data-original-title="Reload" onclick="Draw_Todays_Order_Graph();">
+                        <i class="icon-reload"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <canvas id="chart4" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title">Monthly Selling Graph (@DateTime.UtcNow.ToString("MMMM yyyy"))</h3>
+                <div class="panel-control">
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top"
+                       class="panel-reload" data-original-title="Reload" onclick="Draw_Daily_Selling_Order_Graph();">
+                        <i class="icon-reload"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <canvas id="chart5" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title">Monthly Buying Graph (Pre Owned) (@DateTime.UtcNow.ToString("MMMM yyyy"))</h3>
+                <div class="panel-control">
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top"
+                       class="panel-reload" data-original-title="Reload" onclick="Draw_Daily_Buying_Order_Graph();">
+                        <i class="icon-reload"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <canvas id="chart6" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

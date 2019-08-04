@@ -1,0 +1,63 @@
+﻿@model GamePlatform
+
+
+    <input type="hidden" id="page_index" value="1" />
+    <input type="hidden" id="items_on_page" value="@Model.GameList.NumResult" />
+    <input type="hidden" id="total_items" value="@Model.GameList.TotalCount" />
+    @{
+        foreach (var game in Model.GameList.PagedSet)
+        {
+            double avgRating = game.Rating;//(game.RatingCount > 0) ? game.Rating / game.RatingCount : 0;
+            if (avgRating > 5) { avgRating = 5; }
+            string ratingStyle = "good";
+            if (Math.Round(avgRating, 1) > 3.5) { ratingStyle = "good"; }
+            if (Math.Round(avgRating, 1) <= 3.5 && Math.Round(avgRating, 1) >= 2.5) { ratingStyle = "avrage"; }
+            if (Math.Round(avgRating, 1) < 2.5) { ratingStyle = "bad"; }
+            string img_url = string.IsNullOrEmpty(game.ImageUrl) ? "/images/imagenotavailable.jpg" : game.ImageUrl;
+            
+
+            <div class="col-md-3 col-sm-4 col-xs-6">
+                <div class="prodcut-box-one prodcut-box">
+                    <div class="prdct-img">
+                        <a href="@game.PageUrl">
+                            <img src="@img_url" alt="@game.Name">
+                        </a>
+                    </div>
+                    <div class="prdct-title">
+                        <a href="@game.PageUrl" title="@game.Name">@(string.IsNullOrEmpty(game.Name) ? "N/A" : (game.Name.Length > 15) ? game.Name.Substring(0, 15) + "..." : game.Name)</a>
+                    </div>
+                    <div class="prdct-type">
+                        <a class="pull-left" href="@string.Format("/platform/{0}", Model.NameUrl)" title="@Model.Name">@(string.IsNullOrEmpty(Model.Name) ? "N/A" : (Model.Name.Length > 15) ? Model.Name.Substring(0, 15) + "..." : Model.Name)</a>
+                        <div class="rating pull-right">
+                            <span class="@ratingStyle clr-white txt-center pull-left">@Math.Round(avgRating, 1)</span>
+                        </div>
+                    </div>
+
+                    <div class="price">
+                        <div class="clr-black">
+                            <span>@string.Format("AED {0}", Math.Round(game.Selling_Price, 2))</span>
+                       
+                        </div>
+                        <div class="clearfix">
+                            <a href="javascript:void(0);" class="red-btn cart"
+                               data-bind="click: Add_To_Shoping_Cart.bind($data, @game.Id, @game.Platform.Id, 'Game', @Math.Round(game.Selling_Price, 2), '@game.SKU')">Add to Cart</a>
+                        </div>
+
+                    </div>
+
+                    @{
+                        if (game.PreOrder)
+                        {
+                            <div class="sale-tag"><span>Pre-Order</span></div>
+                        }
+                        else if (game.Condition_Id==2)
+                        {
+                            <div class="sale-tag"><span>Pre-Owned</span></div>
+                        }
+                    }
+                </div>
+            </div>
+                        }
+    }
+
+

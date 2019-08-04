@@ -1,0 +1,529 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Games";
+}
+
+@section styles{
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/summernote-master/summernote.css" rel="stylesheet" />
+<style type="text/css">
+    .bs-example-modal-lg .modal-dialog .modal-dialog {
+        border: 1px solid #9c9797;
+        box-shadow: #bfb3b3 3px 3px 20px 8px;
+    }
+
+    .modal-header {
+        background-color: #dadada;
+    }
+</style>
+}
+
+
+
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">Games</li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white" style="height:auto;">
+            <div class="panel panel-heading">
+                <div class="col-sm-5">
+                    <h2 class="panel-title">
+                        <span>Game List</span>
+                        <span title="Loading...." data-bind="visible:IsLoading" class="fa fa-spin fa-spinner"></span>
+                    </h2>
+                </div>
+                <div class="col-sm-1">
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Game Offset" data-bind="value:Game_Offset_Igdb, valueUpdate:'afterkeydown'" />
+                    </div>
+                    
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-info btn-rounded" 
+                            data-bind="disable:IsLoading_Games, click:Get_Next_50_Games_From_Igdb">
+                        <span>Get Next 50 Games</span>
+                        <span class="glyphicon glyphicon-refresh processingIcon" data-bind="visible:IsLoading_Games"></span>
+                    </button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-info btn-rounded"
+                            data-bind="disable:Updating_Images, click:Update_Images_Of_Games">
+                        <span>Get Images</span>
+                        <span class="glyphicon glyphicon-refresh processingIcon" data-bind="visible:Updating_Images"></span>
+                    </button>
+                </div>
+                <div class="col-sm-1">
+                    <a class="btn btn-primary btn-rounded" href="/master/new-game">
+                        <span>Add New</span>
+                    </a>
+                </div>
+                <div class="col-sm-1">
+                    <button type="submit" form="game-filter-form" class="btn btn-default btn-rounded">
+                        <span>Export</span>
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <form action="/master/download-csv-games" method="post" id="game-filter-form" target="_blank">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <span>Platform</span>
+                                </div>
+                                <select name="Platform_Id" class="form-control" data-bind="options:PlatformList, optionsText:'Name', optionsValue:'Id', value:GameFilter.Platform_Id, optionsCaption:'Choose option', event:{change: GetGameList}"></select>
+                                <div class="input-group-addon" data-bind="visible:IsLoadingPlatforms">
+                                    <span class="fa fa-spin fa-spinner"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <span>Genre</span>
+                                </div>
+                                <select name="Genre_Id" class="form-control" data-bind="options:GenreList, optionsText:'Name', optionsValue:'Id', value:GameFilter.Genre_Id, optionsCaption:'Choose option', event:{change: GetGameList}"></select>
+                                <div class="input-group-addon" data-bind="visible:IsLoadingGenres">
+                                    <span class="fa fa-spin fa-spinner"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input type="text" name="SearchText" class="form-control" placeholder="Search"
+                                       data-bind="value:GameFilter.SearchText, valueUpdate:'afterkeydown'" />
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" data-bind="visible:GameFilter.SearchText().length==0">
+                                        <i class="fa fa-search" data-bind="visible:!IsLoading()"></i>
+                                        <i class="fa fa-spinner fa-spin" data-bind="visible:IsLoading"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default"
+                                            data-bind="visible:GameFilter.SearchText().length>0, click:function(){GameFilter.SearchText('');}">
+                                        <i class="fa fa-remove" data-bind="visible:!IsLoading()"></i>
+                                        <i class="fa fa-spinner fa-spin" data-bind="visible:IsLoading"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width:10%;">#</th>
+                                        <th style="width:15%;">Thumbnail</th>
+                                        <th style="width:15%;">Name</th>
+                                        <th style="width:10%;">Vendor</th>
+                                        <th style="width:25%;">Platforms</th>
+                                        <th style="width:15%;">Genres</th>
+                                        <th style="width:10%;">Release Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach:GameList">
+                                    <tr>
+                                        <td style="width:100px;">
+                                            <div class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" 
+                                                   data-toggle="dropdown" aria-expanded="false"> 
+                                                    <span data-bind="text: ($index()+1)+'). '"></span>
+                                                    <span>Options</span> 
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-list" role="menu">
+                                                    <li role="presentation">
+                                                        <a href="#" data-bind="attr:{href: '/master/update-game/'+$data.Id}" title="Update">
+                                                            <i class="fa fa-edit"></i>
+                                                            <span>Update</span>
+                                                        </a>
+                                                    </li>
+                                                    <li role="presentation">
+                                                        <a href="#" data-bind="click:$parent.Delete_Game_By_Id" title="Delete">
+                                                            <i class="fa fa-trash"></i>
+                                                            <span>Delete</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td style="width:150px;">
+                                            <img alt="Game" src="#" style="max-height:100px;"
+                                                 data-bind="attr:{src: $data.ImageUrl, alt: $data.Name}" />
+                                        </td>
+                                        <td>
+                                            <a href="#" target="_blank" data-bind="attr:{href: '/game/'+$data.NameUrl}, text:$data.Name"></a>
+                                        </td>
+                                        <td data-bind="text:$data.Vendor_Name"></td>
+                                        <td data-bind="text:$data.Platform_Names"></td>
+                                        <td data-bind="text:$data.Genre_Names"></td>
+                                        <td data-bind="text:moment($data.First_release_date).format('Do MMM YYYY')"></td>
+                                    </tr>
+                                </tbody>
+                                <tbody data-bind="visible:IsLoading">
+                                    <tr>
+                                        <td colspan="7">
+                                            <span class="glyphicon glyphicon-refresh processingIcon"></span>
+                                            <span>Loading.....</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td style="width:100px;">
+                                            <select data-bind="options:[10,20,50,100], value:GameFilter.Rows, optionsCaption:'Rows'"
+                                                    class="form-control"></select>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                <span>Total:</span>
+                                                <span data-bind="text:Total"></span>
+                                                <span>Records</span>
+                                            </span>
+                                        </td>
+                                        <td colspan="6">
+                                            <div id="page-selection"></div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+<script>
+        (function (h, q) {
+            h.fn.bootpag = function (p) {
+                function m(c, b) {
+                    b = parseInt(b, 10); var d, e = 0 == a.maxVisible ? 1 : a.maxVisible, k = 1 == a.maxVisible ? 0 : 1, n = Math.floor((b - 1) / e) * e, f = c.find("li"); a.page = b = 0 > b ? 0 : b > a.total ? a.total : b; f.removeClass(a.activeClass); d = 1 > b - 1 ? 1 : a.leaps && b - 1 >= a.maxVisible ? Math.floor((b - 1) / e) * e : b - 1; a.firstLastUse && f.first().toggleClass(a.disabledClass, 1 === b); e = f.first(); a.firstLastUse && (e = e.next()); e.toggleClass(a.disabledClass, 1 === b).attr("data-lp", d).find("a").attr("href", g(d)); k = 1 == a.maxVisible ?
+            0 : 1; d = b + 1 > a.total ? a.total : a.leaps && b + 1 < a.total - a.maxVisible ? n + a.maxVisible + k : b + 1; e = f.last(); a.firstLastUse && (e = e.prev()); e.toggleClass(a.disabledClass, b === a.total).attr("data-lp", d).find("a").attr("href", g(d)); f.last().toggleClass(a.disabledClass, b === a.total); e = f.filter("[data-lp=" + b + "]"); k = "." + [a.nextClass, a.prevClass, a.firstClass, a.lastClass].join(",."); if (!e.not(k).length) {
+                var m = b <= n ? -a.maxVisible : 0; f.not(k).each(function (b) {
+                    d = b + 1 + n + m; h(this).attr("data-lp", d).toggle(d <= a.total).find("a").html(d).attr("href",
+                    g(d))
+                }); e = f.filter("[data-lp=" + b + "]")
+            } e.not(k).addClass(a.activeClass); l.data("settings", a)
+                } function g(c) { return a.href.replace(a.hrefVariable, c) } var l = this, a = h.extend({
+                    total: 0, page: 1, maxVisible: null, leaps: !0, href: "javascript:void(0);", hrefVariable: "{{number}}", next: "&raquo;", prev: "&laquo;", firstLastUse: !1, first: '<span aria-hidden="true">&larr;</span>', last: '<span aria-hidden="true">&rarr;</span>', wrapClass: "pagination", activeClass: "active", disabledClass: "disabled", nextClass: "next", prevClass: "prev",
+                    lastClass: "last", firstClass: "first"
+                }, l.data("settings") || {}, p || {}); if (0 >= a.total) return this; h.isNumeric(a.maxVisible) || a.maxVisible || (a.maxVisible = parseInt(a.total, 10)); l.data("settings", a); return this.each(function () {
+                    var c, b, d = h(this); c = ['<ul class="', a.wrapClass, ' bootpag">']; a.firstLastUse && (c = c.concat(['<li data-lp="1" class="', a.firstClass, '"><a href="', g(1), '">', a.first, "</a></li>"])); a.prev && (c = c.concat(['<li data-lp="1" class="', a.prevClass, '"><a href="', g(1), '">', a.prev, "</a></li>"])); for (b =
+                    1; b <= Math.min(a.total, a.maxVisible) ; b++) c = c.concat(['<li data-lp="', b, '"><a href="', g(b), '">', b, "</a></li>"]); a.next && (b = a.leaps && a.total > a.maxVisible ? Math.min(a.maxVisible + 1, a.total) : 2, c = c.concat(['<li data-lp="', b, '" class="', a.nextClass, '"><a href="', g(b), '">', a.next, "</a></li>"])); a.firstLastUse && (c = c.concat(['<li data-lp="', a.total, '" class="last"><a href="', g(a.total), '">', a.last, "</a></li>"])); c.push("</ul>"); d.find("ul.bootpag").remove(); d.append(c.join("")); c = d.find("ul.bootpag"); d.find("li").click(function () {
+                        var b =
+                        h(this); if (!b.hasClass(a.disabledClass) && !b.hasClass(a.activeClass)) { var c = parseInt(b.attr("data-lp"), 10); l.find("ul.bootpag").each(function () { m(h(this), c) }); l.trigger("page", c) }
+                    }); m(c, a.page)
+                })
+            }
+        })(jQuery, window);
+</script>
+<script src="/assets/plugins/select2/js/select2.min.js"></script>
+<script src="~/assets/plugins/summernote-master/summernote.min.js"></script>
+<script src="~/lib/moment/moment.js"></script>
+<script src="~/lib/knockout/dist/knockout.debug.js"></script>
+
+    <script type="text/javascript">
+        function AppViewModel() {
+            var self = this;            
+            self.Total = ko.observable(0);
+            self.IsSaving = ko.observable(false);
+            self.IsEditing = ko.observable(false);
+            self.IsLoading = ko.observable(false);
+            self.IsDeleting = ko.observable(false);
+            self.IsLoadingPlatforms = ko.observable(false);
+            self.IsLoadingGenres = ko.observable(false);
+            self.IsLoadingVendors = ko.observable(false);
+            self.GameList = ko.observableArray([]);
+            self.PlatformList = ko.observableArray([]);
+            self.GenreList = ko.observableArray([]);
+            self.VendorList = ko.observableArray([]);
+
+            self.Updating_Images = ko.observable(false);
+            self.IsLoading_Games = ko.observable(false);
+            self.Game_Offset_Igdb = ko.observable(500);
+
+            self.Game = {
+                Id: ko.observable(0),
+                Name: ko.observable(''),
+                Summary: ko.observable(''),
+                Storyline: ko.observable(''),
+                Currency: ko.observable('AED'),
+                Price: ko.observable(0),
+                Pre_owned_Price: ko.observable(0),
+                Popularity: ko.observable(0),
+                Availability: ko.observable('Available'),
+                First_release_date: ko.observable(),
+                PreOrder: ko.observable(false),
+                Active: ko.observable(true),
+                Game_modes: ko.observable(''),
+                Keywords: ko.observable(''),
+                Genres: ko.observable(''),
+                Platforms: ko.observable(''),
+
+                PEGI_Rating: ko.observable(0),
+                ESRB_Rating: ko.observable(0),
+
+                ESRB_Synopsis: ko.observable(''),
+                PEGI_Synopsis: ko.observable(''),
+
+                Vendor_Name: ko.observable(''),
+                Vendor_Id: ko.observable(0)
+
+            };
+
+            self.GameFilter = {
+                Offset: ko.observable(0),
+                PageIndex: ko.observable(1),
+                Genre_Id: ko.observable(0),
+                Platform_Id: ko.observable(0),
+                Rows: ko.observable(10).extend({ rateLimit: 500 }),                
+                SearchText: ko.observable('').extend({ rateLimit: 500 })
+
+            };
+
+            self.OnCLick_AddNewGame = function () {
+                $('#new-game-modal').modal('show');
+                self.IsEditing(false);
+                self.IsSaving(false);
+            };
+
+            self.Get_Next_50_Games_From_Igdb = function () {
+                self.IsLoading_Games(true);
+                $.getJSON('/master/Save_IGdb_50_Games_Per_Platforms/' + self.Game_Offset_Igdb(), function (obj) {
+                    self.IsLoading_Games(false);
+                    toastr.success("Success");
+                    console.log(obj);
+                });
+            };
+
+            self.Update_Images_Of_Games = function () {
+                self.Updating_Images(true);
+                $.getJSON('/master/Update-Images-Of-Games', function (obj) {
+                    self.Updating_Images(false);
+                    toastr.success("Success");
+                    console.log(obj);
+                });
+            };
+
+            self.Delete_Game_By_Id = function (obj) {
+                self.IsDeleting(true);
+                $.ajax({
+                    type: 'POST', dataType: "json", url: '/master/delete-game',
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(obj),
+                    success: function (result) {
+                        if (result) {
+                            self.GameList.remove(obj);
+                            toastr.success('Success');
+                        }
+                        else { toastr.warning('Failed');}
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                }).done(function () { self.IsDeleting(false); });
+            };
+
+            self.OnCLick_EditGame_Btn = function (obj) {
+                self.Game.Id(obj.Id);
+                self.Game.Name(obj.Name);
+                self.Game.Currency(obj.Currency);
+                self.Game.Active(obj.Active);
+                self.Game.Availability(obj.Availability);
+                self.Game.ESRB_Rating(obj.ESRB_Rating);
+                self.Game.ESRB_Synopsis(obj.ESRB_Synopsis);
+                self.Game.First_release_date(obj.First_release_date);
+                self.Game.Game_modes(obj.Game_modes);
+                self.Game.Genres(obj.Genres);
+                self.Game.Keywords(obj.Keywords);
+                self.Game.PEGI_Rating(obj.PEGI_Rating);
+                self.Game.PEGI_Synopsis(obj.PEGI_Synopsis);
+                self.Game.Platforms(obj.Platforms);
+                self.Game.Popularity(obj.Popularity);
+                self.Game.Pre_owned_Price(obj.Pre_owned_Price);
+                self.Game.PreOrder(obj.PreOrder);
+                self.Game.Price(obj.Price);
+                self.Game.Storyline(obj.Storyline);
+                self.Game.Summary(obj.Summary);
+                self.Game.Vendor_Id(obj.Vendor_Id);
+                self.Game.Vendor_Name(obj.Vendor_Name);
+                self.IsEditing(true);
+                self.IsSaving(false);
+                $('#new-game-modal').modal('show');
+            };
+
+            
+
+            self.GetAllPlatforms = function () {
+                self.IsLoadingPlatforms(true);
+                $.getJSON('/master/get-all-active-platform', function (data) {
+                    self.IsLoadingPlatforms(false);
+                    self.PlatformList(data);
+                });
+            };
+
+            self.GetAllGenres = function () {
+                self.IsLoadingGenres(true);
+                $.getJSON('/master/get-all-active-genre', function (data) {
+                    self.IsLoadingGenres(false);
+                    self.GenreList(data);
+                });
+            };
+
+            self.GetAllVendors = function () {
+                self.IsLoadingVendors(true);
+                $.getJSON('/vendor/get-all', function (data) {
+                    self.IsLoadingVendors(false);
+                    self.VendorList(data);
+                });
+            };
+
+            self.GetGameList = function () {
+                self.IsLoading(true);
+                $.ajax({
+                    type: 'POST', dataType: "json",
+                    url: '/master/get-paginated-games',
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(self.GameFilter),
+                    success: function (obj) {
+                        console.log('GetGameList', obj);
+                        self.GameList.removeAll();
+                        var totalPage = (obj.TotalCount > self.GameFilter.Rows()) ? obj.TotalCount / self.GameFilter.Rows() : 1;
+                        var reminder = (obj.TotalCount > self.GameFilter.Rows()) ? obj.TotalCount % self.GameFilter.Rows() : 0;
+                        if (reminder > 0) { totalPage += 1; }
+                        $.each(obj.PagedSet, function (i, o) { self.GameList.push(new GameViewModel(o)); });
+                        $('#page-selection').bootpag({ total: parseInt(totalPage), page: self.GameFilter.PageIndex(), maxVisible: 10 });
+                        self.Total(obj.TotalCount);
+                        self.IsLoading(false);
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.GameFilter.Rows.subscribe(function (newValue) {
+                self.GameFilter.Rows(newValue);
+                self.GameFilter.PageIndex(1);
+                self.GameList.removeAll();
+                self.GetGameList();
+            });
+
+            self.GameFilter.SearchText.subscribe(function (newValue) {
+                newValue = newValue || '';
+                self.GameFilter.SearchText(newValue);
+                self.GameFilter.PageIndex(1);
+                self.GetGameList();
+            });
+
+            
+
+            self.Init = function () {
+                self.GetGameList();
+                self.GetAllGenres();
+                self.GetAllPlatforms();
+                //self.GetAllVendors();
+            };
+
+            function GameViewModel(obj) {
+                var x = this;
+                x.Id = obj.Id;
+                x.ImageUrl = obj.ImageUrl;
+                x.Name = obj.Name;
+                x.NameUrl = obj.NameUrl;
+                x.Genre_Names = obj.Genre_Names;
+                x.Platform_Names = obj.Platform_Names;
+                x.Summary = obj.Summary;
+                x.Storyline = obj.Storyline;
+                x.Currency = obj.Currency;
+                x.Price = obj.Price;
+                x.Pre_owned_Price = obj.Pre_owned_Price;
+                x.Popularity = obj.Popularity;
+                x.Availability = obj.Availability;
+                x.First_release_date = obj.First_release_date;
+                x.PreOrder = obj.PreOrder;
+                x.Active = obj.Active;
+                x.Idgb_GameId = obj.Idgb_GameId;
+                x.Collection = obj.Collection;
+                x.Category = obj.Category;
+                x.Rating = obj.Rating;
+                x.RatingCount = obj.RatingCount;
+                x.SimilarGames = obj.SimilarGames;
+                x.Tags = obj.Tags;
+                x.Developers = obj.Developers;
+                x.Publishers = obj.Publishers;
+                x.Game_modes = obj.Game_modes;
+                x.Keywords = obj.Keywords;
+                x.Themes = obj.Themes;
+                x.Genres = obj.Genres;
+                x.Platforms = obj.Platforms;
+                x.PEGI_Rating = obj.PEGI_Rating;
+                x.ESRB_Rating = obj.ESRB_Rating;
+                x.ESRB_Synopsis = obj.ESRB_Synopsis;
+                x.PEGI_Synopsis = obj.PEGI_Synopsis;
+                x.ImageUrl = obj.ImageUrl;
+                x.Vendor_Id = obj.Vendor_Id;
+                x.Vendor_Name = obj.Vendor_Name;
+            };
+
+        };
+        $(document).ready(function () {
+            var app = new AppViewModel();
+            ko.applyBindings(app);
+            app.GameFilter.Rows(10);
+            app.Init();
+            $('select').select2();
+
+            $('#Storyline-box, #Summary-box').summernote({
+                placeholder: 'Enter content', height: 100,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],                   
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['insert', ['link', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ],
+                popover: {
+                    image: [
+                      ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                      ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                      ['remove', ['removeMedia']]
+                    ]
+                }, dialogsFade: true,
+                onImageUpload: function (files, editor, welEditable) {
+                    var _data = new FormData();
+                    _data.append("file", files[0]);
+                    $.ajax({
+                        type: "POST", url: "/uploadfile", data: _data,
+                        cache: false, contentType: false, processData: false,
+                        success: function (url) { editor.insertImage(welEditable, url); }
+                    });
+                }
+            });
+
+            $('#page-selection').bootpag({ total: 5, page: 1, maxVisible: 10 });
+
+            $('#page-selection').on('page', function (event, num) {
+                //console.log('bootpag', event, num);
+                var offset = (app.GameFilter.Rows() * (num - 1));
+                app.GameFilter.Offset(offset);
+                app.GameFilter.PageIndex(num);
+                app.GameList.removeAll();
+                app.GetGameList();
+            });
+
+        });
+    </script>
+
+}

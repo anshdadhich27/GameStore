@@ -1,0 +1,59 @@
+﻿@model PageContent
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaKeywords"] = Model.MetaKeywords;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+}
+@section styles{
+    <link href="~/css/policy-terms.min.css" rel="stylesheet" />
+}
+<div class="wrapper">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 col-sm-3">
+                    @await Html.PartialAsync("_StaticPagesLeftNavigation")
+                </div>
+                <div class="col-md-10 col-sm-9">
+                    <div class="textInfoContent">
+                        <div>
+                            @Html.Raw(Model.HeaderContent)
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8" id="form-content">
+                                <form class="contactForm" asp-controller="Home" asp-action="Add_New_Contact" 
+                                      data-ajax="true" data-ajax-begin="onBegin" data-ajax-complete="onComplete"
+                                      data-ajax-method="POST" data-method="post" data-ajax-mode="replace" 
+                                      data-ajax-update="#form-content">
+                                    <div class="inputfield">
+                                        <input class="field" type="text" placeholder="Name *" name="Name" required>
+                                    </div>
+                                    <div class="inputfield">
+                                        <input class="field" type="text" placeholder="Contact No. *" name="Phone_No" required />
+                                    </div>
+                                    <div class="inputfield">
+                                        <input class="field" type="text" placeholder="Email *" name="Email" required />
+                                    </div>
+                                    <div class="inputfield">
+                                        <input class="field" type="text" placeholder="Subject *" name="Contact_For" required />
+                                    </div>                                    
+                                    <div class="inputfield">
+                                        <textarea class="field" placeholder="Your Message *" name="Message" required></textarea>
+                                    </div>
+                                    <div class="submetField">
+                                        <button type="submit" class="submitBtn">SEND</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="contactText">
+                                    @Html.Raw(Model.BodyContent)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

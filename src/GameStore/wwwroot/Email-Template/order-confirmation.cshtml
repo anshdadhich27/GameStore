@@ -1,0 +1,665 @@
+﻿@model dynamic
+@using GameStore.Models
+@using GameStore.Models.Entity
+@{ 
+    var modal = Model as Cart_DTO;
+}
+<table data-module="Menu" data-bgcolor="Main BG" width="100%" cellspacing="0" 
+       cellpadding="0" border="0" bgcolor="#FFF" align="center">
+    <tr>
+        <td height="80"></td>
+    </tr>
+    <tr>
+        <td align="center">
+            <table class="display-width" data-bgcolor="Menu BG" width="680" 
+                   cellspacing="0" cellpadding="0" border="0" bgcolor="#42C0D3" align="center">
+                <tr>
+                    <td style="padding:0 30px;" align="center">
+                        <table class="display-width" width="600" cellspacing="0" cellpadding="0" border="0" align="center">
+                            <tr>
+                                <td align="center">
+                                    <table class="display-width" width="100%" cellspacing="0" 
+                                           cellpadding="0" border="0" align="center">
+                                        <tr>
+                                            <td height="15"></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center">
+                                                <table class="display-width" 
+                                                       style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" 
+                                                       width="25%" cellspacing="0" cellpadding="0" border="0" align="center">
+                                                    <tr>
+                                                        <td valign="middle" align="center">
+                                                            <a href="@Constant.DomainNane" style="color:#ffffff;text-decoration:none;" data-color="website">
+                                                                <img src="@Constant.DomainNane/email-template/img/ftr-logo.png" width="200" />
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="line-height:20px;" width="1" height="20"></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center">
+                                                <table class="display-width" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" 
+                                                       width="470" cellspacing="0" cellpadding="0" border="0" align="center">
+                                                    <tr>
+                                                        <td align="right">
+                                                            <table class="display-width" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" 
+                                                                   width="100%" cellspacing="0" cellpadding="0" border="0" align="right">
+                                                                <tr>
+                                                                    <td align="center">
+                                                                        <table style="width:auto !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" 
+                                                                               width="470px" cellspacing="0" cellpadding="0" border="0" align="center">
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <table class="display-width" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                                                                                           width="180" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                                        <tr>
+                                                                                            <td align="center">
+                                                                                                <table class="display-width" style="width:auto !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" 
+                                                                                                       width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+                                                                                                    <tr>
+                                                                                                        <td width="30" valign="middle" align="left">
+                                                                                                            <img src="@Constant.DomainNane/email-template/img/link.png" width="20" />
+                                                                                                        </td>
+                                                                                                        <td class="MsoNormal menu" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;font-weight:600;letter-spacing:1px;" valign="middle" align="left">
+                                                                                                            <a href="@Constant.DomainNane" style="color:#FFFFFF;text-decoration:none;" data-color="website" data-size="website" data-min="12" data-max="33">@Constant.DomainNaneTxt</a>
+                                                                                                        </td>
+                                                                                                        <td class="MsoNormal remove-bar" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;font-weight:500;letter-spacing:1px;text-transform:capitalize;" data-color="Bar" data-size="Bar" data-min="12" data-max="33" width="40" valign="middle" align="center">
+                                                                                                            |
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                    <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; mso-hide:all;" 
+                                                                                           width="1" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                                        <tr>
+                                                                                            <td style="line-height:10px;" height="10"></td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                    <table class="phone-1" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; "
+                                                                                           width="230" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                                        <tr>
+                                                                                            <td align="center">
+                                                                                                <table class="display-width" style="width:auto !important;display:block !important;" 
+                                                                                                       width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+                                                                                                    <tr>
+                                                                                                        <td align="left">
+                                                                                                            <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                                                                <tr>
+                                                                                                                    <td width="30" valign="middle" align="left">
+                                                                                                                        <img src="@Constant.DomainNane/email-template/img/phone.png" width="20" />
+                                                                                                                    </td>
+                                                                                                                    <td class="MsoNormal padding-right" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:capitalize;" 
+                                                                                                                        data-color="Ph.No" data-size="Ph.No" data-min="12" data-max="33" valign="middle" align="left">
+                                                                                                                        @Constant.Phone_NumberTxt
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                            </table>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="15"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<table data-module="Order Confirmation" data-bgcolor="Main BG" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFF" align="center">
+    <tr>
+        <td align="center">
+            <table class="display-width" data-bgcolor="Section BG-1" width="680" cellspacing="0" cellpadding="0" border="0" bgcolor="#42C0D3" align="center">
+                <tr>
+                    <td style="padding:0 30px;" align="center">
+                        <table class="display-width" style="border-top-left-radius:5px; border-top-right-radius:5px;" data-bgcolor="Section BG-2" width="600" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center">
+                            <tr>
+                                <td class="resp-padding" style="padding:0 20px;" align="center">
+                                    <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+                                        <tr>
+                                            <td height="40"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:20px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:capitalize;" data-color="Confirmation" data-size="Confirmation" data-min="12" data-max="40" align="right">
+                                                Order Confirmation
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:11px;letter-spacing:1px;line-height:18px;text-transform:capitalize;" align="right">
+                                                <span data-color="Order no-1" data-size="Order no-1" data-min="12" data-max="31">Order no:</span> <span style="color:#42C0D3;" data-color="Order no-2" data-size="Order no-2" data-min="12" data-max="31">@string.Format("#{0}", modal.Id)</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="30"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:18px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:capitalize;" data-color="Heading" data-size="Heading" data-min="12" data-max="38" align="left">
+                                                Hello @modal.Name,
+                                            
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="20"></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">
+                                                <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                    <tr>
+                                                        <td class="MsoNormal" style="color:#666666;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;line-height:24px;" data-color="Content" data-size="Content" data-min="12" data-max="34" align="left">
+                                                           Thanks for shopping from Gamestoreme,<br />
+                                                            We have received your order request, we will send you the confirmation soon your order is ready for ship.
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="30"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border-bottom:3px solid #333333;" data-border-bottom-color="Address top Border"></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-bgcolor="Address BG-1" bgcolor="#f5f5f5" align="left">
+                                                <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                    <tr>
+                                                        <td height="30"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:0 30px;">
+                                                          
+                                                            <table class="display-width-1" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" width="48%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <table class="display-width" style="width:auto !important;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                            <tr>
+                                                                                <td class="MsoNormal" style="color:#666666;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;letter-spacing:1px;line-height:15px;" data-color="Content-1" data-size="Content-1" data-min="12" data-max="33" align="left">
+                                                                                    Your Package will be sent to:
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td height="15"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;font-weight:600;letter-spacing:1px;line-height:24px;text-transform:uppercase;" data-color="Address" data-size="Address" data-min="12" data-max="33" align="left">
+                                                                                    <span>@modal.ShippingAddress.Full_Name</span> <br />
+                                                                                    <span>@modal.ShippingAddress.Address_Line @modal.ShippingAddress.Address_Line2 @modal.ShippingAddress.Address_Line3</span> <br />
+                                                                                    <span>@modal.ShippingAddress.City</span>, <span>@modal.ShippingAddress.State</span> <br />
+                                                                                    <span>@modal.ShippingAddress.Country</span>, <span>@modal.ShippingAddress.ZipCode</span> <br />
+                                                                                    <strong>Phone : @Model.ShippingAddress.Mobile</strong>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="30"></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="20"></td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td style="border-bottom:1px dashed #dddddd;" data-border-bottom-color="Separate Border-1" height="30"></td>
+                                        </tr>
+                                        <tr>
+                                            <td height="30"></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center">
+                                                <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+                                                    <tr>
+                                                        <td width="600">
+                                                            <table class="display-width" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                <tr>
+                                                                    <td data-bgcolor="Product BG" height="50" bgcolor="#42C0D3" align="center">
+                                                                        <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                            <tr>
+                                                                                <td class="product-width" width="20"></td>
+                                                                                <td class="MsoNormal product title-width-1" style="color:#ffffff;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:15px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:uppercase;" data-color="Product Heading" data-size="Product Heading" data-min="12" data-max="35" width="250" align="left">
+                                                                                    Product
+                                                                                </td>
+                                                                                <td class="product-width" width="20"></td>
+                                                                                <td class="MsoNormal product" style="color:#ffffff;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:15px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:uppercase;" data-color="Product Heading" data-size="Product Heading" data-min="12" data-max="35" width="55" align="left">
+                                                                                    Price
+                                                                                </td>
+                                                                                <td class="product-width" width="20"></td>
+                                                                                <td class="MsoNormal product" style="color:#ffffff;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:15px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:uppercase;" data-color="Product Heading" data-size="Product Heading" data-min="12" data-max="35" width="90" align="left">
+                                                                                    Quantity
+                                                                                </td>
+                                                                                <td class="product-width" width="20"></td>
+                                                                                <td class="MsoNormal product" style="color:#ffffff;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:15px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:uppercase;" data-color="Product Heading" data-size="Product Heading" data-min="12" data-max="35" width="85" align="left">
+                                                                                    Amount
+                                                                                </td>
+                                                                                <td width="20"></td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td data-bgcolor="Product BG-1" bgcolor="#f6f6f6">
+                                                                        <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                            
+                                                                            @{
+                                                                                IList<CartItem> list = new List<CartItem>();
+                                                                                if (modal.CartType == "Shopping") { list = modal.ShopingCart; }
+                                                                                else { list = modal.SellingCart; }
+                                                                                int index = 1;
+                                                                                decimal price = 0;
+                                                                                decimal total_price = 0;
+                                                                                decimal total_sum = 0;
+
+                                                                                foreach (var item in list)
+                                                                                {
+                                                                                    if (Model.CartType == "Shopping")
+                                                                                    {
+                                                                                        price = item.Price;
+                                                                                        total_price = price * item.Quantity;
+                                                                                        total_sum += total_price;
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        price = (item.Price - item.Deduction);
+                                                                                        total_price = price * item.Quantity;
+                                                                                        total_sum += total_price;
+                                                                                    }
+
+                                                                                    <tr>
+                                                                                        <td height="20"></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td width="20"></td>
+                                                                                        <td class="title-width" width="250" align="left">
+                                                                                            <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                                                <tr>
+                                                                                                    <td width="70" valign="middle" align="left">
+                                                                                                       
+                                                                                                        <img src="@string.Format("{0}{1}", Constant.DomainNane, item.ImageUrl)" width="60" />
+                                                                                          
+                                                                                                    </td>
+                                                                                                    <td class="hide">
+                                                                                                        <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                                                            <tr>
+                                                                                                                <td class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:15px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:capitalize;" data-color="Product SubHeading" data-size="Product SubHeading" data-min="12" data-max="38" align="left">
+                                                                                                                   @item.Product_Name
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td height="5"></td>
+                                                                                                            </tr>                                                                                                            
+                                                                                                        </table>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                        </td>
+                                                                                        <td width="20"></td>
+                                                                                        <td class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:14px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:capitalize;" data-color="Value-1" data-size="Value-1" data-min="12" data-max="34" width="90" align="left">
+                                                                                            AED @(Math.Round(price , 2))
+                                                                                        </td>
+                                                                                        <td width="20"></td>
+                                                                                        <td class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:14px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:capitalize;" data-color="Value-2" data-size="Value-2" data-min="12" data-max="34" width="60" align="left">
+                                                                                           @item.Quantity
+                                                                                        </td>
+                                                                                        <td width="20"></td>
+                                                                                        <td class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:14px;font-weight:600;letter-spacing:1px;line-height:18px;text-transform:capitalize;" data-color="Value-3" data-size="Value-3" data-min="12" data-max="34" width="60" align="left">
+                                                                                            AED @Math.Round(total_price, 2)
+                                                                                        </td>
+                                                                                        <td width="20"></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td height="20"></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td colspan="10" style="border-bottom:1px solid #dddddd;" data-border-bottom-color="Product Border"></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td height="20"></td>
+                                                                                    </tr>
+
+                                                                                                }
+                                                                            }
+                                                                           
+
+
+
+                                                                           
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="30"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <!-- SUB TOTAL -->
+
+                                                <table class="display-width" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;width:auto;" width="48%" cellspacing="0" cellpadding="0" border="0" align="right">
+                                                    <tr>
+                                                        <td align="right">
+                                                            <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; width:auto !important;" cellspacing="0" cellpadding="0" border="0" align="right">
+                                                                <tr>
+                                                                    <td valign="top" align="left">
+                                                                        <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                            <tr>
+                                                                                <td class="MsoNormal item total" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;letter-spacing:1px;line-height:20px;" data-color="Item Details-1" data-size="Item Details-1" data-min="12" data-max="33" align="right">
+                                                                                    Total Price :
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td height="15"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="MsoNormal item total" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;letter-spacing:1px;line-height:20px;" data-color="Item Details-1" data-size="Item Details-1" data-min="12" data-max="33" align="right">
+                                                                                    Shipping &amp; Handling :
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td height="15"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="MsoNormal item total" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;letter-spacing:1px;line-height:20px;" data-color="Item Details-1" data-size="Item Details-1" data-min="12" data-max="33" align="right">
+                                                                                    Sales Tax Collected :
+                                                                                </td>
+                                                                            </tr>                                                                           
+                                                                        </table>
+                                                                    </td>
+                                                                    <td width="26">
+                                                                        &nbsp;
+                                                                    </td>
+                                                                    <td valign="top" align="left">
+                                                                        <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                            <tr>
+                                                                                <td class="MsoNormal item" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;letter-spacing:1px;line-height:20px;" data-color="Price" data-size="Price" data-min="12" data-max="33" align="right">
+                                                                                    AED @Math.Round(total_sum, 2)
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td height="15"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="MsoNormal item" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;letter-spacing:1px;line-height:20px;" data-color="Price" data-size="Price" data-min="12" data-max="33" align="right">
+                                                                                    AED @Math.Round(modal.ShippingCharge, 2)
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td height="15"></td>
+                                                                            </tr>                                                                            
+                                                                            <tr>
+                                                                                <td class="MsoNormal item" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;letter-spacing:1px;line-height:20px;" data-color="Price" data-size="Price" data-min="12" data-max="33" align="right">
+                                                                                    AED @Math.Round(modal.Tax_Amount, 2)
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="20"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; width:270px;" cellspacing="0" cellpadding="0" border="0" align="right">
+                                                                <tr>
+                                                                    <td style="border-bottom:1px solid #eeeeee;" data-border-bottom-color="Total Border"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td height="20"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="right">
+                                                            <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;width:auto !important;" cellspacing="0" cellpadding="0" border="0" align="right">
+                                                                <tr>
+                                                                    <td align="right">
+                                                                        <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;width:auto !important;" cellspacing="0" cellpadding="0" border="0" align="right">
+                                                                            <tr>
+                                                                                <td valign="top" align="left">
+                                                                                    <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                                        <tr>
+                                                                                            <td class="MsoNormal item" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;font-weight:600;letter-spacing:1px;line-height:20px;" data-color="Total Item" data-size="Total Item" data-min="12" data-max="33" align="right">
+                                                                                                Payable Amount :
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                                <td width="26">
+                                                                                    &nbsp;
+                                                                                </td>
+                                                                                <td valign="top" align="left">
+                                                                                    <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                                        <tr>
+                                                                                            <td class="MsoNormal item" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;font-weight:600;letter-spacing:1px;line-height:20px;" data-color="Total Price" data-size="Total Price" data-min="12" data-max="33" align="right">
+                                                                                                AED @Math.Round(modal.Total_Sum, 2)
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border-bottom:1px solid #eeeeee;" data-border-bottom-color="Separate Border-2" height="40"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table data-module="Company" data-bgcolor="Main BG" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFF" align="center">
+    <tr>
+        <td align="center">
+            <table class="display-width" data-bgcolor="Section BG-1" width="680" cellspacing="0" cellpadding="0" border="0" bgcolor="#42C0D3" align="center">
+                <tr>
+                    <td style="padding:0 30px;" align="center">
+                        <table class="display-width" data-bgcolor="Section BG-2" width="600" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center">
+                            <tr>
+                                <td style="border-bottom:1px solid #eeeeee;padding:0 20px;" data-border-bottom-color="Separate Border-2" align="center">
+                                    <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+                                        <tr>
+                                            <td height="30"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="MsoNormal" style="color:#666666;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;line-height:24px;" align="left">
+                                                <span data-color="Content-4" data-size="Content-4" data-min="12" data-max="33">In case you require any assistance related to the product, please contact to </span> 
+                                                <a href="@string.Format("{0}/contact-us", Constant.DomainNane)" style="color:#42C0D3;text-decoration:none;" data-color="Content-5" data-size="Content-5" data-min="12" data-max="33">Gamestoreme</a> through <b>contact us</b> page.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="MsoNormal" style="color:#666666;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;line-height:24px;" align="left">
+                                                <span data-color="Content-4" data-size="Content-4" data-min="12" data-max="33">Some product has a limited quantity available for purchase. Please see the product's detail page for the availability and its quantity. Any product running out of stock will get cancelled automatically during the time of shipping and amount will refund back with notification. </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="MsoNormal" style="color:#666666;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:13px;line-height:24px;" align="left">
+                                                <span data-color="Content-4" data-size="Content-4" data-min="12" data-max="33">Thanks for shopping, we hope to see you again.</span> 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="20"></td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td class="MsoNormal" style="color:#333333;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:15px;font-weight:600;line-height:24px;" data-color="Company Name" data-size="Company Name" data-min="12" data-max="33" align="left">
+                                                <a href="@Constant.DomainNane">@Constant.DomainNaneTxt</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="30"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<table data-module="Footer" data-bgcolor="Main BG" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#333333" align="center">
+    <tr>
+        <td align="center">
+            <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+                <tr>
+                    <td align="center">
+                        <table class="display-width" data-bgcolor="Footer BG" width="680" cellspacing="0" cellpadding="0" border="0" bgcolor="#42C0D3" align="center">
+                            <tr>
+                                <td style="padding:0 30px;" align="center">
+                                    <table class="display-width" width="600" cellspacing="0" cellpadding="0" border="0" align="center">
+                                        <tr>
+                                            <td height="50"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:0 10px;" align="center">
+                                                <table class="display-width" width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+                                                    <tr>
+                                                        <td>
+                                                            <!-- TABLE LEFT -->
+
+                                                            <table class="display-width" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" width="43%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                <tr>
+                                                                    <td align="center">
+                                                                        <table class="display-width" style="width:auto;" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <table class="display-width" style="width:auto !important;" width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+                                                                                        <tr>
+                                                                                            <td class="MsoNormal" style="color:#FFFFFF; font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:14px;letter-spacing:1px;line-height:24px;" data-color="Copyright" data-size="Copyright" data-min="12" data-max="34" align="center">
+                                                                                                Copyright &copy; @DateTime.Now.Year, @Constant.DomainNaneTxt
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" width="1" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                                <tr>
+                                                                    <td style="line-height:20px;" width="1" height="20"></td>
+                                                                </tr>
+                                                            </table>
+                                                            <!-- TABLE RIGHT -->
+
+                                                            <table class="display-width" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;width:auto;" width="39%" cellspacing="0" cellpadding="0" border="0" align="right">
+                                                                <tr>
+                                                                    <td align="center">
+                                                                        <table class="display-width" style="width:auto !important;" cellspacing="0" cellpadding="0" border="0" align="center">
+                                                                            <tr>
+                                                                                <td class="MsoNormal" style="color:#FFFFFF;font-family:'Segoe UI',sans-serif,Arial,Helvetica,Lato;font-size:14px;letter-spacing:1px;line-height:24px;" data-color="Follow-Us" data-size="Follow-Us" data-min="12" data-max="34" align="left">
+                                                                                    Follow Us
+                                                                                </td>
+                                                                                <td class="follow" width="20">
+                                                                                    &nbsp;
+                                                                                </td>
+                                                                                <td align="left">
+                                                                                    <a href="https://twitter.com/gamestoreme" style="color:#ffffff;text-decoration:none;" data-color="Follow-Us"><img src="@Constant.DomainNane/email-template/img/twitter.png" width="25" /></a>
+                                                                                </td>
+                                                                                <td width="10">
+                                                                                    &nbsp;
+                                                                                </td>
+                                                                                <td align="left">
+                                                                                    <a href="https://www.facebook.com/gamestoreme" style="color:#ffffff;text-decoration:none;" data-color="Follow-Us"><img src="@Constant.DomainNane/email-template/img/facebook.png" width="25" /></a>
+                                                                                </td>
+                                                                                <td width="10">
+                                                                                    &nbsp;
+                                                                                </td>
+                                                                                @*<td align="left">
+                                                                                    <a href="#" style="color:#ffffff;text-decoration:none;" data-color="Follow-Us"><img src="@Constant.DomainNane/email-template/img/googlePlus.png" width="25" /></a>
+                                                                                </td>
+                                                                                <td width="10">
+                                                                                    &nbsp;
+                                                                                </td>*@
+                                                                                <td align="left">
+                                                                                    <a href="https://www.instagram.com/gamestoreme" style="color:#ffffff;text-decoration:none;" data-color="Follow-Us"><img src="@Constant.DomainNane/email-template/img/instagram.png"  width="25" /></a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="50"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td height="80"></td>
+    </tr>
+</table>

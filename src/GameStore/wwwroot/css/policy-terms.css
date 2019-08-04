@@ -1,0 +1,44 @@
+/*polyce page text info pages css*/
+.textInfoContent {margin-left: 3%;margin-bottom: 35px;float: left;width: 100%;}
+.leftSideLink {margin-bottom: 20px;}
+.linkBlock {border-bottom: solid 1px #ccc; padding: 15px 0px;}
+.linkBlock h4 {margin: 0px 0px 10px 0px; color: #000; font-weight: bold; font-size: 16px;}
+.linkBlock ul {padding: 0px 0px 0px 8px; margin:0px; list-style: none;}
+.linkBlock ul li {margin-bottom: 5px;}
+.linkBlock ul li>a { color: #666; text-decoration: none; display: block; }
+.linkBlock ul li>a:hover, .linkBlock ul li>a.active {color: #ff2b2b;}
+
+.pageHeading {margin: 10px 0px 20px 0px; font-size: 24px; font-weight: bold; text-transform: uppercase;
+    color: #333;}
+.infoContent {margin-bottom: 20px;}
+.infoContent p {margin: 0px 0px 15px 0px; color: #666; text-align:justify !important;}
+    .infoContent ul {
+        list-style:disc;
+    }
+   
+
+.contactText {font-size: 16px; margin: 30px 0px;}
+.contactText p {margin: 0px 0px 15px 0px;}
+.contactText p a {font-weight: bold; text-decoration: none;  color: #333; font-size: 18px;}
+
+.select{ background: url(../images/select-arrow.png) no-repeat center right 9px;
+    border: solid 1px #b3b3b3; color: #666; -webkit-appearance: none; }
+.field {outline: none;}
+.contactForm {max-width: 500px; margin: 30px 0px 30px 0px;}
+.contactForm .inputfield  {display: inline-block; width: 100%; margin: 0px 0px 20px 0px;}
+.contactForm .inputfield .field  {width: 100%; border: solid 1px #ccc; padding: 5px 12px;}
+.contactForm textarea {height: 120px; resize: none;}
+.submitBtn {background: linear-gradient(#ff2b2b, #dc2525);
+    /*padding: 12px 40px;*/ color: #fff; border: none; border-radius: 0px; font-size: 16px; font-weight: bold;margin-left: 5px;}
+.submitBtn:hover {background: #d22020;}
+
+
+.faqSection {margin: 0px;}
+.faqSection h2 {color: #ff0000; font-size: 18px; margin:0px 0px 10px 0px; font-weight: bold;}
+.faqSection .faqDesc {margin: 0px 0px 30px 0px;}
+
+@media (max-width:767px) {
+    .textInfoContent {
+        margin-left:0;
+    }
+}

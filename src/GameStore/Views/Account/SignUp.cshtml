@@ -1,0 +1,184 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "SignUp";
+    Layout = "_LoginSignupLayout";
+}
+
+
+
+<div id="signinUp">
+    <div class="modal-header">
+        <h4 class="modal-title txt-center">Create Account</h4>
+    </div>
+    <div class="modal-body" id="form-content">
+        <form asp-controller="Account" asp-action="SignUp"
+              asp-route-returnurl="@ViewData["ReturnUrl"]"
+              data-ajax="true" data-ajax-begin="onBegin" data-ajax-complete="onComplete"
+              data-ajax-method="POST" data-method="post" class="signup-form">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="frm-field">
+                        <input asp-for="FirstName" class="sign-txt" placeholder="First Name" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="frm-field">
+                        <input asp-for="LastName" class="sign-txt" placeholder="Last Name" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" id="emailId">
+                <div class="col-sm-12">
+                    <div class="frm-field">
+                        <input asp-for="Email" placeholder="Email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="frm-field">
+                        <input asp-for="Password" placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="frm-field">
+                        <input asp-for="ConfirmPassword" placeholder="Confirm Password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="frm-field">
+                        <input name="ReferalKey" class="sign-txt" placeholder="Referral Key" />
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <p class="textInfo">
+                    We will send you a verification link via email
+                </p>
+                <input class="txt-upr red-btn" type="submit" value="Signup" id="submitBtn" />
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="or">
+                    <span class="txt-upr">
+                        or
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <form asp-controller="Account" asp-action="ExternalLogin"
+                      asp-route-returnurl="@ViewData["ReturnUrl"]"
+                      method="post" class="form-horizontal">
+                    <div class="signup-with">
+                        <ul>
+                            <li>
+                                <button type="submit" class="btn btn-default"
+                                        name="provider" value="Facebook"
+                                        title="Log in using your Facebook account">
+                                    <img src="/images/fb-signin.png" alt="Facebook">
+                                </button>
+                            </li>
+                            <li>
+                                <button type="submit" class="btn btn-default"
+                                        name="provider" value="Twitter"
+                                        title="Log in using your Twitter account">
+                                    <img src="/images/tw-sign.png" alt="Twitter">
+                                </button>
+                            </li>
+                            <li>
+                                <button type="submit" class="btn btn-default"
+                                        name="provider" value="Google"
+                                        title="Log in using your Google account">
+                                    <img src="/images/ggl-sign.png" alt="Google">
+                                </button>
+                            </li>
+                        </ul>
+                        <p class="txt-center">
+                            Already have a GSM Account?
+                            <a asp-action="Login"
+                               asp-route-returnurl="@ViewData["ReturnUrl"]"
+                               class="clr-blue signUpLink">Click here to Login</a>
+                        </p>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Sign Up</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        Thank you for signing up with GameStoreMe, a verification email has been sent on your email address. Please check your mail box and confirm your account to get exclusive offers and amazing deals.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script type="text/javascript">
+        function onBegin() {
+
+            document.getElementById('submitBtn').disabled = true;
+        };
+        function onComplete() {
+            $("#myModal").modal();
+            document.getElementById('submitBtn').disabled = false;
+        };
+        $('.emailLink').click(function () {
+            if ($("#mob-nmbr").is(':visible')) {
+                console.log('test');
+                $("#mob-nmbr").hide();
+                $("#emailId").show();
+                $(".textInfo").html('');
+            } else {
+                $("#mob-nmbr").show();
+                $("#emailId").hide();
+                $(".textInfo").html('We will send you a verification link via email.');
+            }
+        });
+
+
+        $(".bfh-countries").change(function () {
+            $(".bfh-countries option").each(function () {
+                var thisData = $(this).attr('data-val');
+                $(this).text(thisData);
+            });
+            var val = $(".bfh-countries").val();
+            $(".bfh-countries option:selected").text(val);
+        });
+
+        var windowHeight = $(window).height();
+        $(".signup-sec").css("min-height", windowHeight);
+
+    </script>
+
+}

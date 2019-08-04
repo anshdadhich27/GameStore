@@ -1,0 +1,620 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Manage Deals";
+}
+
+@section styles{
+
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
+    <style>
+        .bs-example-modal-lg .modal-dialog .modal-dialog {
+            border: 1px solid #9c9797;
+            box-shadow: #bfb3b3 3px 3px 20px 8px;
+        }
+
+        .modal-header {
+            background-color: #dadada;
+        }
+
+        .tab-content {
+            border-bottom: 1px solid lightgray;
+            border-left: 1px solid lightgray;
+            border-right: 1px solid lightgray;
+        }
+
+        .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {
+            background-color: #d1dbe4;
+        }
+        
+    </style>
+}
+
+
+
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">Manage Bundle</li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel panel-heading">
+                <h2 class="panel-title">
+                    <span>Bundles</span>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div role="tabpanel">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs nav-justified" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#tab_basic" role="tab" data-toggle="tab" aria-expanded="true">
+                                        <span class="badge badge-info">1</span>&nbsp;<span id="tab-1-txt">Add New</span>
+                                    </a>
+                                </li>
+                                <li role="presentation" class="">
+                                    <a href="#tab_price" role="tab" data-toggle="tab" aria-expanded="false">
+                                        <span class="badge badge-info">2</span>&nbsp;<span>Bundle List</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active in" id="tab_basic">
+                                    <form id="new-form" data-bind="submit:Save_Deals">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Name: *</label>
+                                                    <input type="text" class="form-control" required placeholder="Deal Name"
+                                                           data-bind="value:Deal.Name, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Start Date: </label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </div>
+                                                        <input type="text" class="form-control" placeholder="Start Date"
+                                                               data-bind="datePicker:Deal.Start_Date, valueUpdate:'afterkeydown'" />
+                                                    </div>                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">End Date: </label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </div>
+                                                        <input type="text" class="form-control" placeholder="End Date"
+                                                               data-bind="datePicker:Deal.End_Date, valueUpdate:'afterkeydown'" />
+                                                    </div>                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Price: *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span>AED</span>
+                                                        </div>
+                                                        <input type="text" class="form-control" placeholder="Price" required
+                                                               data-bind="value:Deal.Price, valueUpdate:'afterkeydown'" />
+                                                        <div class="input-group-addon">
+                                                            <span>.00</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Active:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <input type="checkbox" value="true" data-bind="checked:Deal.Active" />
+                                                        </div>
+                                                        <span class="form-control" data-bind="text:Deal.Active()?'YES':'NO'" style="padding:8px 13px!important;" />                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">Category:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-btn">
+                                                            <button type="button" class="btn btn-default">
+                                                                <span class="glyphicon glyphicon-list"></span>
+                                                            </button>
+                                                        </div>
+                                                        <select class="form-control" data-bind="value:Search.ProductType">
+                                                            <option data-bind="text:'Game', value:'Game'"></option>
+                                                            <option data-bind="text:'Console', value:'Console'"></option>
+                                                            <option data-bind="text:'Accessories', value:'Accessories'"></option>
+                                                        </select>
+                                                    </div>                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">Product Type:</label>
+                                                    <div class="input-group" data-bind="visible:(Search.ProductType()==='Game')">
+                                                        <div class="input-group-btn">
+                                                            <button type="button" class="btn btn-default">
+                                                                <span class="glyphicon glyphicon-list"></span>
+                                                            </button>
+                                                        </div>
+                                                        <select id="platform-list" class="form-control" data-bind="options:PlatformList, optionsText:'Name', optionsValue:'Id', value:Search.PlatformId, optionsCaption:'Choose option'"></select>
+                                                    </div> 
+                                                    <div class="input-group product-types" data-bind="visible:(Search.ProductType()!=='Game')">
+                                                        <div class="input-group-btn">
+                                                            <button type="button" class="btn btn-default">
+                                                                <span class="glyphicon glyphicon-list"></span>
+                                                            </button>
+                                                        </div>                                                        
+                                                        <select id="product-types" class="form-control" data-bind="options:ProductTypes, optionsText:'Name', optionsValue:'Id', value:Search.ProductTypeId, optionsCaption:'Choose option'"></select>
+                                                    </div>                                                  
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Search & Add Products:</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-btn">
+                                                            <button type="button" class="btn btn-default">
+                                                                <span class="glyphicon glyphicon-search"></span>
+                                                            </button>
+                                                        </div>
+                                                        <input type="text" placeholder="Seach.." class="form-control"
+                                                               data-bind="value:Search.SearchTxt, valueUpdate:'afterkeydown'" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_price">
+                                    <div class="row">
+                                        <div class="col-sm-12 table-responsive">
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:100px;">#</th>
+                                                        <th>Title</th>
+                                                        <th>Author</th>
+                                                        <th>Active</th>
+                                                        <th>Added On</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="form-control" placeholder="Search..."
+                                                                   data-bind="value:SearchText, valueUpdate:'afterkeydown'" />
+                                                        </td>
+                                                        <td colspan="4"></td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody data-bind="foreach:Deal_List">
+                                                    <tr>
+                                                        <td style="width:100px;" data-bind="text: $index()+1"></td>
+                                                        <td>
+                                                            <span data-bind="text: $data.Product_Name"></span>
+                                                        </td>
+                                                        <td data-bind="text: $data.Name"></td>
+                                                        <td>
+                                                            <label>
+                                                                <input type="checkbox" value="true" data-bind="checked: $data.Active" />
+                                                                <span data-bind="text: $data.Active()?'Yes':'No'"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <span data-bind="visible:$data.Added_On!=null">
+                                                                <span data-bind="text: moment($data.Added_On).format('Do MMM YYYY')"></span>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <button type="button" class="btn btn-primary btn-rounded btn-xs"
+                                                                        data-bind="click:$parent.OnClickEditBtn">
+                                                                    <i class="fa fa-edit"></i>
+                                                                    <span>Edit</span>
+                                                                </button>
+                                                                <button type="button" class="btn btn-danger btn-rounded btn-xs"
+                                                                        data-bind="click:$parent.Delete_Deal, disable:$data.IsDeleting">
+                                                                    <i class="fa fa-trash"></i>
+                                                                    <span>Delete</span>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody data-bind="visible:IsLoading">
+                                                    <tr>
+                                                        <td colspan="6">
+                                                            <span class="glyphicon glyphicon-refresh processingIcon"></span>
+                                                            <span>Loading.....</span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td>
+                                                            <select id="row-select" data-bind="options:[10,20,50,100], value:Rows, optionsCaption:'Rows'"
+                                                                    class="form-control"></select>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                <span>Total:</span>
+                                                                <span data-bind="text:Total"></span>
+                                                                <span>Records</span>
+                                                            </span>
+                                                        </td>
+                                                        <td colspan="4">
+                                                            <div id="page-selection"></div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+<script>
+        (function (h, q) {
+            h.fn.bootpag = function (p) {
+                function m(c, b) {
+                    b = parseInt(b, 10); var d, e = 0 == a.maxVisible ? 1 : a.maxVisible, k = 1 == a.maxVisible ? 0 : 1, n = Math.floor((b - 1) / e) * e, f = c.find("li"); a.page = b = 0 > b ? 0 : b > a.total ? a.total : b; f.removeClass(a.activeClass); d = 1 > b - 1 ? 1 : a.leaps && b - 1 >= a.maxVisible ? Math.floor((b - 1) / e) * e : b - 1; a.firstLastUse && f.first().toggleClass(a.disabledClass, 1 === b); e = f.first(); a.firstLastUse && (e = e.next()); e.toggleClass(a.disabledClass, 1 === b).attr("data-lp", d).find("a").attr("href", g(d)); k = 1 == a.maxVisible ?
+            0 : 1; d = b + 1 > a.total ? a.total : a.leaps && b + 1 < a.total - a.maxVisible ? n + a.maxVisible + k : b + 1; e = f.last(); a.firstLastUse && (e = e.prev()); e.toggleClass(a.disabledClass, b === a.total).attr("data-lp", d).find("a").attr("href", g(d)); f.last().toggleClass(a.disabledClass, b === a.total); e = f.filter("[data-lp=" + b + "]"); k = "." + [a.nextClass, a.prevClass, a.firstClass, a.lastClass].join(",."); if (!e.not(k).length) {
+                var m = b <= n ? -a.maxVisible : 0; f.not(k).each(function (b) {
+                    d = b + 1 + n + m; h(this).attr("data-lp", d).toggle(d <= a.total).find("a").html(d).attr("href",
+                    g(d))
+                }); e = f.filter("[data-lp=" + b + "]")
+            } e.not(k).addClass(a.activeClass); l.data("settings", a)
+                } function g(c) { return a.href.replace(a.hrefVariable, c) } var l = this, a = h.extend({
+                    total: 0, page: 1, maxVisible: null, leaps: !0, href: "javascript:void(0);", hrefVariable: "{{number}}", next: "&raquo;", prev: "&laquo;", firstLastUse: !1, first: '<span aria-hidden="true">&larr;</span>', last: '<span aria-hidden="true">&rarr;</span>', wrapClass: "pagination", activeClass: "active", disabledClass: "disabled", nextClass: "next", prevClass: "prev",
+                    lastClass: "last", firstClass: "first"
+                }, l.data("settings") || {}, p || {}); if (0 >= a.total) return this; h.isNumeric(a.maxVisible) || a.maxVisible || (a.maxVisible = parseInt(a.total, 10)); l.data("settings", a); return this.each(function () {
+                    var c, b, d = h(this); c = ['<ul class="', a.wrapClass, ' bootpag">']; a.firstLastUse && (c = c.concat(['<li data-lp="1" class="', a.firstClass, '"><a href="', g(1), '">', a.first, "</a></li>"])); a.prev && (c = c.concat(['<li data-lp="1" class="', a.prevClass, '"><a href="', g(1), '">', a.prev, "</a></li>"])); for (b =
+                    1; b <= Math.min(a.total, a.maxVisible) ; b++) c = c.concat(['<li data-lp="', b, '"><a href="', g(b), '">', b, "</a></li>"]); a.next && (b = a.leaps && a.total > a.maxVisible ? Math.min(a.maxVisible + 1, a.total) : 2, c = c.concat(['<li data-lp="', b, '" class="', a.nextClass, '"><a href="', g(b), '">', a.next, "</a></li>"])); a.firstLastUse && (c = c.concat(['<li data-lp="', a.total, '" class="last"><a href="', g(a.total), '">', a.last, "</a></li>"])); c.push("</ul>"); d.find("ul.bootpag").remove(); d.append(c.join("")); c = d.find("ul.bootpag"); d.find("li").click(function () {
+                        var b =
+                        h(this); if (!b.hasClass(a.disabledClass) && !b.hasClass(a.activeClass)) { var c = parseInt(b.attr("data-lp"), 10); l.find("ul.bootpag").each(function () { m(h(this), c) }); l.trigger("page", c) }
+                    }); m(c, a.page)
+                })
+            }
+        })(jQuery, window);
+</script>
+<script src="~/assets/plugins/select2/js/select2.min.js"></script>
+<script src="~/lib/moment/moment.js"></script>
+<script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="~/lib/knockout/dist/knockout.js"></script>
+    <script type="text/javascript">
+        function AppViewModel() {
+            var self = this;
+            self.IsEditing = ko.observable(false);
+            self.IsLoading = ko.observable(false);
+            self.IsSaving = ko.observable(false);
+            self.IsDeleting = ko.observable(false);
+
+            self.Deal_List = ko.observableArray([]);
+            self.PlatformList = ko.observableArray([]);
+            
+            self.ProductTypes_ALL = ko.observableArray([]);
+
+            self.Offset = ko.observable(0);
+            self.Rows = ko.observable(10).extend({ rateLimit: 500 });
+            self.Total = ko.observable(0);
+            self.SearchText = ko.observable('').extend({ rateLimit: 500 });
+
+            self.Search = {
+                ProductType: ko.observable('Game'),
+                ProductTypeId: ko.observable(0),
+                PlatformId: ko.observable(0),
+                SearchTxt: ko.observable('').extend({ rateLimit: 500 })
+            };
+
+            self.Deal = {
+                Id: ko.observable(0),
+                Name: ko.observable(''),
+                Active: ko.observable(true),
+                Price: ko.observable(0),
+                Added_On: ko.observable(''),
+                Start_Date: ko.observable(''),
+                End_Date: ko.observable(''),
+                ProductList: ko.observableArray([])
+            };
+
+            self.Rows.subscribe(function (newValue) {
+                self.Deal_List.removeAll();
+                self.Get_Deals();
+            });
+
+            self.SearchText.subscribe(function (newValue) {
+                newValue = newValue || '';
+                if (newValue.length == 0) {
+                    self.Deal_List.removeAll();
+                    self.Get_Deals();
+                }
+                self.GetSearchResult();
+            });
+
+            self.Search.SearchTxt.subscribe(function (newValue) {
+                newValue = newValue || '';
+                if (newValue.length == 0) {
+
+                }
+            });
+
+            self.ProductTypes = ko.computed(function () {
+                return ko.utils.arrayFilter(self.ProductTypes_ALL(), function (o) {
+                    return o.Type === self.Search.ProductType();
+                });
+            }, self);
+
+            self.ProductTypes.subscribe(function (newValue) {
+                $('#product-types').select2('destroy');
+                $('#product-types').select2();
+
+                var x = $('.product-types .select2-container')[0];
+                x.style = 'width:100%;';
+            });
+
+            self.Search.ProductType.subscribe(function (newValue) {                
+                
+            });
+            
+            self.Get_ProductTypes = function () {
+                $.getJSON('/master/get-all-common-name-url', function (obj) {
+                    self.ProductTypes_ALL(obj);
+                    $('#product-types').trigger('change');
+                });
+            };
+
+            self.GetAllPlatforms = function () {
+                $.getJSON('/master/get-all-active-platform', function (data) {
+                    self.PlatformList(data);
+                    $('#platform-list').trigger('change');
+                });
+            };
+
+            self.Get_Deals = function (offset, index) {
+                self.IsLoading(true);
+                offset = offset || 0;
+                index = index || 1;
+                $.get('/deal/get/' + self.Rows() + '/' + offset, function (obj) {
+                    var totalPage = (obj.TotalCount > self.Rows()) ? obj.TotalCount / self.Rows() : 1;
+                    var reminder = (obj.TotalCount > self.Rows()) ? obj.TotalCount % self.Rows() : 0;
+                    if (reminder > 0) { totalPage += 1; }
+                    $.each(obj.PagedSet, function (i, o) { self.Deal_List.push(new DealViewModel(o)); });
+                    $('#page-selection').bootpag({ total: parseInt(totalPage), page: index, maxVisible: 10 });
+                    self.Total(obj.TotalCount);
+                    self.IsLoading(false);
+                    console.log(obj);
+                });
+            };
+
+            self.GetSearchResult = function (Offset, index) {
+                Offset = Offset || 0;
+                index = index || 1;
+                self.IsLoading(true);
+                $.ajax({
+                    type: 'POST', dataType: "json",
+                    url: '/deal/search',
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON({ offset: Offset, rows: self.Rows(), searchTxt: self.SearchText() }),
+                    success: function (obj) {
+                        self.Deal_List.removeAll();
+                        var totalPage = (obj.TotalCount > self.Rows()) ? obj.TotalCount / self.Rows() : 1;
+                        var reminder = (obj.TotalCount > self.Rows()) ? obj.TotalCount % self.Rows() : 0;
+                        if (reminder > 0) { totalPage += 1; }
+                        $.each(obj.PagedSet, function (i, o) { self.Deal_List.push(new DealViewModel(o)); });
+                        $('#page-selection').bootpag({ total: parseInt(totalPage), page: index, maxVisible: 10 });
+                        self.Total(obj.TotalCount);
+                        self.IsLoading(false);
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+            };
+
+            self.Save_Deals = function () {
+                var title = self.Deal.Name() || '';
+                if (title.length == 0) { return; }
+
+                if (self.Deal.ProductList().length == 0) { return;}
+
+                self.IsSaving(true);
+                var api = self.IsEditing() ? '/deal/update' : '/deal/add-new';
+                $.ajax({
+                    type: 'POST', dataType: "json", url: api,
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(self.Deal),
+                    success: function (data) {
+                        toastr.success('Success'); 
+                        self.Deal_List.removeAll(); 
+                        self.Get_Deals(self.Offset(0), self.Rows());
+                    },
+                    error: function (result) { toastr.warning('Error'); }
+                }).done(function () { self.ClearAllFields(); });
+
+            };
+
+            self.OnClickEditBtn = function (obj) {
+                self.IsEditing(true);
+                self.Deal.Id(obj.Id());
+                self.Deal.Name(obj.Name());
+                self.Deal.Price(obj.Price());
+                self.Deal.Active(obj.Active());
+                self.Deal.End_Date(obj.End_Date());
+                self.Deal.Start_Date(obj.Start_Date());
+                self.Deal.ProductList.removeAll();
+                $.each(obj.ProductList(), function (i, o) {
+                    self.Deal.ProductList.push(new DealProductViewModel(o));
+                });
+                
+                $('#tab-1-txt').text("Update");
+                $('a[href="#tab_basic"]').click();
+            };
+
+            self.ClearAllFields = function () {
+                self.IsEditing(false);
+                self.IsSaving(false);
+                self.Deal.Id(0);
+                self.Deal.Name('');
+                self.Deal.Price(0);
+                self.Deal.Start_Date('');
+                self.Deal.End_Date('');
+                self.Deal.Active(true);
+                self.Deal.ProductList.removeAll();
+                $('#tab-1-txt').text("Add New");
+                $('a[href="#tab_price"]').click();
+
+            };
+
+            self.Delete_Deal = function (obj) {
+                console.log(ko.toJSON(obj));
+                obj.IsDeleting(true);
+                $.ajax({
+                    type: 'GET', dataType: "json",
+                    url: '/deal/delete/' + obj.Id(),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        obj.IsDeleting(false);
+                        self.Deal_List.removeAll();
+                        self.Get_Deals(self.Offset(), self.Rows());
+                        console.log(data);
+                        toastr.success('Success');
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.Init = function () {
+                self.Get_Deals();
+                self.Get_ProductTypes();
+                self.GetAllPlatforms();
+            };
+
+
+            function DealViewModel(obj) {
+                var x = this;
+                x.Id = ko.observable(obj.Id);
+                x.Name = ko.observable(obj.Name);
+                x.Active = ko.observable(obj.Active);
+                x.Price = ko.observable(obj.Price);
+                x.Added_On = ko.observable(obj.Added_On);
+                x.Start_Date = ko.observable(obj.Start_Date);
+                x.End_Date = ko.observable(obj.End_Date);
+                x.ProductList = ko.observableArray([]);
+                x.IsDeleting = ko.observable(false);
+                x.IsLoading = ko.observable(false);
+                x.CanShowList = ko.observable(false);
+            };
+
+            function DealProductViewModel(obj) {
+                var x = this;
+                x.SNo = ko.observable(obj.SNo);
+                x.Deal_Id = ko.observable(obj.Deal_Id);
+                x.Product_Id = ko.observable(obj.Product_Id);
+                x.Product_Name = ko.observable(obj.Product_Name);
+                x.Product_Type = ko.observable(obj.Product_Type);
+                x.Product_Type_Id = ko.observable(obj.Product_Type_Id);
+                x.Product_Type_Name = ko.observable(obj.Product_Type_Name);
+                x.Product_Link = ko.observable(obj.Product_Link);
+                x.Quantity = ko.observable(obj.Quantity);
+            };
+        };
+
+        ko.bindingHandlers.datePicker = {
+            init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+                var unwrap = ko.utils.unwrapObservable;
+                var dataSource = valueAccessor();
+                var binding = allBindingsAccessor();
+                var options = {
+                    keyboardNavigation: true,
+                    todayHighlight: true,
+                    autoclose: true,
+                    daysOfWeekDisabled: [0, 6],
+                    format: 'mm/dd/yyyy'
+                };
+                if (binding.datePickerOptions) {
+                    options = $.extend(options, binding.datePickerOptions);
+                }
+                $(element).datepicker(options);
+                $(element).datepicker('update', dataSource());
+                $(element).on("changeDate", function (ev) {
+                    var observable = valueAccessor();
+                    if ($(element).is(':focus')) {
+                        // Don't update while the user is in the field...
+                        // Instead, handle focus loss
+                        $(element).one('blur', function (ev) {
+                            var dateVal = $(element).datepicker("getDate");
+                            observable(dateVal);
+                        });
+                    }
+                    else {
+                        observable(ev.date);
+                    }
+                });
+                //handle removing an element from the dom
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                    $(element).datepicker('remove');
+                });
+            },
+            update: function (element, valueAccessor) {
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                $(element).datepicker('update', value);
+            }
+        };
+
+
+        $(document).ready(function () {
+            var app = new AppViewModel();
+            ko.applyBindings(app);
+            app.Rows(10);
+            app.Init();
+            app.Search.ProductType('Game');
+
+            //$('select').on('change', function () { $('select').trigger('change'); });
+
+            $('select').select2();
+            $('#page-selection').bootpag({ total: 10, page: 1, maxVisible: 10 });
+
+            $('#page-selection').on('page', function (event, num) {
+                console.log('bootpag', event, num);
+                var offset = (app.Rows() * (num - 1));
+                app.Deal_List.removeAll();
+                if (app.SearchText().length > 0) {
+                    app.GetSearchResult(offset, num);
+                } else { app.Get_Deals(offset, num); }
+            });
+        });
+    </script>
+
+
+}

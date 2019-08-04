@@ -1,0 +1,168 @@
+﻿@model PageContent
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaKeywords"] = Model.MetaKeywords;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+    var payment = ViewBag.Payments as PaymentSetting;
+    var credit = Convert.ToDecimal(ViewBag.CreditAmount);
+}
+
+@section styles{
+    <link href="~/css/checkout.min.css" rel="stylesheet" />
+}
+
+<div class="wrapper checout-page">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="order-rvw-box cart-sec">
+                        <h4 class="txt-upr">Shopping Cart (<span data-bind="text:Total_Item_In_ShoppingCart">0</span>)</h4>
+                        <div class="cart-box table-responsive">
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ITEM</th>
+                                        <th>Price</th>
+                                        <th>QTY</th>
+                                        <th>Total</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: Cart.ShopingCart">
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <div class="prd-img">
+                                                    <a href="#" data-bind="attr:{href: $data.PageUrl}">
+                                                        <img style="max-height:100px;" src="" alt="img" data-bind="attr:{src: $data.ImageUrl, alt: $data.Product_Name}">
+                                                    </a>
+                                                </div>
+                                                <div class="prd-name">
+                                                    <a href="#" data-bind="attr:{href: $data.PageUrl}">
+                                                        <span data-bind="text:$data.Product_Name"></span>
+                                                    </a>
+                                                    <br>
+                                                    <b class="type" data-bind="text: Product_TypeName"></b>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="txt-center">
+                                            <span class="newPric">
+                                                AED <span data-bind="text:$data.Price"></span>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="input-group">
+                                                    <div class="input-group-btn">
+                                                        <button style="float:left;" type="button" class="btn btn-default"
+                                                                data-bind="click: function(){ var q=$data.Quantity() || 0; if(q<10){ $data.Quantity(q+1); $parent.Update_Quantity(); }}">
+                                                            <span class="glyphicon glyphicon-plus-sign"></span>
+                                                        </button>
+                                                        <span style="float:left; width:39px !important" class="form-control" data-bind="text:$data.Quantity"></span>
+                                                        <button style="float:left" type="button" class="btn btn-default"
+                                                                data-bind="click: function(){ var q=$data.Quantity() || 0; if(q>1){ $data.Quantity(q-1); $parent.Update_Quantity(); }}">
+                                                            <span class="glyphicon glyphicon-minus-sign"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>                                                
+                                            </div>
+                                        </td>
+                                        <td class="txt-center">
+                                            <span class="newPric">
+                                                AED <span data-bind="text: $data.TotalPrice"></span>
+                                            </span>
+                                        </td>
+                                        <td class="txt-center">
+                                            <button type="button" class="btn btn-default btn-xs" 
+                                                    data-bind="click: $parent.Remove_Item_From_ShopingCart.bind($data)">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </button>                                            
+                                        </td>
+                                    </tr>
+                                                                        
+                                </tbody>
+                                <tbody data-bind="visible: Total_Item_In_ShoppingCart()==0">
+                                    <tr>
+                                        <td colspan="5">
+                                            <p>Your cart is empty. <a href="/">Continue shopping..</a></p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bill-box" data-bind="visible:Total_Item_In_ShoppingCart() > 0">
+                        <h3 class="ordr-summry">ORDER SUMMARY</h3>
+                        <div class="order-detail">
+                            <div>
+                                <div class="trw sbttl">
+                                    <span class="pull-left cpn">Discount Coupon Code</span>
+                                </div>
+                                <div class="trw cpnCode">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Enter Code">
+                                        <div class="input-group-btn">
+                                            <input type="submit" class="btn search-button" value="Apply">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="trw item-detail" data-bind="visible: Credit_Amount()>0 || CreditUsed()>0 ">
+                                <span class="pull-left">
+                                    <input type="checkbox" value="true" data-bind="checked:UseCreditAmount" />
+                                    <span>Use Credit Amount</span>
+                                </span>
+                                <span class="pull-right">AED <span data-bind="text: parseFloat(Credit_Amount()).toFixed(2)"></span></span>
+                            </div>
+                            <div class="trw item-detail">
+                                <span class="pull-left">Total	</span>
+                                <span class="pull-right">AED <span data-bind="text: Total_Price"></span></span>
+                            </div>
+                            <div class="trw item-detail">
+                                <span class="pull-left">Tax</span>
+                                <span class="pull-right">AED <span data-bind="text:Tax_Amount"></span></span>
+                            </div>
+                            <div class="trw item-detail">
+                                <span class="pull-left">Shipping Charge	</span>
+                                <span class="pull-right">AED <span data-bind="text: ShippingCharge_Show">Free</span></span>
+                            </div>
+                            <div class="trw item-detail sbttl">
+                                <span class="pull-left txt-upr clr-black">Subtotal</span>
+                                <span class="pull-right clr-black">AED <span data-bind="text: Sub_Total"></span></span>
+                            </div>
+                            
+                            <div class="trw prcd-buy">
+                                <a href="javascript:void(0);" class="red-btn txt-upr" data-bind="click:Check_out_Shopping_Cart">
+                                    Proceed to Checkout
+                                    <span data-bind="visible:IsUpdating_Cart">
+                                        <span class="glyphicon glyphicon-refresh processingIcon"></span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {            
+            _app.Tax_Rate(@payment.Tax);
+            _app.Credit_Amount(@credit);
+            _app.ShippingCharge(@payment.ShippingCharge);
+            //_app.Update_Total_Price();
+
+        });
+    </script>
+}

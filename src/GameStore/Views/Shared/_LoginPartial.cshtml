@@ -1,0 +1,48 @@
+﻿@using System.Security.Claims
+@{    
+    string name = User.FindFirst(ClaimTypes.GivenName)?.Value;
+}
+@if (User.Identity.IsAuthenticated)
+{
+
+    <li class="user no-border">
+        <form asp-area="" asp-controller="Account" asp-action="SignOut" method="post" id="logoutForm" class="navbar-right">
+            <a href="javascript:void(0);">
+                <span class="icon"></span>
+                <span class="text wordWrap">Hello @name!</span>
+            </a>
+            <ul class="user-details txt-center">
+                <li>
+                    <button type="button" class="red-btn" data-bind="click: OnClick_LogOff">Log off</button>
+                </li>
+                <li>
+                    <a href="/user-account">Account details</a>
+                </li>
+                <li>
+                    <a href="/my-orders">Order History</a>
+                </li>                
+                <li>
+                    <a href="/my-wishlist">Wish List</a>
+                </li>
+                <li>
+                    <a href="/my-sold-items">Sold Items</a>
+                </li> 
+            </ul>
+        </form>
+    </li>
+
+}
+else
+{
+    <li class="user no-border">
+        <a href="javascript:void(0);"><span class="icon"></span><span class="text">Sign In</span></a>
+        <ul class="user-details txt-center">
+            <li>
+                <a href="/account/login" class="red-btn">Sign in</a>
+            </li>
+            <li>
+                <a href="/account/signup" class="nw-cstmr">New customer?</a>
+            </li>            
+        </ul>
+    </li>
+}

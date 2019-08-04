@@ -1,0 +1,602 @@
+﻿@model Game_DTO
+@{
+    ViewData["Title"] = string.Format("{0} | {1} | {2} | GameStoreMe", Model.Game.Name, Model.Game.Platform.Name, Model.Game.Condition);
+    ViewData["MetaKeywords"] = Model.Game.Name;
+    ViewData["MetaDescription"] = Model.Game.Name;
+
+
+
+    double avgRating = Model.Game.Rating;// (Model.Game.RatingCount > 0) ? Model.Game.Rating / Model.Game.RatingCount : 0;
+    if (avgRating > 5) { avgRating = 5; }
+    string ratingStyle = "good";
+    if (Math.Round(avgRating, 1) > 3.5) { ratingStyle = "good"; }
+    if (Math.Round(avgRating, 1) <= 3.5 && Math.Round(avgRating, 1) >= 2.5) { ratingStyle = "avrage"; }
+    if (Math.Round(avgRating, 1) < 2.5) { ratingStyle = "bad"; }
+}
+
+@section styles{
+    <link href="~/css/product-detail.min.css" rel="stylesheet" />
+}
+
+<div class="wrapper product-view prdct-list-dtl">
+    <div class="middle">
+        <div class="container">
+            <div class="conainerSection">
+                <div class="brd-crum">
+                    <a href="/">Home</a> &nbsp;>&nbsp;
+                    <a href="@string.Format("/platform/{0}", Model.Game.Platform.NameUrl)">@Model.Game.Platform.Name</a> &nbsp;>&nbsp;
+                    <a href="@string.Format("/game/{0}/{1}", Model.Game.Platform.NameUrl, Model.Game.NameUrl)">
+                        <span class="clr-red">@Model.Game.Name</span>
+                    </a>
+                </div>
+                <div class="product-detail-sec">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-5">
+                            <div class="productGallery">
+                                <div class="imagesTab">
+                                    @{
+                                        if (Model.ImageList != null)
+                                        {
+                                            foreach (var img in Model.ImageList.Where(x => x.ImageCategory == Constant.ImageCategory.ImageType.Cover && x.ImageType == Constant.ImageType.Thumbnail))
+                                            {
+                                                <a data-large="@img.Url" href="javascript:;">
+                                                    <img src="@img.Url" alt="@Model.Game.Name" />
+                                                </a>
+                                            }
+                                        }
+                                    }
+                                </div>
+                                <div class="imageContent">
+                                    <img src="@(string.IsNullOrEmpty(Model.Game.ImageUrl) ? "/images/imagenotavailable.jpg": Model.Game.ImageUrl)" alt="@Model.Game.Name" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-sm-7">
+                            <div class="prdct-detail">
+                                <div class="prdct-name">
+                                    <div class="pull-left">
+                                        <div class="rating">
+                                            <span class="@ratingStyle clr-white txt-center">@Math.Round(avgRating, 1)</span>
+                                        </div>
+                                        <h1>@Model.Game.Name <small style="font-size:13px;color:gray;">(@Model.Game.Condition)</small></h1>
+                                    </div>
+                                    <div class="otrLink">
+                                        @{
+                                            if (Model.Game.PEGI_Rating > 0)
+                                            {
+                                                <a href="javascript:;" data-toggle="modal" data-target="#pegInfo">
+                                                    <img src="@string.Format("/images/pegi/{0}.gif", Model.Game.PEGI_Rating)" alt="PEGI" />
+                                                </a>
+                                            }
+                                        }
+
+                                    </div>
+
+
+                                </div>
+                                <div class="game-type">
+                                    <span class="cat clr-black">Platform</span><br>
+                                    <select class="form-control" asp-items="@(new SelectList(Model.Game.SupportedPlatforms, "NameUrl", "Name", Model.Game.Platform.NameUrl))" onchange="OnPlatformChanged(event);" onFocus="(this.name=this.value)"></select>
+                                </div>
+                                <div class="game-type">
+                                    <ul>
+                                        <li>
+                                            <span class="cat clr-black">Genre</span><br>
+                                            @{
+                                                foreach (var x in Model.Game.GenereList)
+                                                {
+                                                    <span class="clr-gray">@x.Name</span>
+                                                }
+                                            }
+
+                                        </li>
+                                        <li>
+                                            <span class="cat clr-black">Release Date</span><br>
+                                            <span class="clr-gray">@(Model.Game.First_release_date.HasValue ? Model.Game.First_release_date.Value.ToString("MMM dd, yyyy") : "N/A")</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="price-box">
+                                    <div class="price-chart">
+                                        <label class="radiobLable" for="xxs">
+                                            <span>Buy <span class="text-capitalize">@Model.Game.Condition</span> </span>
+                                            @{
+                                                if (Model.Game.Selling_Price < Model.Game.Original_Price)
+                                                {
+                                                    <span><del>@string.Format("AED {0}", Math.Round(Model.Game.Original_Price, 2))</del></span>
+                                                }
+                                            }
+                                            <span class="clr-red">@string.Format("AED {0}", Math.Round(Model.Game.Selling_Price, 2))</span>
+                                        </label>
+                                    </div>
+                                    <div id="pegInfo" class="modal fade" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                        <span>PEGI</span>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>@Model.Game.PEGI_Synopsis</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="shipping-info">
+                                        <span class="clr-black">Shipping info</span><br>
+                                        <span class="pull-left dlvry clr-gray">Ships within 3 working days</span>
+                                    </div>
+
+                                    <div class="buy-cart">
+                                        <a href="javascript:void(0);" class="buy-now txt-upr red-btn"
+                                           data-bind="click: function(){ _app.Add_To_Shoping_Cart(@Model.Game.Id, @Model.Game.Platform.Id, 'Game', @Math.Round(Model.Game.Selling_Price, 2), '@Model.Game.SKU'); window.location.href='/shopping-cart';}">Buy Now</a>
+                                        <a href="javascript:void(0);" class="add-cart txt-upr blue-btn"
+                                           data-bind="click: Add_To_Shoping_Cart.bind($data, @Model.Game.Id, @Model.Game.Platform.Id, 'Game', @Math.Round(Model.Game.Selling_Price, 2), '@Model.Game.SKU')">Add to Cart</a>
+
+                                        @{
+
+                                            @*if (Model.Game.Available_To_Buy)
+                                                {
+                                                    <a href="javascript:void(0);" class="add-cart book-app txt-upr black-btn"
+                                                       data-bind="click: Add_To_Selling_Cart.bind($data, @Model.Game.Id, @Model.Game.Platform.Id, 'Game', @Math.Round(Model.Game.Buying_Price, 2), '@Model.Game.SKU')">Sell Yours here</a>
+                                                }*@
+
+                                        if (User.Identity.IsAuthenticated)
+                                        {
+                                            <a href="javascript:void(0)" class="add-cart book-app txt-upr green-btn"
+                                               data-bind="click:Add_To_WishList.bind($data, @Model.Game.Id, @Model.Game.Platform.Id, 'Game', @Math.Round(Model.Game.Selling_Price, 2), '@Model.Game.SKU')">Add to wish list</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="javascript:void(0);" class="add-cart book-app txt-upr green-btn"
+                                               data-toggle="popover" title="Information"
+                                               data-content="Please login to add product in wish list."
+                                               data-container="body" data-placement="bottom">
+                                                <span>Add to wish list</span>
+                                            </a>
+                                        }
+                                        }
+
+                                    </div>
+                                    @*<div class="doubt">
+                                            <p class="clr-black">
+                                                Have doubt regarding this product?
+                                            </p>
+                                            <a href="javascript:void(0);" class="black-btn">
+                                                Post Your Question
+                                            </a>
+                                        </div>*@
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-des">
+                    <div id="productDes" class="des-box">
+                        <ul class="proList">
+                            <li class="active">
+                                <span>Description </span>
+                            </li>
+                            <li>
+                                <span>Product Details</span>
+                            </li>
+                            <li>
+                                <span>Reviews and Ratings</span>
+                            </li>
+                        </ul>
+                        <div class="tabContainer">
+                            <div class="proContainer">
+                                <div class="row">
+                                    @{
+                                        if (Model.VideoList.Count() > 0 || Model.ImageList.Count(x => x.ImageCategory == Constant.ImageCategory.ImageType.ScreenShot && x.ImageType == Constant.ImageType.Medium) > 0)
+                                        {
+                                            <div class="col-sm-7">
+                                                <div class="videoGallery">
+                                                    <div class="videoBlock">
+                                                        @{
+                                                            if (Model.VideoList != null)
+                                                            {
+                                                                if (Model.VideoList.Count() == 0)
+                                                                {
+                                                                    if (Model.ImageList.Count(x => x.ImageCategory == Constant.ImageCategory.ImageType.ScreenShot && x.ImageType == Constant.ImageType.Medium) > 0)
+                                                                    {
+                                                                        <img src="@Model.ImageList.FirstOrDefault(x => x.ImageCategory == Constant.ImageCategory.ImageType.ScreenShot && x.ImageType == Constant.ImageType.Medium).Url" data-video="" alt="@Model.Game.Name">
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <img src="@Model.VideoList.First().Snapshot" data-video="@Model.VideoList.First().Video_Id" alt="@Model.Game.Name">
+                                                                }
+
+                                                            }
+                                                        }
+
+                                                    </div>
+                                                    <div class="gallerySlideBlock">
+                                                        @{
+                                                            if (Model.VideoList.Count() > 0 || Model.ImageList.Count(x => x.ImageCategory == Constant.ImageCategory.ImageType.ScreenShot && x.ImageType == Constant.ImageType.Medium) > 0)
+                                                            {
+                                                                <div class="controles">
+                                                                    <span class="left disable"></span>
+                                                                    <span class="right"></span>
+                                                                </div>
+                                                                <div class="galleryControlles">
+                                                                    <ul class="smallImages">
+                                                                        @{
+                                                                            if (Model.VideoList != null)
+                                                                            {
+                                                                                foreach (var vid in Model.VideoList)
+                                                                                {
+                                                                                    <li class="active video">
+                                                                                        <img data-img="@vid.Snapshot" src="@vid.Snapshot"
+                                                                                             data-video="@vid.Video_Id" alt="@Model.Game.Name">
+                                                                                    </li>
+                                                                                }
+                                                                            }
+
+                                                                            if (Model.ImageList != null)
+                                                                            {
+                                                                                var screenShot = Model.ImageList.Where(x => x.ImageCategory == Constant.ImageCategory.ImageType.ScreenShot && x.ImageType == Constant.ImageType.Medium);
+                                                                                foreach (var img in screenShot)
+                                                                                {
+                                                                                    <li>
+                                                                                        <img data-img="@img.Url" src="@img.Url" alt="@Model.Game.Name" />
+                                                                                    </li>
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                    </ul>
+                                                                </div>
+
+                                                                            }
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                                            }
+                                    }
+
+                                    <div class="col-sm-5">
+                                        <div class="game-des-box">
+                                            <h5>@Model.Game.Name</h5>
+                                            <div>@Html.Raw(Model.Game.Summary)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="proContainer" style="display:none;">
+                                @{
+                                    if (string.IsNullOrEmpty(Model.Game.Storyline))
+                                    {
+                                        <h4>Details not available</h4>
+                                    }
+                                    else
+                                    {
+                                        <div>@Html.Raw(Model.Game.Storyline)</div>
+                                    }
+                                }
+
+                            </div>
+                            <div class="proContainer" style="display:none;">
+                                @{
+                                    if (Model.Reviews != null)
+                                    {
+                                        if (Model.Reviews.Count() == 0)
+                                        {
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h4>Review not available</h4>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        foreach (var x in Model.Reviews)
+                                        {
+                                            int rtng = x.Rating == 0 ? 1 : x.Rating;
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <p>
+                                                        <i class="glyphicon glyphicon-user"></i>
+                                                        <span>@x.UserName</span>
+                                                        <img src="@string.Format("/images/{0}star.png", rtng)" alt="@string.Format("{0} Start", rtng)" />
+                                                    </p>
+                                                    <h3>@x.Title</h3>
+                                                </div>
+                                                @{
+                                                    if (!string.IsNullOrEmpty(x.Introduction))
+                                                    {
+                                                        x.Introduction = x.Introduction.Contains("\n") ? x.Introduction.Replace("\n", "<br/>") : x.Introduction;
+                                                        <div class="col-sm-12">
+                                                            <div>@Html.Raw(x.Introduction)</div>
+                                                        </div>
+                                                    }
+                                                    if (!string.IsNullOrEmpty(x.Content))
+                                                    {
+                                                        x.Content = x.Content.Contains("\n") ? x.Content.Replace("\n", "<br/>") : x.Content;
+                                                        <div class="col-sm-12">
+                                                            <div>@Html.Raw(x.Content)</div>
+                                                        </div>
+                                                    }
+
+                                                    if (!string.IsNullOrEmpty(x.Positive_Points))
+                                                    {
+                                                        x.Positive_Points = x.Positive_Points.Contains("\n") ? x.Positive_Points.Replace("\n", "<br/>") : x.Positive_Points;
+                                                        <div class="col-sm-12">
+                                                            <br />
+                                                            <h5><label>Positive Points</label></h5>
+                                                            <div>@Html.Raw(x.Positive_Points)</div>
+                                                        </div>
+                                                    }
+                                                    if (!string.IsNullOrEmpty(x.Negative_Points))
+                                                    {
+                                                        x.Negative_Points = x.Negative_Points.Contains("\n") ? x.Negative_Points.Replace("\n", "<br/>") : x.Negative_Points;
+                                                        <div class="col-sm-12">
+                                                            <br />
+                                                            <h5><label>Negative Points</label></h5>
+                                                            <div>@Html.Raw(x.Negative_Points)</div>
+                                                        </div>
+                                                    }
+                                                    if (!string.IsNullOrEmpty(x.Conclusion))
+                                                    {
+                                                        x.Conclusion = x.Conclusion.Contains("\n") ? x.Conclusion.Replace("\n", "<br/>") : x.Conclusion;
+                                                        <div class="col-sm-12">
+                                                            <br />
+                                                            <h5><label>Conclusion</label></h5>
+                                                            <div>@Html.Raw(x.Conclusion)</div>
+                                                        </div>
+                                                    }
+                                                }
+                                                <div class="col-sm-12">
+                                                    <hr />
+                                                </div>
+
+                                            </div>
+                                                        }
+                                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @await Html.PartialAsync("_Suggested_Game_Partial", new Suggested_Games { GameList = Model.Similar_Games.PagedSet, Title = "Customers who bought this item also bought", TitleStyle = "games" })
+
+                @await Html.PartialAsync("_Suggested_Game_Partial", new Suggested_Games { GameList = Model.Recommended_Games.PagedSet, Title = "Recommended for you", TitleStyle = "consols" })
+
+
+                @await Html.PartialAsync("_Review_Box_Partial", new Review { Reference_Id = Model.Game.Id, Title = Model.Game.Name, ReviewFor = Constant.GAME, Platform_Id = Model.Game.PlatformId, SKU = Model.Game.SKU })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="videoPopup" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="popupClose" data-dismiss="modal" aria-label="Close">
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div class="modal-body text-center">
+                <div class="embed-responsive embed-responsive-16by9" id="videoPopup-content">
+
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="galleryPopup" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="popupClose" data-dismiss="modal" aria-label="Close">
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div class="modal-body">
+                <div class="largeImage">
+                    <img src="@(string.IsNullOrEmpty(Model.Game.ImageUrl)? "/images/imagenotavailable.jpg": Model.Game.ImageUrl)" alt="@Model.Game.Name" />
+                </div>
+                <div class="lightBoxContr">
+                    <span class="prev">prev</span>
+                    <span class="next">next</span>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+@section scripts{
+    <script src="/js/owl.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+            var owl = $('.owl-carousel');
+            owl.owlCarousel({
+                margin: 15,
+                nav: true,
+                loop: true,
+                navigation: false,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    500: {
+                        items: 1
+                    },
+                    600: {
+                        items: 2
+                    },
+                    700: {
+                        items: 3
+                    },
+                    900: {
+                        items: 4
+                    },
+                    1100: {
+                        items: 6
+                    }
+                }
+            });
+            $('[data-toggle="popover"]').popover();
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        function OnPlatformChanged(e) {
+            console.log(e);
+            var url = e.target.baseURI || '';
+            console.log('old url', url);
+            var old_str = "/" + e.target.name + "/";
+            var new_str = "/" + e.target.value + "/";
+            console.log('old_str', old_str);
+            console.log('new_str', new_str);
+            if (url.Contains(old_str)) {
+                url = url.replace(new RegExp(old_str, 'gi'), new_str);
+            } else {
+                url = '/game' + new_str + '@Model.Game.NameUrl/@Model.Game.Condition?.ToLower()';
+            }
+
+            //url.split(new RegExp(old_str, 'gi')).join(new_str);
+            console.log('new url', url);
+            window.location.href = url;
+        };
+
+
+        $(document).ready(function () {
+
+            var tsld = $(".galleryControlles ul li").length;
+            var wsld = $(".galleryControlles ul li").outerWidth() + 12;
+            var ulWidth = wsld * tsld;
+            var msld = ulWidth - $(".galleryControlles").outerWidth();
+            //console.log(tsld +" x "+wsld+" -- "+ulWidth+"----"+msld);
+            $('.galleryControlles ul').css({ "width": ulWidth });
+            var left = 0;
+
+            $('.controles span').click(function () {
+                //clearInterval(runint);
+                play($(this));
+            });
+
+            /*var runint = setInterval(function(){
+                play($('.controles .right'));
+            }, 4000);*/
+
+            function play(thisObj) {
+                if (thisObj.hasClass('disable')) {
+                    return false;
+                }
+                if (thisObj.hasClass('left')) {
+                    left = parseFloat(left) + parseFloat(wsld);
+                    $('.galleryControlles ul').css({ 'margin-left': left + 'px' });
+                } else {
+                    left = parseFloat(left) - parseFloat(wsld);
+                    $('.galleryControlles ul').css({ 'margin-left': left + 'px' });
+                }
+                if (left == '0') {
+                    $('.controles .left').addClass('disable');
+                } else {
+                    $('.controles .left').removeClass('disable');
+                }
+                if (left < -msld) {
+                    $('.controles .right').addClass('disable');
+                } else {
+                    $('.controles .right').removeClass('disable');
+                }
+            }
+
+            $(".smallImages li").click(function () {
+                var imgurl = $(this).find('img').attr('data-img');
+                var videourl = $(this).find('img').attr('data-video');
+                $(".smallImages li").removeClass('active');
+                $(this).addClass('active');
+                $(".videoBlock img").attr('src', imgurl);
+                console.log('smallImages', videourl);
+                if (videourl !== undefined) {
+                    $(".videoBlock").addClass('videoOnly');
+                    $(".videoBlock img").attr('data-video', videourl);
+                }
+                else { $(".videoBlock img").attr('data-video', ''); $(".videoBlock").removeClass('videoOnly'); }
+
+            });
+
+            $(".videoBlock").click(function () {
+                var videourl = $(this).find('img').attr('data-video');
+                if (videourl !== '') {
+                    var iframe = document.createElement('iframe');
+                    iframe.setAttribute('width', '560');
+                    iframe.setAttribute('height', '315');
+                    iframe.setAttribute('frameborder', '0');
+                    iframe.setAttribute('allowfullscreen', '');
+                    iframe.setAttribute('class', 'embed-responsive-item');
+                    iframe.setAttribute('src', 'https://www.youtube.com/embed/' + videourl + '?autoplay=1');
+                    document.getElementById('videoPopup-content').innerHTML = '';
+                    document.getElementById('videoPopup-content').appendChild(iframe);
+                    $('#videoPopup').modal('show');
+                }
+            });
+
+            $('#videoPopup .popupClose').click(function () {
+                $('#videoPopup').modal('hide');
+                document.getElementById('videoPopup-content').innerHTML = '';
+            });
+
+            //tab section
+            $("#productDes .proList li").click(function () {
+                $(".proList li").removeClass('active');
+                $(this).addClass('active');
+                $(".tabContainer .proContainer").hide();
+                $(".tabContainer .proContainer").eq($(this).index()).show();
+            });
+
+            /*------PRODUCT IMAGE TAB-------*/
+
+            $(".imagesTab a").click(function () {
+                var img = $(this).attr('data-large');
+                $(".imageContent img").attr('src', img);
+            });
+
+            $(".imageContent img").click(function () {
+                // open popup
+                $('#galleryPopup').modal('show');
+                $('.largeImage img').attr('src', $(this).attr('src'));
+            });
+
+            $(".get-custmized span").click(function () {
+                // open popup
+                $('#getCustmize').modal('show');
+                $('.largeImage img').attr('src', $(this).attr('src'));
+            });
+
+            $(".lightBoxContr span").click(function () {
+                var curtimg = $('.largeImage img').attr('src');
+                var curtimgindex = $(".imagesTab").find("a[data-large='" + curtimg + "']").index();
+                //console.log(curtimgindex);
+                if ($(this).hasClass('next')) {
+                    if ($(".imagesTab a").eq(curtimgindex).is(':last-child')) {
+                        var imageurl = $(".imagesTab a").first().attr('data-large');
+                        $(".largeImage img").attr('src', imageurl);
+                    } else {
+                        var imageurl = $(".imagesTab a").eq(curtimgindex).next().attr('data-large');
+                        $(".largeImage img").attr('src', imageurl);
+                    }
+                } else {
+                    if ($(".imagesTab a").eq(curtimgindex).is(':first-child')) {
+                        var imageurl = $(".imagesTab a").last().attr('data-large');
+                        $(".largeImage img").attr('src', imageurl);
+                    } else {
+                        var imageurl = $(".imagesTab a").eq(curtimgindex).prev().attr('data-large');
+                        $(".largeImage img").attr('src', imageurl);
+                    }
+                }
+            });
+        });
+    </script>
+}

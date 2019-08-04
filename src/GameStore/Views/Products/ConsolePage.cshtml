@@ -1,0 +1,464 @@
+﻿@model PageContent
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaKeywords"] = Model.MetaKeywords;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+
+    var productList = ViewBag.ProductList as PaginatedEntity<Product>;
+    string release_date = ViewBag.Release_Date as string;
+    string condition = ViewBag.Condition as string;
+    string typeGame = ViewBag.TypeGame as string;
+    string ratings = ViewBag.Ratings as string;
+    string orderby = ViewBag.orderby as string;
+}
+
+@section styles{
+    <link href="~/css/product-listing.min.css" rel="stylesheet" />
+}
+
+
+<div class="wrapper brd-crum">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="/">Home</a> &nbsp;>&nbsp;
+                <a href="/console">
+                    <span class="text-capitalize">Console</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="wrapper product-view">
+    <div class="middle">
+        <div class="container conainerSection">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="sideBar">
+                        <div class="filters">
+                            <span class="pull-left txt-upr">
+                                Filters
+                            </span>
+                        </div>
+
+                        <div class="filterBlock">
+                            <ul class="product-category">
+                                <li>
+                                    <a href="#" class="txt-upr hide">Release date</a>
+                                    <ul>
+                                        <li class="li-check release-date">
+                                            <input type="checkbox" id="checkIt-RD1" name="new-releases"
+                                                   @(string.IsNullOrEmpty(release_date) ? "" : release_date.Contains("new-releases") ? "checked" : "")>&nbsp; &nbsp; New releases
+                                            <label for="checkIt-RD1"></label>
+                                        </li>
+                                        <li class="li-check release-date">
+                                            <input type="checkbox" id="checkIt-RD4" name="last-30-days"
+                                                   @(string.IsNullOrEmpty(release_date) ? "" : release_date.Contains("last-30-days") ? "checked" : "")>&nbsp; &nbsp; Last 30 days
+                                            <label for="checkIt-RD4"></label>
+                                        </li>
+                                        <li class="li-check release-date">
+                                            <input type="checkbox" id="checkIt-RD5" name="last-90-days"
+                                                   @(string.IsNullOrEmpty(release_date) ? "" : release_date.Contains("last-90-days") ? "checked" : "")>&nbsp; &nbsp; Last 90 days
+                                            <label for="checkIt-RD5"></label>
+                                        </li>
+                                        <li class="li-check release-date">
+                                            <input type="checkbox" id="checkIt-RD6" name="best-of-2017"
+                                                   @(string.IsNullOrEmpty(release_date) ? "" : release_date.Contains("best-of-2017") ? "checked" : "")>&nbsp; &nbsp; Best of 2017
+                                            <label for="checkIt-RD6"></label>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#" class="txt-upr hide">Condition</a>
+                                    <ul>
+                                        <li class="li-check condition">
+                                            <input type="checkbox" name="new" id="checkIt-C1"
+                                                   @(string.IsNullOrEmpty(condition) ? "" : condition.Contains("new") ? "checked" : "")>&nbsp; &nbsp; New
+                                            <label for="checkIt-C1"></label>
+                                        </li>
+                                        <li class="li-check condition">
+                                            <input type="checkbox" name="pre-owned" id="checkIt-C2"
+                                                   @(string.IsNullOrEmpty(condition) ? "" : condition.Contains("pre-owned") ? "checked" : "")>&nbsp; &nbsp; PRE-OWNED
+                                            <label for="checkIt-C2"></label>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#" class="txt-upr hide">Type</a>
+                                    <ul>
+                                        <li class="li-check typeGame">
+                                            <input type="checkbox" name="boxed" id="checkIt-TY1"
+                                                   @(string.IsNullOrEmpty(typeGame) ? "" : typeGame.Contains("boxed") ? "checked" : "")>&nbsp; &nbsp; Boxed games
+                                            <label for="checkIt-TY1"></label>
+                                        </li>
+                                        <li class="li-check typeGame">
+                                            <input type="checkbox" name="dlc" id="checkIt-TY2"
+                                                   @(string.IsNullOrEmpty(typeGame) ? "" : typeGame.Contains("dlc") ? "checked" : "")>&nbsp; &nbsp; DLC games
+                                            <label for="checkIt-TY2"></label>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#" class="txt-upr hide">PRICE</a>
+                                    <ul>
+                                        <li>
+                                            <div class="priceBox">
+                                                <div id="slider-range"></div>
+                                                <p class="value" type="text" id="amount">
+                                                    <span class="pull-left" id="amount-start"></span>
+                                                    <span class="pull-right" id="amount-end"></span>
+                                                </p>
+                                                @{
+                                                    var queryString = Context.Request.Query;
+                                                    Microsoft.Extensions.Primitives.StringValues maxInt;
+                                                    queryString.TryGetValue("max", out maxInt);
+
+                                                    if (queryString.TryGetValue("max", out maxInt))
+                                                    {
+                                                        int maxPrice = int.Parse(maxInt);
+                                                        if (maxPrice > 0)
+                                                        {
+                                                            <p>
+                                                                <button type="button" class="btn btn-default btn-xs" onclick="ResetPriceFilter();">
+                                                                    <span>Reset</span>
+                                                                </button>
+                                                            </p>
+                                                        }
+
+                                                    }
+                                                }
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#" class="txt-upr hide">Rating</a>
+                                    <ul class="rate-bare">
+                                        <li class="li-check">
+                                            <div class="pull-left">
+                                                <input type="checkbox" id="checkIt-RT1" name="5-star"
+                                                       @(string.IsNullOrEmpty(ratings) ? "" : ratings.Contains("5-star") ? "checked" : "")>&nbsp;&nbsp;&nbsp;5 Star
+                                                <label for="checkIt-RT1"></label>
+                                            </div>
+                                            <div class="pull-left">
+                                                <img src="~/images/5star.png" alt="5 Start" />
+                                            </div>
+                                        </li>
+                                        <li class="li-check">
+                                            <div class="pull-left">
+                                                <input type="checkbox" id="checkIt-RT2" name="4-star"
+                                                       @(string.IsNullOrEmpty(ratings) ? "" : ratings.Contains("4-star") ? "checked" : "")>&nbsp;&nbsp;&nbsp;4+ Star
+                                                <label for="checkIt-RT2"></label>
+                                            </div>
+                                            <div class="pull-left">
+                                                <img src="~/images/4star.png" alt="4 Start" />
+                                            </div>
+                                        </li>
+                                        <li class="li-check">
+                                            <div class="pull-left">
+                                                <input type="checkbox" id="checkIt-RT3" name="3-star"
+                                                       @(string.IsNullOrEmpty(ratings) ? "" : ratings.Contains("3-star") ? "checked" : "")>&nbsp;&nbsp;&nbsp;3+ Star
+                                                <label for="checkIt-RT3"></label>
+                                            </div>
+                                            <div class="pull-left">
+                                                <img src="~/images/3star.png" alt="3 Start" />
+                                            </div>
+                                        </li>
+                                        <li class="li-check">
+                                            <div class="pull-left">
+                                                <input type="checkbox" id="checkIt-RT4" name="2-star"
+                                                       @(string.IsNullOrEmpty(ratings) ? "" : ratings.Contains("2-star") ? "checked" : "")>&nbsp;&nbsp;&nbsp;2+ Star
+                                                <label for="checkIt-RT4"></label>
+                                            </div>
+                                            <div class="pull-left">
+                                                <img src="~/images/2star.png" alt="2 Start" />
+                                            </div>
+                                        </li>
+                                        <li class="li-check">
+                                            <div class="pull-left">
+                                                <input type="checkbox" id="checkIt-RT5" name="1-star"
+                                                       @(string.IsNullOrEmpty(ratings) ? "" : ratings.Contains("1-star") ? "checked" : "")>&nbsp;&nbsp;&nbsp;1+ Star
+                                                <label for="checkIt-RT5"></label>
+                                            </div>
+                                            <div class="pull-left">
+                                                <img src="~/images/1star.png" alt="1 Start" />
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="productListFilterTopRow">
+                        <div class="pr-list-title">
+                            <div class="pull-left">
+                                <span class="game-name txt-upr">
+                                    @Model.Name
+                                </span>
+                            </div>
+                            <div class="pull-right game-types hidden">
+                                <a href="#" class="all txt-center hidden">All</a>
+
+                                <a href="#" class="hidden">
+                                    <img src="/images/xbox-360.jpg" alt="Game Store">
+                                </a>
+                            </div>
+                            <div class="pr-des">
+                                @Html.Raw(Model.HeaderContent)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="showTitle">
+                                    <span>Showing </span>
+                                    <span id="page-index">@ViewBag.PageIndex</span>
+                                    <span>–</span>
+                                    <span id="items-on-page">@productList.NumResult</span>
+                                    <span>of</span>
+                                    <span id="total-items">@productList.TotalCount</span>
+                                    <span>items</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="filterBy pull-right">
+                                    Sort By
+                                    <select class="custome" name="order" id="select_order">
+                                        @if (string.IsNullOrEmpty(orderby) || orderby == "Price low to high")
+                                        {
+                                            <option selected="selected">Price low to high</option>
+                                        }
+                                        else
+                                        {
+                                            <option>Price low to high</option>
+                                        }
+                                        @if (orderby == "Price high to low")
+                                        {
+                                            <option selected="selected">Price high to low</option>
+                                        }
+                                        else
+                                        {
+                                            <option>Price high to low</option>
+                                        }
+                                        @if (orderby == "Popularity")
+                                        {
+                                            <option selected="selected">Popularity</option>
+                                        }
+                                        else
+                                        {
+                                            <option>Popularity</option>
+                                        }
+                                        @if (orderby == "Best Sellers")
+                                        {
+                                            <option selected="selected"> Best Sellers</option>
+                                        }
+                                        else
+                                        {
+                                            <option> Best Sellers</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productListing">
+                        <div class="row" id="game-listing">
+                            @await Html.PartialAsync("_Console_List_Partial", productList)
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <nav aria-label="Page navigation" class="pr-pages" id="page-selection"></nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @await Html.PartialAsync("_PreOwnedGaming")
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        (function (h, q) {
+            h.fn.bootpag = function (p) {
+                function m(c, b) {
+                    b = parseInt(b, 10); var d, e = 0 == a.maxVisible ? 1 : a.maxVisible, k = 1 == a.maxVisible ? 0 : 1, n = Math.floor((b - 1) / e) * e, f = c.find("li"); a.page = b = 0 > b ? 0 : b > a.total ? a.total : b; f.removeClass(a.activeClass); d = 1 > b - 1 ? 1 : a.leaps && b - 1 >= a.maxVisible ? Math.floor((b - 1) / e) * e : b - 1; a.firstLastUse && f.first().toggleClass(a.disabledClass, 1 === b); e = f.first(); a.firstLastUse && (e = e.next()); e.toggleClass(a.disabledClass, 1 === b).attr("data-lp", d).find("a").attr("href", g(d)); k = 1 == a.maxVisible ?
+            0 : 1; d = b + 1 > a.total ? a.total : a.leaps && b + 1 < a.total - a.maxVisible ? n + a.maxVisible + k : b + 1; e = f.last(); a.firstLastUse && (e = e.prev()); e.toggleClass(a.disabledClass, b === a.total).attr("data-lp", d).find("a").attr("href", g(d)); f.last().toggleClass(a.disabledClass, b === a.total); e = f.filter("[data-lp=" + b + "]"); k = "." + [a.nextClass, a.prevClass, a.firstClass, a.lastClass].join(",."); if (!e.not(k).length) {
+                var m = b <= n ? -a.maxVisible : 0; f.not(k).each(function (b) {
+                    d = b + 1 + n + m; h(this).attr("data-lp", d).toggle(d <= a.total).find("a").html(d).attr("href",
+                    g(d))
+                }); e = f.filter("[data-lp=" + b + "]")
+            } e.not(k).addClass(a.activeClass); l.data("settings", a)
+                } function g(c) { return a.href.replace(a.hrefVariable, c) } var l = this, a = h.extend({
+                    total: 0, page: 1, maxVisible: null, leaps: !0, href: "javascript:void(0);", hrefVariable: "{{number}}", next: "&raquo;", prev: "&laquo;", firstLastUse: !1, first: '<span aria-hidden="true">&larr;</span>', last: '<span aria-hidden="true">&rarr;</span>', wrapClass: "pagination", activeClass: "active", disabledClass: "disabled", nextClass: "next", prevClass: "prev",
+                    lastClass: "last", firstClass: "first"
+                }, l.data("settings") || {}, p || {}); if (0 >= a.total) return this; h.isNumeric(a.maxVisible) || a.maxVisible || (a.maxVisible = parseInt(a.total, 10)); l.data("settings", a); return this.each(function () {
+                    var c, b, d = h(this); c = ['<ul class="', a.wrapClass, ' bootpag">']; a.firstLastUse && (c = c.concat(['<li data-lp="1" class="', a.firstClass, '"><a href="', g(1), '">', a.first, "</a></li>"])); a.prev && (c = c.concat(['<li data-lp="1" class="', a.prevClass, '"><a href="', g(1), '">', a.prev, "</a></li>"])); for (b =
+                    1; b <= Math.min(a.total, a.maxVisible) ; b++) c = c.concat(['<li data-lp="', b, '"><a href="', g(b), '">', b, "</a></li>"]); a.next && (b = a.leaps && a.total > a.maxVisible ? Math.min(a.maxVisible + 1, a.total) : 2, c = c.concat(['<li data-lp="', b, '" class="', a.nextClass, '"><a href="', g(b), '">', a.next, "</a></li>"])); a.firstLastUse && (c = c.concat(['<li data-lp="', a.total, '" class="last"><a href="', g(a.total), '">', a.last, "</a></li>"])); c.push("</ul>"); d.find("ul.bootpag").remove(); d.append(c.join("")); c = d.find("ul.bootpag"); d.find("li").click(function () {
+                        var b =
+                        h(this); if (!b.hasClass(a.disabledClass) && !b.hasClass(a.activeClass)) { var c = parseInt(b.attr("data-lp"), 10); l.find("ul.bootpag").each(function () { m(h(this), c) }); l.trigger("page", c) }
+                    }); m(c, a.page)
+                })
+            }
+        })(jQuery, window);
+    </script>
+    <script type="text/javascript">
+        var min_price = parseInt('@ViewBag.MinPrice');
+        var max_selected_price = parseInt('@ViewBag.MaxSelectedPrice');
+        var max_price = parseInt('@ViewBag.MaxPrice');
+        $(function () {
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                max: max_price,
+                values: [min_price, max_selected_price],
+                slide: function (event, ui) {
+                    min_price = ui.values[0];
+                    max_selected_price = ui.values[1];
+                    $('#amount-start').text("AED " + min_price + ".00");
+                    $('#amount-end').text("AED " + max_selected_price + ".00");
+
+                    let url = new URL(window.location.href);
+                    let params = url.searchParams;
+
+                    if (params.has('min')) { params.set('min', min_price); }
+                    else { params.append('min', min_price); }
+
+                    if (params.has('max')) { params.set('max', max_selected_price); }
+                    else { params.append('max', max_selected_price); }
+
+                    console.log('min:', min_price, 'max:', max_selected_price);
+                    window.location.href = url.href;
+                }
+            });
+
+            $('#amount-start').text("AED " + $("#slider-range").slider("values", 0) + ".00");
+            $('#amount-end').text("AED " + $("#slider-range").slider("values", 1) + ".00");
+        });
+        (function ($) {
+            var fold = $('.product-category ul').prev();
+            fold.addClass('dir').attr('href', 'javascript:;');
+            fold.on('click', function () {
+                var $this = $(this);
+                $this.toggleClass('hide');
+                $this.next().toggle('300');
+            });
+        })(jQuery);
+
+        function ResetPriceFilter() {
+            let url = new URL(window.location.href);
+            let params = url.searchParams;
+            if (params.has('min')) { params.set('min', 0); }
+            if (params.has('max')) { params.set('max', 0); }
+            window.location.href = url.href;
+        };
+
+        $(document).ready(function () {
+
+            var page_index = $('#page-index').text();
+            page_index = parseInt(page_index);
+            //console.log('page_index', page_index);
+
+            var items_on_page = $('#items-on-page').text();
+            items_on_page = parseInt(items_on_page);
+            //console.log('items_on_page', items_on_page);
+
+            var total_items = $('#total-items').text();
+            total_items = parseInt(total_items);
+            //console.log('total_items', total_items);
+
+            var totalPage = (total_items > 20) ? total_items / 20 : 1;
+            var reminder = (total_items > 20) ? total_items % 20 : 0;
+            if (reminder > 0) { totalPage += 1; }
+
+            $('#page-selection').bootpag({ total: parseInt(totalPage), page: page_index, maxVisible: 5 });
+
+            $('#page-selection').on('page', function (event, num) {
+                let url = new URL(window.location.href);
+                let params = url.searchParams;
+                if (params.has('page')) { params.set('page', num); }
+                else { params.append('page', num); }
+                window.location.href = url.href;
+            });
+
+            $('.release-date input[type="checkbox"]').on('change', function (e) {
+                let url = new URL(e.target.baseURI);
+                let params = url.searchParams;
+                if (params.has('rd')) {
+                    var param = params.get('rd') || '';
+                    if (e.target.checked) { param += "," + e.target.name; }
+                    else { param = param.replace(e.target.name, ''); }
+                    params.set('rd', param);
+                }
+                else { params.append('rd', e.target.name); }
+                window.location.href = url.href;
+            });
+
+            $('.condition input[type="checkbox"]').on('change', function (e) {
+                let url = new URL(e.target.baseURI);
+                let params = url.searchParams;
+                if (params.has('c')) {
+                    var param = params.get('c') || '';
+                    if (e.target.checked) { param += "," + e.target.name; }
+                    else { param = param.replace(e.target.name, ''); }
+                    params.set('c', param);
+                }
+                else { params.append('c', e.target.name); }
+                window.location.href = url.href;
+            });
+
+            $('.typeGame input[type="checkbox"]').on('change', function (e) {
+                let url = new URL(e.target.baseURI);
+                let params = url.searchParams;
+                if (params.has('t')) {
+                    var param = params.get('t') || '';
+                    if (e.target.checked) { param += "," + e.target.name; }
+                    else { param = param.replace(e.target.name, ''); }
+                    params.set('t', param);
+                }
+                else { params.append('t', e.target.name); }
+                window.location.href = url.href;
+            });
+
+            $('.rate-bare .li-check input[type="checkbox"]').on('change', function (e) {
+                let url = new URL(e.target.baseURI);
+                let params = url.searchParams;
+                if (params.has('r')) {
+                    var param = params.get('r') || '';
+                    if (e.target.checked) { param += "," + e.target.name; }
+                    else { param = param.replace(e.target.name, ''); }
+                    params.set('r', param);
+                }
+                else { params.append('r', e.target.name); }
+                window.location.href = url.href;
+            });
+            $('#select_order').on('change', function (e) {
+                let url = new URL(e.target.baseURI);
+                let params = url.searchParams;
+                if (params.has('order')) {
+
+                    var param = params.get('order') || '';
+
+                    param = param.replace(e.target.name, '');
+                    param = '';
+                    param += this.value;
+
+                    params.set('order', param);
+                }
+                else { params.append('order', this.value); }
+                window.location.href = url.href;
+            });
+        });
+    </script>
+
+
+}

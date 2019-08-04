@@ -1,0 +1,153 @@
+﻿@{ 
+
+    string aName = ViewContext.RouteData.Values["action"].ToString();
+    string cName = ViewContext.RouteData.Values["controller"].ToString();
+    aName = string.IsNullOrEmpty(aName) ? string.Empty : aName.ToLower();
+    cName = string.IsNullOrEmpty(cName) ? string.Empty : cName.ToLower();
+}
+
+<div class="page-sidebar-inner slimscroll">
+    <ul class="menu accordion-menu">
+        <li class="@((cName.Equals("dashboard") && aName.Equals("index"))?"active":"")">
+            <a href="/dashboard" class="waves-effect waves-button">
+                <span class="menu-icon icon-home"></span><p>Dashboard </p><span class="active-page"></span>
+            </a>
+        </li>
+
+        <li class="droplink @((cName.Equals("master"))?"active open":"")">
+            <a href="#" class="waves-effect waves-button">
+                <span class="menu-icon icon-grid"></span><p>Master</p><span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li class="@((cName.Equals("master") && aName.Equals("gamepage")) ?"active":"")">
+                    @Html.ActionLink("Games", "GamePage", "Master")
+                </li>
+                <li class="@((cName.Equals("master") && aName.Equals("generepage")) ?"active":"")">
+                    @Html.ActionLink("Genere", "genere", "master")
+                </li>
+                <li class="@((cName.Equals("master") && aName.Equals("gameplatformpage")) ?"active":"")">
+                    @Html.ActionLink("Platforms", "game-platform", "master")
+                </li>
+                <li class="hidden @((cName.Equals("master") && aName.Equals("keywords")) ?"active":"")">
+                    @Html.ActionLink("Keywords", "keywords", "master")
+                </li>                
+                <li class="@((cName.Equals("master") && aName.Equals("gamemode")) ? "active" : "")">
+                    @Html.ActionLink("Game Mode", "gamemode", "master")
+                </li>
+                <li class="hidden @((cName.Equals("master") && aName.Equals("gameengine")) ?"active":"")">
+                    @Html.ActionLink("Game Engine", "gameengine", "master")
+                </li>
+                <li class="hidden @((cName.Equals("master") && aName.Equals("gamecollection")) ?"active":"")">
+                    @Html.ActionLink("Game Collection", "gamecollection", "master")
+                </li>
+                <li class="@((cName.Equals("master") && aName.Equals("page_contents")) ?"active":"")">
+                    @Html.ActionLink("Page Contents", "Page_Contents", "Master")
+                </li>
+                <li class="@((cName.Equals("master") && aName.Equals("newsletter_subscriber")) ?"active":"")">
+                    @Html.ActionLink("News Letter Subscriber", "NewsLetter_Subscriber", "Master")
+                </li>
+                <li class="@((cName.Equals("master") && aName.Equals("categorypages")) ?"active":"")">
+                    @Html.ActionLink("Category", "CategoryPages", "Master")
+                </li> 
+                <li class="@((cName.Equals("master") && aName.Equals("paymentsettingpage")) ?"active":"")">
+                    @Html.ActionLink("Payment Settings", "PaymentSettingPage", "Master")
+                </li> 
+                <li class="@((cName.Equals("master") && aName.Equals("banners")) ?"active":"")">
+                    @Html.ActionLink("Banners", "Banners", "Master")
+                </li> 
+                <li class="@((cName.Equals("master") && aName.Equals("adpage")) ?"active":"")">
+                    @Html.ActionLink("Manage Ads", "AdPage", "Master")
+                </li> 
+                <li class="@((cName.Equals("master") && aName.Equals("users")) ?"active":"")">
+                    @Html.ActionLink("Users", "Users", "Master")
+                </li> 
+            </ul>
+        </li>
+        <li class="droplink @((cName.Equals("manageblogs"))?"active open":"")">
+            <a href="#" class="waves-effect waves-button">
+                <span class="menu-icon icon-grid"></span><p>Blogs</p><span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li class="@((cName.Equals("manageblogs") && aName.Equals("blog_categorypages")) ?"active":"")">
+                    @Html.ActionLink("Blog Category", "Blog_CategoryPages", "ManageBlogs")
+                </li>
+                <li class="@((cName.Equals("manageblogs") && aName.Equals("blogpage")) ?"active":"")">
+                    @Html.ActionLink("Blogs", "BlogPage", "ManageBlogs")
+                </li>
+            </ul>
+        </li>
+        <li class="droplink @((cName.Equals("vendor"))?"active open":"")">
+            <a href="#" class="waves-effect waves-button">
+                <span class="menu-icon icon-grid"></span><p>Vendors</p><span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li class="@((cName.Equals("vendor") && aName.Equals("index")) ?"active":"")">
+                    @Html.ActionLink("Vendor", "Index", "Vendor")
+                </li>
+            </ul>
+        </li>
+        <li class="droplink @((cName.Equals("reports"))?"active open":"")">
+            <a href="#" class="waves-effect waves-button">
+                <span class="menu-icon icon-grid"></span><p>Orders</p><span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li class="@((cName.Equals("reports") && aName.Equals("shopping_order")) ?"active":"")">
+                    @Html.ActionLink("Orders", "Shopping_Order", "Reports")
+                </li>
+                <li class="@((cName.Equals("reports") && aName.Equals("order_cancelation")) ?"active":"")">
+                    @Html.ActionLink("Order Cancelation", "Order_Cancelation", "Reports")
+                </li>
+            </ul>
+        </li>
+        <li class="droplink @((cName.Equals("operator"))?"active open":"")">
+            <a href="#" class="waves-effect waves-button">
+                <span class="menu-icon icon-grid"></span><p>Operators</p><span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li class="@((cName.Equals("operator") && aName.Equals("index")) ?"active":"")">
+                    @Html.ActionLink("Operator", "Index", "Operator")
+                </li>
+            </ul>
+        </li>
+        <li class="droplink @((cName.Equals("deal"))?"active open":"") hidden">
+            <a href="#" class="waves-effect waves-button">
+                <span class="menu-icon icon-grid"></span><p>Deals</p><span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li class="@((cName.Equals("deal") && aName.Equals("manage")) ?"active":"")">
+                    @Html.ActionLink("Deal", "Manage", "Deal")
+                </li>
+            </ul>
+        </li>
+        <li class="droplink @((cName.Equals("managereview"))?"active open":"")">
+            <a href="#" class="waves-effect waves-button">
+                <span class="menu-icon icon-grid"></span><p>Reviews</p><span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li class="@((cName.Equals("managereview") && aName.Equals("index")) ?"active":"")">
+                    @Html.ActionLink("Manage Review", "Index", "ManageReview")
+                </li>
+            </ul>
+        </li>
+        <li class="droplink @((cName.Equals("manageproducts"))?"active open":"")">
+            <a href="#" class="waves-effect waves-button">
+                <span class="menu-icon icon-grid"></span><p>Products</p><span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li class="@((cName.Equals("manageproducts") && aName.Equals("accessoriestypepage")) ?"active":"")">
+                    @Html.ActionLink("Accessories Type", "AccessoriesTypePage", "ManageProducts")
+                </li>
+                <li class="@((cName.Equals("manageproducts") && aName.Equals("accessoriespage")) ?"active":"")">
+                    @Html.ActionLink("Accessories", "AccessoriesPage", "ManageProducts")
+                </li>
+                <li class="@((cName.Equals("manageproducts") && aName.Equals("consoletype")) ?"active":"")">
+                    @Html.ActionLink("Console Type", "ConsoleType", "ManageProducts")
+                </li>
+                <li class="@((cName.Equals("manageproducts") && aName.Equals("consolepage")) ?"active":"")">
+                    @Html.ActionLink("Consoles", "ConsolePage", "ManageProducts")
+                </li>
+            </ul>
+        </li>
+
+    </ul>
+</div>

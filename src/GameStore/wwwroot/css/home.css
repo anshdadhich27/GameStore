@@ -1,0 +1,481 @@
+/*---------------------MAIN SLIDER------------------*/
+.main-banner{
+    position: relative;
+    margin-bottom: 25px;
+    margin-top: 163px;
+}
+#main-banner a img, #main-banner a {
+    display: block;
+    float: left;
+    max-width: 100%;
+}
+#prev, #next {
+    /*background-color: rgba(0,0, 0, 0.5);*/
+    display: block;
+    height: auto;
+    min-height: 545px;
+    width: 45px;
+    top: 0;
+    position: absolute;
+}
+
+#prev span, #next span{
+    font-size: 55px;
+    color: #fff;
+    opacity: 0.4;
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+}
+
+#prev span{
+    right: 0;
+}
+
+#prev {
+    left: 6px;
+}
+#next {
+    right: 6px;
+}
+#pager {
+    background: url(../images/page-bg.png) no-repeat top center;
+    position: absolute;
+    left: 0;
+    width: 105px;
+    right: 0;
+    margin: 0 auto;
+    bottom: 0;
+    text-align: center;
+}
+#pager a {
+    background: #18141b;
+    border-radius: 10px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 5px 0 0;
+}
+#pager a:hover {
+    background-color: #ff2b2b;
+}
+#pager a span {
+    display: none;
+}
+#pager a.selected {
+    background-color: #ff2b2b;
+}
+
+/*-----OFFER AND NEW LETTER SECTOIN----*/
+
+.ofr-box, .news-ltr-box{
+    display: block;
+    width: 100%;
+    float: left;
+    max-height: 159px;    
+    height: auto;
+}
+
+.ofr-box.rcntLaunch{
+    background: url(../images/recent-launch.jpg) no-repeat left center/cover;
+}
+.ofr-box.bstSelling{
+    background: url(../images/best-selling.jpg) no-repeat left center/cover;
+}
+.ofr-box.ofrZone{
+    background: url(../images/offer-zone.jpg) no-repeat left center/cover;
+}
+
+.ofr-box{
+   transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  -webkit-transition: all 1s ease;
+  -o-transition: all 1s ease;
+}
+
+.ofr-box:hover{
+  transform: scale(1.04);
+  -moz-transform: scale(1.04);
+  -webkit-transform: scale(1.04);
+  -o-transform: scale(1.04);
+  -ms-transform: scale(1.04); /* IE 9 */
+}
+
+.ofr-box a, .news-ltr-box h4{
+    display: block;
+    text-align: left;
+    color: #fff;
+    font:700 22px/30px 'PT Sans', sans-serif;
+    padding:15px 0 0 15px;
+}
+.ofr-box a{
+    height: 159px;
+}
+.ofr-box a span, .news-ltr-box h4 span{
+    font-weight: 400;
+}
+
+.news-ltr-box{
+    background: #ff2b2b;
+    min-height: 159px;
+    position:relative;
+}
+
+
+.news-ltr-box .subscribe-sec {
+    position: relative;
+    margin: 15px;
+}
+
+.news-ltr-box .subscribe-sec h3{
+    margin-top: 0;
+    font-size: 15px;
+}
+
+.subscribe-sec input{
+    width: 100%;
+    font:400 14px/20px 'PT Sans', sans-serif;
+    padding:10px;
+    border:none;
+    border-radius: 4px;
+    color: #333;
+    outline: none;
+    padding-right: 48px;
+}
+
+.subscribe-sec button {
+    background: url(../images/sprite.png) no-repeat center left;
+    background-position: -114px -79px;
+    width: 42px;
+    height: 39px;
+    top: 1px;
+    bottom: 0;
+    border-left: solid 2px #dddddd;
+}
+
+
+
+
+/*----GAMES SECTION------*/
+.games {
+    margin-top: 44px;
+    overflow: hidden;
+}
+.games .page-title{
+    width:165px;
+    position: relative;
+}
+
+
+
+.web-flow {
+    text-align: center;
+}
+
+.pro-list {
+    display: block;
+    display: inline-table;
+    width: 90%;
+}
+
+.pro-list li.resp-tab-active {
+    background: none;
+    padding: 10px 3%!important;
+}
+.pro-list li.resp-tab-active, .pro-list li:hover {
+    color: #f92828;
+    border-bottom: solid 2px #f92828;
+}
+
+.pro-list li {
+    font: 700 16px/30px 'PT sans', sans-serif;
+    display: inline-block;
+    margin: 0;
+    list-style: none;
+    cursor: pointer;
+    /*float: left;*/
+    -moz-transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    border: none;
+    color: #333334;
+    text-align: center;
+    padding: 10px 3%;
+}
+
+.pro-container {
+    margin-top: -1px;
+}
+
+.resp-tab-content {
+    border-top: solid 2px #ddd !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+.consols .page-title-block.animation-element.in-view .page-title:after {
+    width: 422px;
+    right: -422px;
+}
+
+.consols .page-title-block.animation-element.in-view .page-title:before {
+    width: 422px;
+    left: -422px;
+}
+
+.consols.game-accessry .page-title-block.animation-element.in-view .page-title:after {
+    width: 402px;
+    right: -402px;
+}
+
+.consols.game-accessry .page-title-block.animation-element.in-view .page-title:before {
+    width: 402px;
+    left: -402px;
+}
+
+/*----------SELL GAME SECTION---------*/
+.sell-game{
+    background: url(../images/sell-game-bg.jpg) no-repeat top center;
+    display: block;
+    width: 100%;
+    padding:35px 0;
+    margin-top: 25px;
+}
+.sell-game .page-title{
+    position: static;
+    background: none !important;
+}
+
+.sell-game .page-title+p{
+    font:400 15px/22px 'PT sans', sans-serif;
+    padding: 15px 0;
+}
+
+.prdct-box-two{
+    display: block;
+    width: 100%;
+    padding: 8%;
+}
+
+.prdct-box-two .list-title{
+    font:700 22px/30px 'PT sans', sans-serif;
+    margin: 20px 0 6px;
+}
+
+/*-----CONSOL SECTION----*/
+.consols{
+    padding:35px 0 0px;
+    position: relative;
+}
+
+.game-accessry h2.page-title{
+    max-width: 366px;
+}
+.consols .page-title-block{
+    margin-bottom: 64px !important;
+}
+.consols a.view-all{
+    position: absolute;
+    right: 0;
+    top:30px;
+    color:#666;
+    text-decoration: underline;
+}
+
+a.view-all{
+    color:#666;
+    text-decoration: underline;
+}
+
+.consols .page-title{
+    margin-bottom: 30px;
+}
+.prodcut-box-three .prdct-img{
+    border:solid 1px #ddd;
+    padding: 5px 0;
+}
+.prodcut-box-three .prdct-img img {
+    max-width: 100%;
+}
+
+
+/*-----GET DISCOUNT SEC------*/
+.get-discount, .get-discount .dis-box {
+    display: block;
+    width:100%;
+}
+.get-discount .dis-box img{
+    max-width: 100%
+}
+
+/*--------READ NEWS SECTION--------*/
+.read-news{
+    display: inline-block;
+    width:100%;
+    background:#1a131a url(../images/read-news.jpg) no-repeat top center;
+    -webkit-transition: ease-in-out 0.8s;
+    -moz-transition: ease-in-out 0.8s;
+    transition: ease-in-out 0.8s;
+    position: relative;
+}
+
+.news-box{
+    display: block;
+    margin:53px auto;
+    /*vertical-align: middle;*/
+    width:50%;
+    max-width: 462px;
+    position: relative;
+    border: 1px solid transparent;
+    -webkit-transition: ease-in-out 0.8s;
+    -moz-transition: ease-in-out 0.8s;
+    transition: ease-in-out 0.8s; 
+    z-index: 4 ;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-font-smoothing: antialiased; 
+     -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+    box-shadow: 0 0 1px transparent;
+}
+
+
+
+
+
+.read-news:hover .news-box:before, .read-news:hover .news-box:focus:before, .read-news:hover .news-box:active:before {
+    top: -8px;
+    right: -8px;
+    bottom: -8px;
+    left: -8px;
+    border: #fff solid 2px;
+}
+
+.news-box:before {
+    content: '';
+    position: absolute;
+    border: transparent solid 4px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: top, right, bottom, left;
+    transition-property: top, right, bottom, left;
+}
+    
+
+
+.news-box .news-line{
+    font:700 27px/35px 'PT sans', sans-serif;
+    padding: 5px;
+}
+
+.read-news a{
+    color: #fff;
+    cursor: pointer;
+    display: block;
+}
+
+.news-box .news-line span{
+    font-weight: 400;
+}
+
+
+
+
+/*-MEDIA QUERIES--*/
+@media (min-width:1600px){
+    #prev, #next{
+       width: 45px;
+    }
+}
+
+@media (max-width:1024px){
+.main-banner {
+    margin-top: 47px;
+    }
+.get-discount .dis-box {
+    margin-top: 25px;
+}
+}
+
+@media (max-width:991px){
+.ofr-box {
+    margin-bottom: 20px;
+    transition: all 1s ease 0s;
+    } 
+.sell-game{
+    background-image: none;
+    background-color: #070f19;
+    margin-top: 35px;
+    }
+
+}
+
+@media (max-width: 768px){
+    ul.pro-list {
+        display: none;
+    }
+    .pro-container {
+        margin-top: 5px;
+        clear: both;
+    }
+
+    .games .page-title{
+        margin-bottom: 20px;
+    }
+
+    .pro-container h2.resp-accordion {
+        font:700 15px/25px 'PT sans', sans-serif;
+        border: 1px solid #c1c1c1;
+        border-top: 0px solid #c1c1c1;
+        margin: 0px;
+        padding: 10px 15px;
+        text-align: left;
+    }
+
+    .pro-container h2.resp-tab-active, h2.resp-accordion.resp-tab-active:first-child {
+        background: #fff !important;
+        border-bottom:solid 2px #f92828!important;
+        border-top:none!important; 
+        border-right:none;
+        border-left:none;
+        color: #f92828;
+    }
+}
+
+@media (max-width:767px){
+.main-banner {
+    display: none;
+}
+
+.box-zone {
+    margin-top: 60px;
+}
+
+    .cookies {
+        width:95%;
+    }
+
+}
+
+@media (max-width:480px){
+
+.games {
+    margin-top: 0;
+} 
+
+.games.prdct-view-title .page-title, .consols.recommended .page-title{
+  font-size: 20px;  
+}    
+.consols .page-title-block{
+    margin-bottom: 20px;
+}
+
+}
+
+

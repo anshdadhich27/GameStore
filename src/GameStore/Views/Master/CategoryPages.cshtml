@@ -1,0 +1,366 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Category";
+}
+
+@section styles{
+
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .bs-example-modal-lg .modal-dialog .modal-dialog {
+            border: 1px solid #9c9797;
+            box-shadow: #bfb3b3 3px 3px 20px 8px;
+        }
+
+        .modal-header {
+            background-color: #dadada;
+        }
+
+        .tab-content {
+            border-bottom: 1px solid lightgray;
+            border-left: 1px solid lightgray;
+            border-right: 1px solid lightgray;
+        }
+
+        .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {
+            background-color: #d1dbe4;
+        }
+    </style>
+}
+
+
+
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">Category</li>
+    </ol>
+}
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel panel-heading">
+                <h2 class="panel-title">
+                    <span>Category</span>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div role="tabpanel">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs nav-justified" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#tab_basic" role="tab" data-toggle="tab" aria-expanded="true">
+                                        <span class="badge badge-info">1</span>&nbsp;<span id="tab-1-txt">Add New</span>
+                                    </a>
+                                </li>
+                                <li role="presentation" class="">
+                                    <a href="#tab_price" role="tab" data-toggle="tab" aria-expanded="false">
+                                        <span class="badge badge-info">2</span>&nbsp;<span>Category List</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active in" id="tab_basic">
+                                    <form id="new-form" data-bind="submit:Save_Category">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Name:</label>
+                                                    <input type="text" class="form-control" placeholder="Enter Category Name" required
+                                                           data-bind="value:Category.Name, valueUpdate:'afterkeydown'" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Platforms</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <span class="fa" data-bind="css:{'fa-spinner fa-spin':IsLoadingPlatforms, 'fa-th-list': !IsLoadingPlatforms()}"></span>
+                                                        </div>
+                                                        <select class="form-control" id="PlatformList_select" multiple
+                                                                data-bind="options:PlatformList, optionsText:'Name', optionsValue:'Id', selectedOptions:Category.Selected_Platforms"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-success" form="new-form" data-bind="disable:IsSaving">
+                                                        <span>Save</span>
+                                                        <span class="fa fa-spinner fa-spin" data-bind="visible:IsSaving"></span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-default" data-bind="click:ClearAllFields">
+                                                        <span>Cancel</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_price">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:100px;">#</th>
+                                                    <th>Name</th>
+                                                    <th>Platform</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-bind="foreach:CategoryList">
+                                                <tr>
+                                                    <td style="width:100px;" data-bind="text: $index()+1"></td>
+                                                    <td data-bind="text: $data.Name"></td>
+                                                    <td data-bind="text: $data.Platform_Names"></td>
+                                                    
+                                                    
+                                                    <td>
+                                                        <div>
+                                                            <button type="button" class="btn btn-primary btn-rounded btn-xs"
+                                                                    data-bind="click:$parent.OnClickEditBtn">
+                                                                <i class="fa fa-edit"></i>
+                                                                <span>Edit</span>
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger btn-rounded btn-xs"
+                                                                    data-bind="click:$parent.Delete_Category">
+                                                                <i class="fa fa-trash"></i>
+                                                                <span>Delete</span>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tbody data-bind="visible:IsLoading">
+                                                <tr>
+                                                    <td colspan="4">
+                                                        <span class="glyphicon glyphicon-refresh processingIcon"></span>
+                                                        <span>Loading.....</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>                                                    
+                                                    <td colspan="4">
+                                                        <span>
+                                                            <span>Total:</span>
+                                                            <span data-bind="text:Total"></span>
+                                                            <span>Records</span>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    
+    <script src="~/assets/plugins/select2/js/select2.min.js"></script>
+    <script src="~/lib/knockout/dist/knockout.js"></script>
+
+    <script type="text/javascript">
+
+        function AppViewModel() {
+            var self = this;
+            self.IsEditing = ko.observable(false);
+            self.IsLoading = ko.observable(false);
+            self.IsSaving = ko.observable(false);
+            self.IsDeleting = ko.observable(false);
+            self.IsLoadingPlatforms = ko.observable(false);
+
+            self.Offset = ko.observable(0);
+            self.Rows = ko.observable(10).extend({ rateLimit: 500 });
+            self.Total = ko.observable(0);
+            self.SearchText = ko.observable('').extend({ rateLimit: 500 });
+            self.CategoryList = ko.observableArray([]);
+            self.PlatformList = ko.observableArray([]);
+            self.Category = {
+                Id: ko.observable(0),
+                Name: ko.observable(''),
+                Platform_Ids: ko.observable(''),
+                Platform_Names: ko.observable(''),
+                Selected_Platforms: ko.observableArray([]),
+            };
+
+            
+
+            self.Rows.subscribe(function (newValue) {
+                self.PageList.removeAll();
+                self.Get_PageList();
+            });
+
+            self.SearchText.subscribe(function (newValue) {
+                newValue = newValue || '';
+                if (newValue.length == 0) {
+                    self.CategoryList.removeAll();
+                    self.Get_CategoryList();
+                }
+                self.GetSearchResult();
+            });
+
+            self.GetAllPlatforms = function () {
+                self.IsLoadingPlatforms(true);
+                $.getJSON('/master/get-all-active-platform', function (data) {
+                    self.IsLoadingPlatforms(false);
+                    self.PlatformList(data);
+                });
+            };
+
+            self.Get_CategoryList = function (offset, index) {
+                self.IsLoading(true);
+                offset = offset || 0;
+                index = index || 1;
+                $.get('/master/get-all-category', function (obj) {                    
+                    $.each(obj, function (i, o) { self.CategoryList.push(new CategoryViewModel(o)); });                   
+                    self.Total(obj.TotalCount);
+                    self.IsLoading(false);
+                    console.log(obj);
+                });
+            };
+
+            
+            self.Save_Category = function () {
+                var name = self.Category.Name() || '';
+                if (name.length == 0) { return; }
+
+                if (self.Category.Selected_Platforms().length == 0) { return; }
+
+                var platforms = ',';
+                $.each(self.Category.Selected_Platforms(), function (i, o) { platforms += o + ',' });
+                self.Category.Platform_Ids(platforms);
+
+
+                self.IsSaving(true);
+                var api = self.IsEditing() ? '/master/update-category' : '/master/add-new-category';
+                $.ajax({
+                    type: 'POST', dataType: "json", url: api,
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(self.Category),
+                    success: function (data) {
+                        self.IsSaving(false); console.log(data);
+                        toastr.success('Success'); self.IsEditing(false);
+                        self.CategoryList.removeAll(); self.ClearAllFields();
+                        self.Get_CategoryList(self.Offset(0), self.Rows());
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.Delete_Category = function (obj) {
+                console.log(ko.toJSON(obj));
+                obj.IsDeleting(true);
+                $.ajax({
+                    type: 'GET', dataType: "json",
+                    url: '/master/delete-category/' + obj.Id,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        obj.IsDeleting(false);
+                        self.CategoryList.removeAll();
+                        self.Get_CategoryList(self.Offset(), self.Rows());
+                        console.log(data);
+                        toastr.success('Success');
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.OnClickEditBtn = function (obj) {
+                self.IsEditing(true);
+                self.Category.Id(obj.Id);
+                self.Category.Name(obj.Name());
+                self.Category.Platform_Ids(obj.Platform_Ids());
+                self.Category.Platform_Names(obj.Platform_Names());
+
+                if (obj.Platform_Ids() != null || obj.Platform_Ids() != undefined) {
+                    if (obj.Platform_Ids().Contains(',')) {
+                        var plt = obj.Platform_Ids().split(',');
+                        $.each(plt, function (i, o) {
+                            if (o != "") { self.Category.Selected_Platforms.push(parseInt(o)); }
+                        });
+                    }
+                }
+
+                $('a[href="#tab_basic"]').click();
+                $('#tab-1-txt').text("Update");
+                $('#PlatformList_select').trigger('change');
+                //$('#PlatformList_select').select2({
+                //    tags: true,
+                //    placeholder: 'Select options',
+                //    tokenSeparators: [',', ' ']
+                //});
+
+                
+
+
+                console.log(ko.toJSON(self.Category));
+            };
+
+            self.ClearAllFields = function () {
+                self.IsEditing(false);
+                self.Category.Id(0);               
+                self.Category.Name('');
+                self.Category.Platform_Ids('');
+                self.Category.Platform_Names('');
+                self.Category.Selected_Platforms.removeAll();
+                $('#tab-1-txt').text("Add New");
+                $('a[href="#tab_New"]').click();
+                $('#PlatformList_select').trigger('change');
+            };
+
+            self.Init = function () {
+                self.Get_CategoryList();
+                self.GetAllPlatforms();
+            };
+
+        };
+
+        function CategoryViewModel(obj) {
+            var x = this;
+            x.Id = obj.Id;
+            x.IsDeleting = ko.observable(false);
+            x.Name = ko.observable(obj.Name);
+            x.Platform_Ids = ko.observable(obj.Platform_Ids);
+            x.Platform_Names = ko.observable(obj.Platform_Names);
+        };
+
+        $(document).ready(function () {
+            var app = new AppViewModel();
+            ko.applyBindings(app);
+            app.Rows(10);
+            app.Init();
+
+           
+
+            $('#PlatformList_select').select2({
+                tags: true,
+                placeholder: 'Select options',
+                tokenSeparators: [',', ' ']
+            });
+
+            
+
+           
+
+        });
+    </script>
+
+
+}

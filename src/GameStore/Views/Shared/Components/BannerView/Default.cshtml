@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Banner>
+
+<div class="wrapper main-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="main-banner">
+                    @{
+                        foreach (var x in Model)
+                        {
+                            <a href="@x.Link"><img src="@x.ImageUrl" alt="@x.Title" /></a>
+                        }
+                    }
+                    
+                </div>
+                <a href="#" id="prev" title="Show previous">
+                    <span>
+                        <img src="/images/slider-arrow.png" alt="Game Store">
+                    </span>
+                </a>
+                <a href="#" id="next" title="Show next">
+                    <span>
+                        <img src="/images/slider-arrow-right.png" alt="Game Store">
+                    </span>
+                </a>
+                <div id="pager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+

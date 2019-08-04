@@ -1,0 +1,818 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewBag.Title = "Game Platform";
+}
+
+@section styles{
+
+    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="~/assets/plugins/summernote-master/summernote.css" rel="stylesheet" />
+    <style>
+        .bs-example-modal-lg .modal-dialog .modal-dialog {
+            border: 1px solid #9c9797;
+            box-shadow: #bfb3b3 3px 3px 20px 8px;
+        }
+
+        .modal-header {
+            background-color: #dadada;
+        }
+    </style>
+}
+
+
+
+
+@section breadcrumb{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active">Game Platform</li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-white">
+            <div class="panel panel-heading" style="height:auto;">
+                <form action="/master/download-csv-plaform" method="post" id="plaform-filter-form" target="_blank">
+                    <div class="col-sm-7">
+                        <h2 class="panel-title">
+                            <span>Game Platform List</span>    &nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-primary btn-xs"
+                                    data-bind="click:SyncWithIgdbApi, disable:IsDataSyncing">
+                                <span>Sync with IGDb Api</span>
+                                <i class="fa fa-refresh" data-bind="visible:!IsDataSyncing()"></i>
+                                <i class="fa fa-spinner fa-spin" data-bind="visible:IsDataSyncing"></i>
+                            </button>
+                        </h2>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" name="searchTxt" class="form-control" placeholder="Search"
+                                   data-bind="value:SearchText, valueUpdate:'afterkeydown'" />
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default" data-bind="visible:SearchText().length==0">
+                                    <i class="fa fa-search" data-bind="visible:!IsLoading()"></i>
+                                    <i class="fa fa-spinner fa-spin" data-bind="visible:IsLoading"></i>
+                                </button>
+                                <button type="button" class="btn btn-default"
+                                        data-bind="visible:SearchText().length>0, click:function(){SearchText('');}">
+                                    <i class="fa fa-remove" data-bind="visible:!IsLoading()"></i>
+                                    <i class="fa fa-spinner fa-spin" data-bind="visible:IsLoading"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-1">
+                        <button class="btn btn-info btn-rounded pull-right" type="button"
+                                data-toggle="modal" data-target=".bs-example-modal-lg">
+                            <span>Add New</span>
+                        </button>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="submit" form="plaform-filter-form" class="btn btn-default btn-rounded">
+                            <span>Export</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width:100px;">#</th>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Code</th>
+                                <th>Active</th>
+                                <th>Added On</th>
+                                <th>Updated On</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach:GamePlatformList">
+                            <tr>
+                                <td style="width:100px;" data-bind="text: $index()+1"></td>
+                                <td style="width:100px;" data-bind="text: $data.Id"></td>
+                                <td>
+                                    <a href="#" target="_blank" data-bind="attr:{href:'/platform/'+$data.NameUrl()}">
+                                        <span data-bind="text: $data.Name"></span>
+                                    </a>
+                                </td>
+                                <td data-bind="text: $data.Position"></td>
+                                <td data-bind="text: $data.Code"></td>
+                                <td data-bind="text: $data.Active()?'Yes':'No'"></td>
+                                <td>
+                                    <span data-bind="visible:$data.AddedOn!=null">
+                                        <span data-bind="text: moment($data.AddedOn).format('Do MMM YYYY')"></span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span data-bind="visible:$data.UpdatedOn!=null">
+                                        <span data-bind="text: moment($data.UpdatedOn).format('Do MMM YYYY')"></span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div>
+                                        <button type="button" class="btn btn-primary btn-rounded btn-xs"
+                                                data-bind="click:$parent.OnClickEditBtn">
+                                            <i class="fa fa-edit"></i>
+                                            <span>Edit</span>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-rounded btn-xs"
+                                                data-bind="click:$parent.DeleteGamePlatform">
+                                            <i class="fa fa-trash"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody data-bind="visible:IsLoading">
+                            <tr>
+                                <td colspan="9">
+                                    <span class="glyphicon glyphicon-refresh processingIcon"></span>
+                                    <span>Loading.....</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td style="width:100px;">
+                                    <select data-bind="options:[10,20,50,100], value:Rows, optionsCaption:'Rows'"
+                                            class="form-control"></select>
+                                </td>
+                                <td colspan="2">
+                                    <span>
+                                        <span>Total:</span>
+                                        <span data-bind="text:Total"></span>
+                                        <span>Records</span>
+                                    </span>
+                                </td>
+                                <td colspan="6">
+                                    <div id="page-selection"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+     aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="mySmallModalLabel">New Game Platform</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form id="add-new-form" data-bind="submit:AddNewGamePlatform">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Name:</label>
+                                <input type="text" class="form-control" required placeholder="Enter Name"
+                                       data-bind="value:GamePlatform.Name, valueUpdate:'afterkeydown'">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Position:</label>
+                                <input type="number" class="form-control" required placeholder="Enter Position"
+                                       data-bind="value:GamePlatform.Position, valueUpdate:'afterkeydown'" onkeypress="return isNumber(event);">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Code:</label>
+                                <input type="text" class="form-control" required placeholder="Enter Code" maxlength="5"
+                                       data-bind="value:GamePlatform.Code, valueUpdate:'afterkeydown'" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Active:</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <input type="checkbox" value="true" data-bind="checked: GamePlatform.Active" />
+                                    </div>
+                                    <div class="form-control" style="padding:8px 13px!important;" data-bind="text:GamePlatform.Active()?'Yes':'No'">Yes</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Page Title:</label>
+                                <input type="text" class="form-control" required placeholder="Enter Page Title"
+                                       data-bind="value:GamePlatform.PageTitle, valueUpdate:'afterkeydown'">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Meta Keywords:</label>
+                                <input type="text" class="form-control" placeholder="Enter Meta Keywords"
+                                       data-bind="value:GamePlatform.MetaKeyword, valueUpdate:'afterkeydown'">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Meta Description:</label>
+                                <input type="text" class="form-control" placeholder="Enter Meta Description"
+                                       data-bind="value:GamePlatform.MetaDescription, valueUpdate:'afterkeydown'">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">
+                                            <div class="form-group">
+                                                <label class="control-label">Feature Links:</label>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <button class="btn btn-default btn-sm pull-right" type="button"
+                                                    data-bind="click:Add_New_feature_Link">
+                                                <span class="glyphicon glyphicon-plus-sign"></span>
+                                                <span>Add New</span>
+                                            </button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach:GamePlatform.FeatureLinks">
+                                    <tr>
+                                        <td data-bind="text:$index()+1"></td>
+                                        <td>
+                                            <input type="text" placeholder="Name" required class="form-control"
+                                                   data-bind="value:$data.Name, valueUpdate:'afterkeydown'" />
+                                        </td>
+                                        <td>
+                                            <input type="url" placeholder="Link" required class="form-control"
+                                                   data-bind="value:$data.Link, valueUpdate:'afterkeydown'" />
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-default btn-sm" type="button"
+                                                    data-bind="click:$parent.Remove_feature_Link">
+                                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                                <span>Remove</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Logo Url: (123x154)</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-picture"></span>
+                                    </div>
+                                    <label for="logoUploader" class="form-control" style="padding:5px!important;">
+                                        <span class="btn btn-default btn-xs">Choose logo</span>
+                                    </label>
+                                    <div class="input-group-btn" data-bind="visible:GamePlatform.LogoUrl()!=''">
+                                        <button class="btn btn-danger" type="button" title="Delete Logo" data-bind="click:function(){GamePlatform.LogoUrl('');}">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <input type="file" id="logoUploader" style="display:none;" accept="image/*" />
+                            </div>
+                            <div class="form-group" data-bind="visible:GamePlatform.LogoUrl()!=''">
+                                <img style="max-height:100px;max-width:200px;" alt="Banner" data-bind="attr:{src: GamePlatform.LogoUrl}" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Banner: (1172x265)</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-picture"></span>
+                                    </div>
+                                    <label for="bannerUploader" class="form-control" style="padding:5px!important;">
+                                        <span class="btn btn-default btn-xs">Choose banner</span>
+                                    </label>
+                                    <div class="input-group-btn" data-bind="visible:GamePlatform.Banner()!=''">
+                                        <button class="btn btn-danger" type="button" title="Delete Banner" data-bind="click:function(){GamePlatform.Banner('');}">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <input type="file" id="bannerUploader" style="display:none;" accept="image/*" />
+                            </div>
+                            <div class="form-group" data-bind="visible:GamePlatform.Banner()!=''">
+                                <img style="max-height:250px;max-width:500px;" alt="Banner" data-bind="attr:{src: GamePlatform.Banner}" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Page Content:</label>
+                                <div id="summernote"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" form="add-new-form" class="btn btn-success" data-bind="disable:IsSaving">
+                    <span>Save</span>
+                    <i class="fa fa-spinner fa-spin" data-bind="visible:IsSaving"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="api_log_modal"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">IGDb Platform</h4>
+            </div>
+            <div class="modal-body">
+                <h3 data-bind="text: ApiLogs"></h3>
+                <table class="table table-bordered table-striped"
+                       data-bind="visible:Igdb_GamePlatformList().length>0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach:Igdb_GamePlatformList">
+                        <tr>
+                            <td data-bind="text:$index()+1"></td>
+                            <td data-bind="text:$data.id"></td>
+                            <td data-bind="text:$data.name"></td>
+                            <td data-bind="text:$data.Status, css:{'text-success': $data.Status()=='Saved'}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        (function (h, q) {
+            h.fn.bootpag = function (p) {
+                function m(c, b) {
+                    b = parseInt(b, 10); var d, e = 0 == a.maxVisible ? 1 : a.maxVisible, k = 1 == a.maxVisible ? 0 : 1, n = Math.floor((b - 1) / e) * e, f = c.find("li"); a.page = b = 0 > b ? 0 : b > a.total ? a.total : b; f.removeClass(a.activeClass); d = 1 > b - 1 ? 1 : a.leaps && b - 1 >= a.maxVisible ? Math.floor((b - 1) / e) * e : b - 1; a.firstLastUse && f.first().toggleClass(a.disabledClass, 1 === b); e = f.first(); a.firstLastUse && (e = e.next()); e.toggleClass(a.disabledClass, 1 === b).attr("data-lp", d).find("a").attr("href", g(d)); k = 1 == a.maxVisible ?
+            0 : 1; d = b + 1 > a.total ? a.total : a.leaps && b + 1 < a.total - a.maxVisible ? n + a.maxVisible + k : b + 1; e = f.last(); a.firstLastUse && (e = e.prev()); e.toggleClass(a.disabledClass, b === a.total).attr("data-lp", d).find("a").attr("href", g(d)); f.last().toggleClass(a.disabledClass, b === a.total); e = f.filter("[data-lp=" + b + "]"); k = "." + [a.nextClass, a.prevClass, a.firstClass, a.lastClass].join(",."); if (!e.not(k).length) {
+                var m = b <= n ? -a.maxVisible : 0; f.not(k).each(function (b) {
+                    d = b + 1 + n + m; h(this).attr("data-lp", d).toggle(d <= a.total).find("a").html(d).attr("href",
+                    g(d))
+                }); e = f.filter("[data-lp=" + b + "]")
+            } e.not(k).addClass(a.activeClass); l.data("settings", a)
+                } function g(c) { return a.href.replace(a.hrefVariable, c) } var l = this, a = h.extend({
+                    total: 0, page: 1, maxVisible: null, leaps: !0, href: "javascript:void(0);", hrefVariable: "{{number}}", next: "&raquo;", prev: "&laquo;", firstLastUse: !1, first: '<span aria-hidden="true">&larr;</span>', last: '<span aria-hidden="true">&rarr;</span>', wrapClass: "pagination", activeClass: "active", disabledClass: "disabled", nextClass: "next", prevClass: "prev",
+                    lastClass: "last", firstClass: "first"
+                }, l.data("settings") || {}, p || {}); if (0 >= a.total) return this; h.isNumeric(a.maxVisible) || a.maxVisible || (a.maxVisible = parseInt(a.total, 10)); l.data("settings", a); return this.each(function () {
+                    var c, b, d = h(this); c = ['<ul class="', a.wrapClass, ' bootpag">']; a.firstLastUse && (c = c.concat(['<li data-lp="1" class="', a.firstClass, '"><a href="', g(1), '">', a.first, "</a></li>"])); a.prev && (c = c.concat(['<li data-lp="1" class="', a.prevClass, '"><a href="', g(1), '">', a.prev, "</a></li>"])); for (b =
+                    1; b <= Math.min(a.total, a.maxVisible) ; b++) c = c.concat(['<li data-lp="', b, '"><a href="', g(b), '">', b, "</a></li>"]); a.next && (b = a.leaps && a.total > a.maxVisible ? Math.min(a.maxVisible + 1, a.total) : 2, c = c.concat(['<li data-lp="', b, '" class="', a.nextClass, '"><a href="', g(b), '">', a.next, "</a></li>"])); a.firstLastUse && (c = c.concat(['<li data-lp="', a.total, '" class="last"><a href="', g(a.total), '">', a.last, "</a></li>"])); c.push("</ul>"); d.find("ul.bootpag").remove(); d.append(c.join("")); c = d.find("ul.bootpag"); d.find("li").click(function () {
+                        var b =
+                        h(this); if (!b.hasClass(a.disabledClass) && !b.hasClass(a.activeClass)) { var c = parseInt(b.attr("data-lp"), 10); l.find("ul.bootpag").each(function () { m(h(this), c) }); l.trigger("page", c) }
+                    }); m(c, a.page)
+                })
+            }
+        })(jQuery, window);
+    </script>
+    <script src="~/assets/plugins/summernote-master/summernote.min.js"></script>
+    <script src="~/assets/plugins/summernote-master/summernote-ext-video.js"></script>
+    <script src="/assets/plugins/select2/js/select2.min.js"></script>
+    <script src="~/lib/moment/moment.js"></script>
+    <script src="~/lib/knockout/dist/knockout.js"></script>
+
+    <script type="text/javascript">
+
+        function AppViewModel() {
+            var self = this;
+            self.Offset = ko.observable(0);
+            self.Rows = ko.observable(10).extend({ rateLimit: 500 });
+            self.Total = ko.observable(0);
+            self.GamePlatformList = ko.observableArray([]);
+            self.Igdb_GamePlatformList = ko.observableArray([]);
+            self.IsLoading = ko.observable(false);
+            self.IsSaving = ko.observable(false);
+            self.IsEditing = ko.observable(false);
+            self.SearchText = ko.observable('').extend({ rateLimit: 500 });
+            self.IsDataSyncing = ko.observable(false);
+            self.ApiLogs = ko.observable('');
+            self.All_Feature_Links = ko.observableArray([]);
+
+            self.GamePlatform = {
+                Id: ko.observable(0),
+                Name: ko.observable(''),
+                NameUrl: ko.observable(''),
+                AddedOn: ko.observable(''),
+                UpdatedOn: ko.observable(''),
+                Position: ko.observable(0),
+                Active: ko.observable(true),
+                PageTitle: ko.observable(''),
+                MetaKeyword: ko.observable(''),
+                MetaDescription: ko.observable(''),
+                PageContent: ko.observable(''),
+                Banner: ko.observable(''),
+                Igdb_Id: ko.observable(0),
+                Website: ko.observable(''),
+                Alternative_name: ko.observable(''),
+                Generation: ko.observable(0),
+                Games: ko.observable(''),
+                LogoUrl: ko.observable(''),
+                Code: ko.observable(''),
+                FeatureLinks: ko.observableArray([])
+            };
+
+            self.SyncWithIgdbApi = function () {
+                self.IsDataSyncing(true);
+                $('#api_log_modal').modal('show');
+                $.when(
+                    $.get('/master/getgameplatform_last_igdbid'),
+                    $.get('/master/getgameplatform_count_igdb')
+                ).then(function (result1, result2) {
+                    var lastPlatform = result1[0];
+                    var totalPlatforms = result2[0];
+                    console.log('lastPlatform:', lastPlatform, 'totalPlatforms:', totalPlatforms);
+                    if (lastPlatform != null || lastPlatform != undefined) {
+                        if (totalPlatforms != null || totalPlatforms != undefined) {
+                            for (var offset = lastPlatform; offset < totalPlatforms; offset += 50) {
+                                self.ApiLogs('Getting data from IgDb Api, from OffSet: ' + offset + ' To next 50 records.');
+                                self.Igdb_GamePlatformList.removeAll();
+                                var task = $.ajax({
+                                    type: 'GET', dataType: "json",
+                                    url: '/master/getpaginated_gameplatform_from_igdb/' + offset,
+                                    contentType: "application/json; charset=utf-8",
+                                    success: function (data) {
+                                        console.log('offset: ', offset, 'Data:', data);
+                                        $.each(data, function (index, obj) {
+                                            self.Igdb_GamePlatformList.push(new Igdb_Platform(obj));
+                                        });
+                                    }
+                                }).done(function () {
+                                    $.each(self.Igdb_GamePlatformList(), function (index, obj) {
+                                        obj.Status('Saving');
+                                        console.log('Save_Igdb_GamePlatform', ko.toJSON(obj));
+                                        $.ajax({
+                                            type: 'POST', dataType: "json",
+                                            url: '/master/save_igdb_gameplatform',
+                                            contentType: "application/json; charset=utf-8",
+                                            data: ko.toJSON(obj),
+                                            success: function (data) { obj.Status('Saved'); }
+                                        });
+                                    });
+                                });
+
+                            }
+                        };
+                    };
+                }).then(function () {
+                    self.ApiLogs('Sync Process.');
+                    self.IsDataSyncing(false);
+                });
+            };
+
+            self.GetGamePlatforms = function (offset, index) {
+                self.IsLoading(true);
+                offset = offset || 0;
+                index = index || 1;
+                $.get('/master/getpaginatedgame-platformasync/' + offset + '/' + self.Rows(), function (obj) {
+                    var totalPage = (obj.TotalCount > self.Rows()) ? obj.TotalCount / self.Rows() : 1;
+                    var reminder = (obj.TotalCount > self.Rows()) ? obj.TotalCount % self.Rows() : 0;
+                    if (reminder > 0) { totalPage += 1; }
+                    $.each(obj.PagedSet, function (i, o) { self.GamePlatformList.push(new GamePlatformViewModel(o)); });
+                    $('#page-selection').bootpag({ total: parseInt(totalPage), page: index, maxVisible: 10 });
+                    self.Total(obj.TotalCount);
+                    self.IsLoading(false);
+                    console.log(obj);
+                });
+            };
+
+            self.Rows.subscribe(function (newValue) {
+                self.GamePlatformList.removeAll();
+                self.GetGamePlatforms();
+            });
+
+            self.SearchText.subscribe(function (newValue) {
+                newValue = newValue || '';
+                if (newValue.length == 0) {
+                    self.GamePlatformList.removeAll();
+                    self.GetGamePlatforms();
+                }
+                self.GetSearchResult();
+            });
+
+            self.GetSearchResult = function (Offset, index) {
+                Offset = Offset || 0;
+                index = index || 1;
+                self.IsLoading(true);
+                $.ajax({
+                    type: 'POST', dataType: "json",
+                    url: '/master/searchgame-platform',
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON({ offset: Offset, rows: self.Rows(), searchTxt: self.SearchText() }),
+                    success: function (obj) {
+                        self.GamePlatformList.removeAll();
+                        var totalPage = (obj.TotalCount > self.Rows()) ? obj.TotalCount / self.Rows() : 1;
+                        var reminder = (obj.TotalCount > self.Rows()) ? obj.TotalCount % self.Rows() : 0;
+                        if (reminder > 0) { totalPage += 1; }
+                        $.each(obj.PagedSet, function (i, o) { self.GamePlatformList.push(new GamePlatformViewModel(o)); });
+                        $('#page-selection').bootpag({ total: parseInt(totalPage), page: index, maxVisible: 10 });
+                        self.Total(obj.TotalCount);
+                        self.IsLoading(false);
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+            };
+
+            self.AddNewGamePlatform = function () {
+                var pageContent = $('#summernote').code();
+                self.GamePlatform.PageContent(pageContent);
+                self.IsSaving(true);
+                var api = self.IsEditing() ? '/master/updategame-platform' : '/master/addnewgame-platform';
+                console.log(ko.toJSON(self.GamePlatform));
+                $.ajax({
+                    type: 'POST', dataType: "json", url: api,
+                    contentType: "application/json; charset=utf-8",
+                    data: ko.toJSON(self.GamePlatform),
+                    success: function (data) {
+                        $('.bs-example-modal-lg').modal('hide');
+                        self.IsSaving(false); console.log(data);
+                        toastr.success('Success'); self.IsEditing(false);
+                        self.GamePlatformList.removeAll(); self.ClearAllFields();
+                        self.GetGamePlatforms(self.Offset(), self.Rows());
+                        self.Get_All_Feature_Links();
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.ClearAllFields = function () {
+                self.GamePlatform.Active(true);
+                self.GamePlatform.Id(0);
+                self.GamePlatform.Code('');
+                self.GamePlatform.MetaDescription('');
+                self.GamePlatform.MetaKeyword('');
+                self.GamePlatform.Name('');
+                self.GamePlatform.NameUrl('');
+                self.GamePlatform.PageContent('');
+                self.GamePlatform.PageTitle('');
+                self.GamePlatform.Position(0);
+                self.GamePlatform.Banner('');
+                self.GamePlatform.Igdb_Id(0);
+                self.GamePlatform.Website('');
+                self.GamePlatform.Alternative_name('');
+                self.GamePlatform.Generation(0);
+                self.GamePlatform.Games('');
+                self.GamePlatform.LogoUrl('');
+                $('#summernote').code('');
+                $('#bannerUploader').val('');
+                $('#logoUploader').val('');
+                self.GamePlatform.FeatureLinks.removeAll();
+                self.GamePlatform.FeatureLinks.push(new FeatureViewModel());
+            };
+
+            self.OnClickEditBtn = function (obj) {
+                self.GamePlatform.Active(obj.Active());
+                self.GamePlatform.AddedOn(obj.AddedOn);
+                self.GamePlatform.Id(obj.Id);
+                self.GamePlatform.Code(obj.Code());
+                self.GamePlatform.MetaDescription(obj.MetaDescription());
+                self.GamePlatform.MetaKeyword(obj.MetaKeyword());
+                self.GamePlatform.Name(obj.Name());
+                self.GamePlatform.NameUrl(obj.NameUrl());
+                self.GamePlatform.PageContent(obj.PageContent());
+                self.GamePlatform.PageTitle(obj.PageTitle());
+                self.GamePlatform.Position(obj.Position());
+                self.GamePlatform.UpdatedOn(obj.UpdatedOn);
+                self.GamePlatform.Banner(obj.Banner);
+                self.GamePlatform.LogoUrl(obj.LogoUrl);
+                self.GamePlatform.Igdb_Id(obj.Igdb_Id);
+                self.GamePlatform.Website(obj.Website);
+                self.GamePlatform.Alternative_name(obj.Alternative_name);
+                self.GamePlatform.Generation(obj.Generation);
+                self.GamePlatform.Games(obj.Games);
+                self.IsEditing(true);
+
+                var features = ko.utils.arrayFilter(self.All_Feature_Links(), function (o) {
+                    return o.Reference_Id === obj.Id && o.Reference_Name === 'Platform';
+                });
+                console.log(features);
+                self.GamePlatform.FeatureLinks.removeAll();
+                if (features !== undefined) {
+                    $.each(features, function (i, o) {
+                        var x = new FeatureViewModel();
+                        x.Id = o.Id; x.Name(o.Name);
+                        x.Link(o.Link); x.AddedOn = o.AddedOn;
+                        x.Reference_Id = o.Reference_Id;
+                        x.Reference_Name = o.Reference_Name;
+                        self.GamePlatform.FeatureLinks.push(x);
+                    });
+                }
+
+                var pageContent = obj.PageContent() || '';
+                $('#summernote').code(pageContent);
+                $('.bs-example-modal-lg').modal('show');
+                console.log(ko.toJSON(self.GamePlatform));
+            };
+
+            self.DeleteGamePlatform = function (obj) {
+                console.log(ko.toJSON(obj));
+                obj.IsDeleting(true);
+                $.ajax({
+                    type: 'GET', dataType: "json",
+                    url: '/master/deletegame-platform/' + obj.Id,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        obj.IsDeleting(false);
+                        self.GamePlatformList.removeAll();
+                        self.GetGamePlatforms(self.Offset(), self.Rows());
+                        console.log(data);
+                        toastr.success('Success');
+                    },
+                    error: function (result) { console.log(result); toastr.warning('Error'); }
+                });
+
+            };
+
+            self.Get_All_Feature_Links = function () {
+                $.getJSON('/master/get-all-feature-links', function (data) {
+                    self.All_Feature_Links(data);
+                    console.log(data);
+                });
+            };
+
+            self.Add_New_feature_Link = function () {
+                var x = new FeatureViewModel();
+                self.GamePlatform.FeatureLinks.push(x);
+            };
+
+            self.Remove_feature_Link = function (obj) {
+                self.GamePlatform.FeatureLinks.remove(obj);
+            };
+
+            self.Init = function () {
+                self.Get_All_Feature_Links();
+                self.GetGamePlatforms(self.Offset());
+            };
+
+
+
+            function FeatureViewModel() {
+                var x = this;
+                x.Id = 0;
+                x.Name = ko.observable('');
+                x.Link = ko.observable('');
+                x.Reference_Id = 0;
+                x.Reference_Name = '';
+                x.AddedOn = new Date();
+            };
+
+            function Igdb_Platform(obj) {
+                var x = this;
+                x.Status = ko.observable('');
+                x.alternative_name = obj.alternative_name;
+                x.created_at = obj.created_at;
+                x.games = obj.games;
+                x.id = obj.id;
+                x.name = obj.name;
+                x.shortcut = obj.shortcut;
+                x.slug = obj.slug;
+                x.summary = obj.summary;
+                x.updated_at = obj.updated_at;
+                x.url = obj.url;
+                x.website = obj.website;
+                x.logo = {
+                    cloudinary_id: obj.logo.cloudinary_id,
+                    height: obj.logo.height,
+                    url: obj.logo.url,
+                    width: obj.logo.width
+                };
+
+            };
+
+            function GamePlatformViewModel(obj) {
+                var x = this;
+                x.Id = obj.Id;
+                x.AddedOn = obj.AddedOn;
+                x.UpdatedOn = obj.UpdatedOn;
+                x.Banner = obj.Banner || '';
+                x.LogoUrl = obj.LogoUrl || '';
+                x.Igdb_Id = obj.Igdb_Id;
+                x.Website = obj.Website;
+                x.Games = obj.Games;
+                x.Generation = obj.Generation;
+                x.Code = ko.observable(obj.Code);
+                x.Alternative_name = obj.Alternative_name;
+                x.Name = ko.observable(obj.Name);
+                x.NewName = ko.observable(obj.Name);
+                x.NameUrl = ko.observable(obj.NameUrl);
+                x.NewNameUrl = ko.observable(obj.NameUrl);
+                x.Position = ko.observable(obj.Position);
+                x.Active = ko.observable(obj.Active);
+                x.PageTitle = ko.observable(obj.PageTitle);
+                x.PageContent = ko.observable(obj.PageContent);
+                x.MetaKeyword = ko.observable(obj.MetaKeyword);
+                x.MetaDescription = ko.observable(obj.MetaDescription);
+                x.IsDeleting = ko.observable(false);
+            }
+        }
+        $(document).ready(function () {
+            var app = new AppViewModel();
+            ko.applyBindings(app);
+            app.Rows(10);
+            app.Init();
+            $('select').select2();
+
+            $('#page-selection').bootpag({ total: 10, page: 1, maxVisible: 10 });
+
+            $('#page-selection').on('page', function (event, num) {
+                console.log('bootpag', event, num);
+                var offset = (app.Rows() * (num - 1));
+                app.GamePlatformList.removeAll();
+                if (app.SearchText().length > 0) {
+                    app.GetSearchResult(offset, num);
+                } else { app.GetGamePlatforms(offset, num); }
+            });
+
+            $('#summernote').summernote({
+                placeholder: 'Enter page content', height: 200,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ],
+                popover: {
+                    image: [
+                      ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                      ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                      ['remove', ['removeMedia']]
+                    ]
+                }, dialogsFade: true,
+                onImageUpload: function (files, editor, welEditable) {
+                    var _data = new FormData();
+                    _data.append("file", files[0]);
+                    $.ajax({
+                        type: "POST", url: "/uploadfile", data: _data,
+                        cache: false, contentType: false, processData: false,
+                        success: function (url) { editor.insertImage(welEditable, url); }
+                    });
+                }
+            });
+
+            $('#bannerUploader').on('change', function (e) {
+                var _data = new FormData();
+                _data.append("file", e.target.files[0]);
+                $.ajax({
+                    type: "POST", url: "/uploadfile", data: _data,
+                    cache: false, contentType: false, processData: false,
+                    success: function (url) { app.GamePlatform.Banner(url); }
+                });
+            });
+
+            $('#logoUploader').on('change', function (e) {
+                var _data = new FormData();
+                _data.append("file", e.target.files[0]);
+                $.ajax({
+                    type: "POST", url: "/uploadfile", data: _data,
+                    cache: false, contentType: false, processData: false,
+                    success: function (url) { app.GamePlatform.LogoUrl(url); }
+                });
+            });
+
+        });
+    </script>
+
+}

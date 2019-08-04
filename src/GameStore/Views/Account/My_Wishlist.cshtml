@@ -1,0 +1,37 @@
+﻿@model WishList_DTO
+@{
+    ViewData["Title"] = "My Wishlist";
+
+}
+
+@section styles{
+    <link href="~/css/user-acc.min.css" rel="stylesheet" />
+}
+
+
+
+<div class="wrapper user-account-page">
+    <div class="middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    @await Html.PartialAsync("_User_Left_Nav")
+                </div>
+                <div class="col-sm-9">
+                    <h4>My Wishlist</h4>                    
+                    <div id="wishlist-container">
+                        @await Html.PartialAsync("_WishList_Partial", Model)
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts{
+
+}

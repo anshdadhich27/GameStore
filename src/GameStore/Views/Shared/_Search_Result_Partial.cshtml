@@ -1,0 +1,75 @@
+﻿@model SearchResult
+
+<ul class="list-group">
+    @{
+        if (Model.GameList != null && Model.GameList.Count() > 0)
+        {
+            <li class="list-group-item">
+                <label style="color: #ff2b2b;">Games</label>
+            </li>
+            foreach (var x in Model.GameList)
+            {
+                <li class="list-group-item">
+                    <a href="@x.PageUrl" title="@x.Name">
+                        <span>@x.Name</span>
+                        <span>(<i>@x.Condition</i>)</span>
+                        <small>in</small>
+                        <label>@x.PlatformName</label>
+                    </a>
+                </li>
+            }
+        }
+
+        if (Model.Consoles != null && Model.Consoles.Count() > 0)
+        {
+            <li class="list-group-item">
+                <label style="color: #ff2b2b;">Consoles</label>
+            </li>
+            foreach (var x in Model.Consoles)
+            {
+                <li class="list-group-item">
+                    <a href="@x.PageUrl" title="@x.Name">
+                        <span>@x.Name</span>
+                        <span>(<i>@x.Condition</i>)</span>
+                        <small>in</small>
+                        <label>@x.ProductTypeName</label>
+                    </a>
+                </li>
+            }
+        }
+
+        if (Model.Accessories != null && Model.Accessories.Count() > 0)
+        {
+            <li class="list-group-item">
+                <label style="color: #ff2b2b;">Accessories</label>
+            </li>
+            foreach (var x in Model.Accessories)
+            {
+                <li class="list-group-item">
+                    <a href="@x.PageUrl" title="@x.Name">
+                        <span>@x.Name</span>
+                        <span>(<i>@x.Condition</i>)</span>
+                        <small>in</small>
+                        <label>@x.ProductTypeName</label>
+                    </a>
+                </li>
+            }
+        }
+
+        if (Model.Blogs != null && Model.Blogs.Count() > 0)
+        {
+            <li class="list-group-item">
+                <label style="color: #ff2b2b;">Blogs</label>
+            </li>
+            foreach (var x in Model.Blogs)
+            {
+                <li class="list-group-item">
+                    <a href="@string.Format("/blog/{0}", x.Link)" title="@x.Title">
+                        <span>@x.Title</span>
+                    </a>
+                </li>
+            }
+        }
+    }
+    
+</ul>

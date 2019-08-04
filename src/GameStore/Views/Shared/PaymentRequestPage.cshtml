@@ -1,0 +1,62 @@
+﻿@model Cart_Details
+@{ 
+    Layout = null;
+}
+<html lang="en">
+<head>
+    <title>Payment Request</title>
+</head>
+<body>
+
+    <div style="width:100%;margin-top:20%;text-align:center;">
+        <img style="display:inline-block;" src="~/images/ring.gif" alt="Loader" />
+    </div>
+    <form id="paypal-payment" action="https://secure.innovatepayments.com/gateway/index.html"
+          method="post" target="_top" style="display:none;">   
+        <input name="ivp_store" type="hidden" value="@Constant.StoreID">
+        <input name="ivp_amount" type="hidden" value="@Model.Cart.Total_Sum"> 
+        <input name="ivp_currency" type="hidden" value="@Constant.Currency">
+        <input name="ivp_test" type="hidden" value="@Constant.TelrTestMode">
+        <input name="ivp_timestamp" type="hidden" value="@Model.TimeStamp">
+        <input name="ivp_cart" type="hidden" value="@Model.Cart.Id">
+        <input name="ivp_desc" type="hidden" value="Items">
+        <input name="ivp_extra" type="hidden" value="return">
+        <input name="ivp_signature" type="hidden" value="@Model.Signature">        
+        <input name="ivp_lang" type="hidden" value="EN">
+        
+        <input name="bill_fname" type="hidden" value="@Model.Billing.First_Name">
+        <input name="bill_sname" type="hidden" value="@Model.Billing.Last_Name">
+        <input name="bill_email" type="hidden" value="@Model.User.Email">
+        <input name="bill_addr1" type="hidden" value="@Model.Billing.Address_Line">
+        <input name="bill_city" type="hidden" value="@Model.Billing.City">
+        <input name="bill_region" type="hidden" value="@Model.Billing.State">
+        <input name="bill_country" type="hidden" value="@Model.Billing.Country">
+        <input name="bill_zip" type="hidden" value="@Model.Billing.ZipCode">
+        <input name="bill_phone1" type="hidden" value="@Model.Billing.Mobile">
+
+        <input name="delv_fname" type="hidden" value="@Model.Shipping.First_Name">
+        <input name="delv_sname" type="hidden" value="@Model.Shipping.Last_Name">
+        <input name="bill_email" type="hidden" value="@Model.User.Email">
+        <input name="delv_addr1" type="hidden" value="@Model.Shipping.Address_Line">
+        <input name="delv_city" type="hidden" value="@Model.Shipping.City">
+        <input name="delv_region" type="hidden" value="@Model.Shipping.State">
+        <input name="delv_country" type="hidden" value="@Model.Shipping.Country">
+        <input name="delv_zip" type="hidden" value="@Model.Shipping.ZipCode">
+
+        
+        <input name="return_cb_auth" type="hidden" value="@Model.CallBackUrl">
+        <input name="return_cb_decl" type="hidden" value="@Model.CallBackUrl">
+        <input name="return_cb_can" type="hidden" value="@Model.CallBackUrl">
+        <input name="return_auth" type="hidden" value="@Model.SuccessUrl">
+        <input name="return_decl" type="hidden" value="@Model.DecliendUrl">
+        <input name="return_can" type="hidden" value="@Model.CanceledUrl">
+        <input name="return_signature" type="hidden" value="@Model.ReturnSignature">
+        
+        
+        <input type="submit" value="Purchase">
+    </form>
+    <script type="text/javascript">
+           document.getElementById("paypal-payment").submit();
+    </script>
+</body>
+</html>

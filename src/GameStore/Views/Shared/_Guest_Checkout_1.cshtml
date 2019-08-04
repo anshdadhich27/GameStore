@@ -1,0 +1,15 @@
+﻿@model GuestViewModel
+
+<p>
+    We have send an OTP on your Email.<br>
+    Please verify to proceed.
+</p>
+<form method="post" asp-controller="Account" asp-action="Guest_Checkout_Step_Two"
+      data-ajax="true" data-ajax-begin="onBegin" data-ajax-complete="onComplete"
+      data-ajax-method="POST" data-method="post" data-ajax-mode="replace"
+      data-ajax-update="#guest-checkout-form">
+    <input type="hidden" name="Email" value="@Model.Email" />
+    <input type="hidden" name="CartId" value="@Model.CartId" />
+    <input type="text" name="OTP" placeholder="OTP" required class="input-box" />
+    <input type="submit" value="Submit" class="txt-center">
+</form>

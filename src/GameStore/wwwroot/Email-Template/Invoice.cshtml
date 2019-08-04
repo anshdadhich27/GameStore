@@ -1,0 +1,195 @@
+﻿@using GameStore.Models.Entity
+@model Cart_DTO
+
+@{ 
+    string domain = GameStore.Models.Constant.DomainNane;
+    domain = "http://game.vervelogicshowcase.com";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Game Store Me</title>
+</head>
+<body>
+    <table border="0" cellpadding="0" style="border-collapse: collapse;max-width:970px;width:100%;">
+        <tr>
+            <td>
+                <table style="border-collapse: collapse;max-width:970px;width:100%;min-width:550px;margin:0 auto; font-family:'Montserrat', sans-serif;">
+                    <tbody>
+                        <tr>
+                            <td style="width:60%;">
+                                <a href="@domain" style="text-decoration:none;">
+                                    <img src="@string.Format("{0}/images/logo.png", domain)" alt="Game Store Me" />
+                                </a>
+                            </td>
+                            <td style="width:40%; text-align:right;color:#a1a1a1;font-size: 17px;">
+                                <a href="mailto:support@gamestoreme.com" style="color:#a1a1a1; text-decoration:none;font-size: 14px;">
+                                    support@gamestoreme.com
+                                </a><br />
+                                <a style="color:#a1a1a1; text-decoration:none;font-size: 14px;" 
+                                   href="@string.Format("tel:{0}", GameStore.Models.Constant.Phone_Number)">@GameStore.Models.Constant.Phone_NumberTxt</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr><td style="height:30px;">&nbsp;</td></tr>
+        <tr>
+            <td>
+                <table style="border-collapse: collapse;max-width:970px;width:100%;min-width:550px;margin:0 auto; font-family:'Montserrat', sans-serif;color:#a1a1a1;font-size: 13px;">
+                    <thead style="background:#7f7f7f; padding:5px; color:#fff; font-size:14px; text-align:left">
+                        <tr>
+                            <th style="width:33.33%;padding:6px 8px;">Invoice Info</th>
+                            <th style="width:33.33%;padding:6px 8px;">@(Model.CartType == "Shopping" ? "Ship To" : "Pickup From")</th>
+                            <th style="width:33.33%;padding:6px 8px;">Shipment Info</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="width:33.33%;padding:6px 8px;">
+                                <strong>Invoice No.:</strong>&nbsp; @string.Format("#{0}", Model.Id)<br />
+                                <strong>Invoice Date:</strong>&nbsp; @Model.OrderDate.ToString("dd MMMM yyyy") <br />
+                                <strong>Speacial Instruction:</strong><br />
+                                <p style="margin:0;"><i>Please Leave with Security if Not Reachable</i></p>
+                            </td>
+                            <td style="width:33.33%;padding:6px 8px;">
+                                <strong>@Model.ShippingAddress.Full_Name</strong><br />
+                                @Model.ShippingAddress.Address_Line @Model.ShippingAddress.Address_Line2 @Model.ShippingAddress.Address_Line3,<br />
+                                @Model.ShippingAddress.Area, @Model.ShippingAddress.City<br />
+                                @Model.ShippingAddress.State, @Model.ShippingAddress.Country <br />
+                                PO Box: @Model.ShippingAddress.ZipCode<br />
+                                <strong>Phone : @Model.ShippingAddress.Mobile</strong>
+                            </td>
+                            <td style="width:33.33%;padding:6px 8px;">
+                                <strong>Order No.:</strong>&nbsp; @string.Format("#{0}", Model.Id)<br />
+                                <strong>Order Date:</strong>&nbsp; @Model.OrderDate.ToString("dd MMMM yyyy")<br />
+                                <strong>Payment Mode :</strong>&nbsp; @(Model.PaymentType == "cc" ? "Credit Card" : "Cash on Delivery") <br />
+                                <strong>Paument Status:</strong>&nbsp; @(Model.Payment_Status == "Success" ? "Success" : "Pending") <br />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr><td style="height:30px;">&nbsp;</td></tr>
+        <tr>
+            <td>
+                <table border="0" cellpadding="0" style="border-collapse: collapse; max-width:970px;width:100%;min-width:550px;margin:25px auto; font-family:'Montserrat', sans-serif;color:#a1a1a1;font-size: 13px;">
+                    <thead border="0" cellpadding="0" style="background:#7f7f7f; padding:5px; color:#fff; font-size:14px; text-align:left">
+                        <tr>
+                            <th cellpadding="8" style="width:5.37%;padding:6px 8px;border-right:solid 1px #ccc">#</th>
+                            <th cellpadding="8" style="width:47.10%;padding:6px 8px;border-right:solid 1px #ccc">Item Description</th>
+                            <th cellpadding="8" style="width:19.90%;padding:6px 8px;border-right:solid 1px #ccc; text-align:center;">Unit Price</th>
+                            <th cellpadding="8" style="width:10%;padding:6px 8px;border-right:solid 1px #ccc">Qty</th>
+                            <th cellpadding="8" style="width:17.53%;padding:6px 8px;border-right:solid 1px #ccc; text-align:center;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody style="color:#12131d; font-weight:500">
+                        @{
+                            IList<CartItem> list = new List<CartItem>();
+                            if (Model.CartType == "Shopping") { list = Model.ShopingCart; }
+                            else { list = Model.SellingCart; }
+                            int index = 1;
+                            decimal price = 0;
+                            decimal total_price = 0;
+                            decimal total_sum = 0;
+                            foreach (var x in list)
+                            {
+                                if (Model.CartType == "Shopping")
+                                {
+                                    price = x.Price;
+                                    total_price = price * x.Quantity;
+                                    total_sum += total_price;
+                                }
+                                else
+                                {
+                                    price = (x.Price - x.Deduction);
+                                    total_price = price * x.Quantity;
+                                    total_sum += total_price;
+                                }
+
+                                <tr>
+                                    <td cellpadding="8" style="color:#424141;width:5.37%;padding-top:6px; padding-left: 8px; padding-bottom: 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;">@index</td>
+                                    <td cellpadding="8" style="color:#424141;width:47.10%;padding-top:6px; padding-left: 8px; padding-bottom: 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;">
+                                        <a href="@string.Format("{0}{1}", domain, x.PageUrl)" target="_blank" style="color:#424141;text-decoration:none;">@x.Product_Name</a>
+                                    </td>
+                                    <td cellpadding="8" style="color:#424141;width:19.90%;padding-top:6px; padding-left: 8px; padding-bottom: 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc; text-align:center;">@string.Format("AED {0}", Math.Round(price, 2))</td>
+                                    <td cellpadding="8" style="color:#424141;width:10%;padding-top:6px; padding-left: 8px; padding-bottom: 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;">@x.Quantity</td>
+                                    <td cellpadding="8" style="color:#424141;width:17.53%;padding-top:6px; padding-left: 8px; padding-bottom: 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;border-right:solid 1px #ccc; text-align:right;">@string.Format("AED {0}", Math.Round(total_price, 2))</td>
+                                </tr>
+                                index++;
+                            }
+                        }
+
+
+                        <tr>
+                            <td cellpadding="8" colspan="4" style="color:#424141;width:19.90%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;height: 15px; text-align:right;">Sub Total</td>
+                            <td cellpadding="8" style="color:#424141;width:17.53%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;border-right:solid 1px #ccc;height: 15px; text-align:right;">@string.Format("AED {0}", Math.Round(total_sum, 2))</td>
+                        </tr>
+                        @{
+                            if (Model.CartType == "Shopping")
+                            {
+                                <tr>
+                                    <td cellpadding="8" colspan="4" style="color:#424141;width:19.90%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;height: 15px; text-align:right;">VAT</td>
+                                    <td cellpadding="8" style="color:#424141;width:17.53%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;border-right:solid 1px #ccc;height: 15px; text-align:right;">@string.Format("AED {0}", Math.Round(Model.Tax_Amount, 2))</td>
+                                </tr>
+
+                                <tr>
+                                    <td cellpadding="8" colspan="4" style="color:#424141;width:19.90%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;height: 15px; text-align:right;">Shipping & Handling</td>
+                                    <td cellpadding="8" style="color:#424141;width:17.53%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;border-right:solid 1px #ccc;height: 15px; text-align:right;">@string.Format("AED {0}", Math.Round(Model.ShippingCharge, 2))</td>
+                                </tr>
+
+                                <tr>
+                                    <td cellpadding="8" colspan="4" style="color:#424141;width:19.90%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;height: 15px; text-align:right;">Credit Used</td>
+                                    <td cellpadding="8" style="color:#424141;width:17.53%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;border-right:solid 1px #ccc;height: 15px; text-align:right;">@string.Format("AED {0}", Math.Round(Model.CreditUsed, 2))</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td cellpadding="8" colspan="4" style="color:#424141;width:19.90%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;height: 15px; text-align:right;">Shipping & Handling</td>
+                                    <td cellpadding="8" style="color:#424141;width:17.53%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;border-right:solid 1px #ccc;height: 15px; text-align:right;">@string.Format("AED {0}", Math.Round(Model.ShippingCharge, 2))</td>
+                                </tr>
+                            }
+                        }
+
+                        <tr>
+                            <td cellpadding="8" colspan="4" style="color:#424141;width:19.90%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc;height: 15px; text-align:right;">Payable Amount</td>
+                            <td cellpadding="8" style="color:#424141;width:17.53%;padding:6px 8px;border-bottom:solid 1px #ccc;border-left:solid 1px #ccc; border-right:solid 1px #ccc;height: 15px; text-align:right;">@string.Format("AED {0}", Math.Round(Model.Total_Sum, 2))</td>
+                        </tr>
+
+                        <tr>
+                            <td cellpadding="8" colspan="5" style="color:#424141;width:100%; text-align:right;padding:10px 5px 5px; color:#7f7f7f;">Thank you for @(Model.CartType == "Shopping" ? "shopping with" : "selling on")  Gamestoreme.com!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr><td style="height:30px;">&nbsp;</td></tr>
+        <tr>
+            <td>
+                <table border="0" cellpadding="0" style="border-collapse: collapse; max-width:970px;width:100%;min-width:550px;margin:0 auto; font-family:'Montserrat', sans-serif;color:#a1a1a1;font-size: 13px;">
+                    <tr>
+                        <td cellpadding="8">
+                            For any concerns, queries or returns, please write to us at 
+                            <a href="mailto:support@gamestoreme.com" style="color:#a1a1a1; text-decoration:none;">support@gamestoreme.com</a>, 
+                            or call us at 
+                            <a style="color:#a1a1a1; text-decoration:none;" 
+                               href="@string.Format("tel:{0}", GameStore.Models.Constant.Phone_Number)">@GameStore.Models.Constant.Phone_NumberTxt</a>.<br />
+                            All orders are eligble for free return within 7 days of receipt of the product, unless othewise mentioned. <br />
+                            Gamestoreme.com is part of and operated by Boxcape Tech Ventures FZCO.<br />
+                            The TRN for Vat Purposes is 00000000.
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    
+</body>
+</html>
