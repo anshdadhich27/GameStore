@@ -1,0 +1,8 @@
+https://www.c-sharpcorner.com/article/microservice-using-asp-net-core/
+
+why to choose net core for microservices
+
+
+https://stackoverflow.com/questions/21758615/why-should-i-use-ihttpactionresult-instead-of-httpresponsemessage
+
+https://www.c-sharpcorner.com/blogs/a-new-way-to-send-response-using-ihttpactionresult1
